@@ -1,0 +1,11 @@
+.ecritures a {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(20px, 200px));
+}
+
+.ecritures a div {
+  margin: 4px 1px;
+  border-radius: 8px;
+  background-color: #fff0b1;
+  padding: 2px 5px;
+}
