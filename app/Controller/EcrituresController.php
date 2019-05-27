@@ -15,6 +15,8 @@ class EcrituresController extends AppController {
     
     $debut = $year.$month.'01';
     $fin = $year.$month.cal_days_in_month(CAL_GREGORIAN, $month, $year);
+    $this->set('debut', date_create($debut));
+    $this->set('fin', date_create($fin));
     
     $this->_setSoldesDebutFin($debut, $fin);
     

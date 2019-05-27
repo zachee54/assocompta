@@ -2,6 +2,35 @@
 $this->Html->css('ecritures', array('inline' => false));
 $this->element('currency');
 
+/**
+ * Affiche une de tableau ligne indiquant le solde à une date donnée.
+ * 
+ * @param object $self    L'objet dans lequel s'exécute la vue.
+ * @param string $date    La date.
+ * @param float $montant  Le montant, négatif pour le débit ou positif pour le
+ *                        crédit.
+ */
+function displaySolde($self, $date, $montant) {
+  ?>
+  <tr class="solde">
+    <td colspan="7">Solde au <?php echo date_format($date, 'd/m/Y'); ?></td>
+    <td>
+      <?php
+      if ($montant < 0) {
+        echo $self->Number->currency(-$montant); 
+      }
+      ?>
+    </td>
+    <td>
+      <?php
+      if ($montant >= 0) {
+        echo $self->Number->currency($montant); 
+      }
+      ?>
+    </td>
+  </tr>
+  <?php
+}
 ?>
 
 <table class="ecritures">
@@ -19,8 +48,10 @@ $this->element('currency');
     </tr>
   </thead>
   <tbody>
-  <?php
-  foreach ($ecritures as $ecriture) {
+    <?php
+    displaySolde($this, $debut, $a_nouveau);
+    
+    foreach ($ecritures as $ecriture) {
     ?>
     <tr onclick="window.location='<?php
       echo $this->Html->url(array('action' => 'edit', $ecriture['Ecriture']['id']));
@@ -48,7 +79,9 @@ $this->element('currency');
       </td>
     </tr>
     <?php
-  }
-  ?>
+    }
+    
+    displaySolde($this, $fin, $solde);
+    ?>
   </tbody>
 </table>
