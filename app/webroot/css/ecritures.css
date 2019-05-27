@@ -1,19 +1,30 @@
 .ecritures {
-  border-spacing: 2px 4px;
-  border-collapse: separate;
+  border-collapse: collapse;
 }
 
+.ecritures th, .ecritures td {
+  border: solid 1px black;
+  padding: 2px 5px;
+}
 .ecritures th {
   text-align: center;
 }
-
 .ecritures td {
-  margin: 4px 1px;
-  border-radius: 4px;
   background-color: #fff0b1;
-  padding: 2px 5px;
 }
 
+/* Débits et crédits */
 .ecritures td:nth-last-child(-n+2) {
-  background-color: #a3c0f4;
+  text-align: right;
+  background-color: #c5d8f9;
+}
+
+/* Lignes de soldes */
+.solde td:first-child {
+  text-align: right;
+  font-style: italic;
+  background-color: #fff7d9;
+}
+.solde td:nth-last-child(-n+2) {
+  font-weight: bold;
 }
