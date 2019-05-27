@@ -28,3 +28,17 @@
 .solde td:nth-last-child(-n+2) {
   font-weight: bold;
 }
+
+.months {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.months a {
+  margin: 10px 0;
+  padding: 5px;
+  font-weight: bold;
+  color: white;
+  border-radius: 5px;
+  background-color: brown;
+}
