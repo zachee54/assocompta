@@ -71,7 +71,7 @@ class DATABASE_CONFIG {
 		'persistent' => false,
 		'host' => 'localhost',
 		'login' => 'cfe',
-		'password' => 'emmanuel-est',
+		'password' => 'xxx',
 		'database' => 'cfe',
 		'prefix' => '',
 		'encoding' => 'utf8',
