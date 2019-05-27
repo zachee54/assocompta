@@ -1,11 +1,19 @@
-.ecritures a {
-  display: grid;
-  grid-template-columns: repeat(9, minmax(20px, 200px));
+.ecritures {
+  border-spacing: 2px 4px;
+  border-collapse: separate;
 }
 
-.ecritures a div {
+.ecritures th {
+  text-align: center;
+}
+
+.ecritures td {
   margin: 4px 1px;
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: #fff0b1;
   padding: 2px 5px;
+}
+
+.ecritures td:nth-last-child(-n+2) {
+  background-color: #a3c0f4;
 }
