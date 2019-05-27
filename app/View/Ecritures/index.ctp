@@ -65,14 +65,14 @@ function displaySolde($self, $date, $montant) {
       <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
       <td>
         <?php
-        if ($ecriture['Ecriture']['debit']) {
+        if ($ecriture['Ecriture']['debit'] != 0) {
           echo $this->Number->currency($ecriture['Ecriture']['debit']);
         }
         ?>
       </td>
       <td>
         <?php
-        if ($ecriture['Ecriture']['credit']) {
+        if ($ecriture['Ecriture']['credit'] != 0) {
           echo $this->Number->currency($ecriture['Ecriture']['credit']);
         }
         ?>
