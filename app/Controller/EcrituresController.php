@@ -13,8 +13,11 @@ class EcrituresController extends AppController {
       $year = date_format($max_date, 'Y');
     }
     
-    $debut = $year.$month.'01';
-    $fin = $year.$month.cal_days_in_month(CAL_GREGORIAN, $month, $year);
+    $debut = sprintf('%04u%02u01', $year, $month);
+    $fin = sprintf('%04u%02u%02u', $year, $month, cal_days_in_month(CAL_GREGORIAN, $month, $year));
+    
+    $this->set('year', $year);
+    $this->set('month', $month);
     $this->set('debut', date_create($debut));
     $this->set('fin', date_create($fin));
     
