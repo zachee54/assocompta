@@ -74,6 +74,6 @@ class DATABASE_CONFIG {
 		'password' => 'emmanuel-est',
 		'database' => 'cfe',
 		'prefix' => '',
-		//'encoding' => 'utf8',
+		'encoding' => 'utf8',
 	);
 }
