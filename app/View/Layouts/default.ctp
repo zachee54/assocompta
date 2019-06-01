@@ -12,6 +12,7 @@
   <?php
   echo $this->Flash->render();
   echo $this->fetch('content');
+  echo $this->fetch('scriptBottom');
   ?>
 </body>
 </html>
