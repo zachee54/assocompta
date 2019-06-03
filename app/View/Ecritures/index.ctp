@@ -32,6 +32,18 @@ function displaySolde($self, $date, $montant) {
   <?php
 }
 ?>
+<div id="ajax-background">
+  <div class="popup">
+    <?php
+    echo $this->Html->image('close.png');
+    ?>
+    <div class="popup-content">
+      <?php
+      echo $this->Html->image('ajax-loader.gif');
+      ?>
+    </div>
+  </div>
+</div>
 
 <table class="ecritures">
   <thead>
@@ -99,3 +111,15 @@ function displaySolde($self, $date, $montant) {
   echo $this->Html->link('Mois suivant >>', $nextMonthUrl);
   ?>
 </div>
+<?php
+
+// Scripts JS de fin de page
+$this->element('jquery');
+
+$this->append('scriptBottom');
+?>
+<script type="text/javascript">
+  
+</script>
+<?php
+$this->end();
