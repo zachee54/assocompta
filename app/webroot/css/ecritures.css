@@ -67,12 +67,17 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  padding: 15px;
+  padding: 10px;
   border-radius: 10px;
   background-color: white;
-  background-image: url(../img/close.png);
-  background-size: 15px;
-  background-position: top right;
-  background-repeat: no-repeat;
-  border: solid 10px white;
+  display: flex;
+  flex-direction: column;
+}
+#ajax-background .popup > img:first-child {
+  width: 15px;
+  height: 15px;
+  align-self: end;
+}
+#ajax-background .popup-content {
+  padding: 15px;
 }
