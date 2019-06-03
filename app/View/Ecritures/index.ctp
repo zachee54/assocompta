@@ -35,13 +35,8 @@ function displaySolde($self, $date, $montant) {
 <div id="ajax-background">
   <div class="popup">
     <?php
-    echo $this->Html->image('close.png');
+    echo $this->Html->image('ajax-loader.gif');
     ?>
-    <div class="popup-content">
-      <?php
-      echo $this->Html->image('ajax-loader.gif');
-      ?>
-    </div>
   </div>
 </div>
 
