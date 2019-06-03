@@ -3,7 +3,7 @@ $this->Html->css('ecritures', array('inline' => false));
 $this->element('currency');
 
 /**
- * Affiche une de tableau ligne indiquant le solde à une date donnée.
+ * Affiche une ligne de tableau indiquant le solde à une date donnée.
  * 
  * @param object $self    L'objet dans lequel s'exécute la vue.
  * @param string $date    La date.
@@ -32,15 +32,14 @@ function displaySolde($self, $date, $montant) {
   <?php
 }
 ?>
-<div id="ajax-background">
-  <div class="popup">
-    <?php
-    echo $this->Html->image('close.png', array('class' => 'close'));
-    ?>
-    <div class="popup-content">
+<div id="ajaxBackground">
+  <div id="popup">
+    <div id="close">
       <?php
-      echo $this->Html->image('ajax-loader.gif');
+      echo $this->Html->image('close.png', array('class' => 'close'));
       ?>
+    </div>
+    <div id="popupContent">
     </div>
   </div>
 </div>
@@ -65,9 +64,7 @@ function displaySolde($self, $date, $montant) {
     
     foreach ($ecritures as $ecriture) {
     ?>
-    <tr href="<?php
-      echo $this->Html->url(array('action' => 'edit', $ecriture['Ecriture']['id']));
-      ?>">
+    <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
       <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
       <td><?php echo $ecriture['Ecriture']['bancaire']; ?></td>
       <td><?php echo $ecriture['Poste']['name']; ?></td>
@@ -119,12 +116,22 @@ $this->element('jquery');
 $this->append('scriptBottom');
 ?>
 <script type="text/javascript">
-  $('tr').click(function() {
-    $('#ajax-background').show();
-  });
-
-  $('.close').click(function() {
-    $('#ajax-background').hide();
+  $('tr').click(function(event) {
+    $('#close').click(function() {
+      $('#ajaxBackground').fadeOut();
+    });
+  
+    var popupContent = $('#popupContent');
+    popupContent.html('<?php echo $this->Html->image('ajax-loader.gif'); ?>');
+    $('#ajaxBackground').fadeIn();
+    
+    var id = event.currentTarget.attributes.ref.value;
+    $.get(
+      '<?php echo $this->Html->url(array('action' => 'edit')); ?>/' + id,
+      '')
+    .done(function(data) {
+      popupContent.html(data);
+    });
   });
 </script>
 <?php

@@ -53,4 +53,14 @@ class EcrituresController extends AppController {
     $this->set('solde', $solde[0]['solde']);
   }
   
+  /**
+   * Édite une écriture.
+   * 
+   * @param int $id L'identifiant de l'écriture.
+   */
+  public function edit($id = null) {
+    if ($id !== null) {
+      $this->set('ecriture', $this->Ecriture->findById($id));
+    }
+  }
 }
