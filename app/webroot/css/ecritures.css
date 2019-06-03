@@ -1,3 +1,7 @@
+body {
+	margin: 0;
+}
+
 .ecritures {
   border-collapse: separate;
   border-spacing: 0px 3px;
@@ -50,4 +54,30 @@
   color: white;
   border-radius: 5px;
   background-color: brown;
+}
+
+#ajax-background {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #00000080;
+}
+
+#ajax-background .popup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+#ajax-background .popup > img:first-child {
+  width: 15px;
+  height: 15px;
+  align-self: end;
+}
+#ajax-background .popup-content {
+  padding: 15px;
 }
