@@ -57,6 +57,7 @@ body {
 }
 
 #ajax-background {
+  display: none;
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -79,5 +80,5 @@ body {
   align-self: end;
 }
 #ajax-background .popup-content {
-  padding: 15px;
+  padding: 5px;
 }

@@ -35,7 +35,7 @@ function displaySolde($self, $date, $montant) {
 <div id="ajax-background">
   <div class="popup">
     <?php
-    echo $this->Html->image('close.png');
+    echo $this->Html->image('close.png', array('class' => 'close'));
     ?>
     <div class="popup-content">
       <?php
@@ -65,9 +65,9 @@ function displaySolde($self, $date, $montant) {
     
     foreach ($ecritures as $ecriture) {
     ?>
-    <tr onclick="window.location='<?php
+    <tr href="<?php
       echo $this->Html->url(array('action' => 'edit', $ecriture['Ecriture']['id']));
-      ?>'">
+      ?>">
       <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
       <td><?php echo $ecriture['Ecriture']['bancaire']; ?></td>
       <td><?php echo $ecriture['Poste']['name']; ?></td>
@@ -119,7 +119,13 @@ $this->element('jquery');
 $this->append('scriptBottom');
 ?>
 <script type="text/javascript">
-  
+  $('tr').click(function() {
+    $('#ajax-background').show();
+  });
+
+  $('.close').click(function() {
+    $('#ajax-background').hide();
+  });
 </script>
 <?php
 $this->end();
