@@ -63,9 +63,24 @@ class EcrituresController extends AppController {
       
     } else if ($id !== null) {
       $this->request->data = $this->Ecriture->findById($id);
+      
+      $this->_nullIfZero('debit');
+      $this->_nullIfZero('credit');
     }
     
     $this->set('postes', $this->Ecriture->Poste->find('list'));
     $this->set('activites', $this->Ecriture->Activite->find('list'));
+  }
+  
+  /**
+   * Supprime un champ de la requête s'il est égal à zéro (y compris la chaîne
+   * '0.00').
+   * 
+   * @param string $ecritureField Le nom d'un champ du modèle Ecriture.
+   */
+  private function _nullIfZero($ecritureField) {
+    if ($this->request->data['Ecriture'][$ecritureField] == 0) {
+      unset($this->request->data['Ecriture'][$ecritureField]);
+    }
   }
 }
