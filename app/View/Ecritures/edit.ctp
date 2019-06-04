@@ -26,4 +26,10 @@ echo $this->Form->input('personne', array(
 echo $this->Form->input('piece', array(
   'label' => 'N°&nbsp;pièce&nbsp;:'));
 
+echo $this->Form->input('debit', array(
+  'label' => 'Débit&nbsp;:'));
+
+echo $this->Form->input('credit', array(
+  'label' => 'Crédit&nbsp;:'));
+
 echo $this->Form->end();
