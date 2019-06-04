@@ -32,7 +32,8 @@ function displaySolde($self, $date, $montant) {
   <?php
 }
 ?>
-<div id="ajaxBackground">
+<div id="ajax">
+  <div id="ajaxBackground"></div>
   <div id="popup">
     <div id="close">
       <?php
@@ -118,12 +119,12 @@ $this->append('scriptBottom');
 <script type="text/javascript">
   $('tr').click(function(event) {
     $('#close').click(function() {
-      $('#ajaxBackground').fadeOut();
+      $('#ajax').fadeOut();
     });
   
     var popupContent = $('#popupContent');
     popupContent.html('<?php echo $this->Html->image('ajax-loader.gif'); ?>');
-    $('#ajaxBackground').fadeIn();
+    $('#ajax').fadeIn();
     
     var id = event.currentTarget.attributes.ref.value;
     $.get(
