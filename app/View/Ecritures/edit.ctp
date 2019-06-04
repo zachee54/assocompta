@@ -17,4 +17,13 @@ echo $this->Form->input('poste_id', array(
 echo $this->Form->input('activite_id', array(
   'label' => 'Activité&nbsp;:'));
 
+echo $this->Form->input('description', array(
+  'label' => 'Description&nbsp;:'));
+
+echo $this->Form->input('personne', array(
+  'label' => 'Personne'));
+
+echo $this->Form->input('piece', array(
+  'label' => 'N°&nbsp;pièce&nbsp;:'));
+
 echo $this->Form->end();
