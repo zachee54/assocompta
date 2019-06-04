@@ -59,8 +59,12 @@ class EcrituresController extends AppController {
    * @param int $id L'identifiant de l'écriture.
    */
   public function edit($id = null) {
-    if ($id !== null) {
-      $this->set('ecriture', $this->Ecriture->findById($id));
+    if ($this->request->is(array('put', 'post'))) {
+      
+    } else if ($id !== null) {
+      $this->request->data = $this->Ecriture->findById($id);
     }
+    
+    $this->set('postes', $this->Ecriture->Poste->find('list'));
   }
 }
