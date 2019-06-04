@@ -1,4 +1,6 @@
 <?php
+$this->layout = 'ajax';
+
 echo $this->Form->create();
 
 echo $this->Form->input('poste_id', array(
