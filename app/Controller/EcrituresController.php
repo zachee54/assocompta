@@ -66,5 +66,6 @@ class EcrituresController extends AppController {
     }
     
     $this->set('postes', $this->Ecriture->Poste->find('list'));
+    $this->set('activites', $this->Ecriture->Activite->find('list'));
   }
 }
