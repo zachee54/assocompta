@@ -117,10 +117,12 @@ $this->element('jquery');
 $this->append('scriptBottom');
 ?>
 <script type="text/javascript">
+  function closePopup() {
+    $('#ajax').fadeOut();
+  }
+
   $('tr').click(function(event) {
-    $('#close').click(function() {
-      $('#ajax').fadeOut();
-    });
+    $('#close').click(closePopup);
   
     var popupContent = $('#popupContent');
     popupContent.html('<?php echo $this->Html->image('ajax-loader.gif'); ?>');

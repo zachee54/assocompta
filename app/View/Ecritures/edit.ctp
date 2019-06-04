@@ -32,4 +32,9 @@ echo $this->Form->input('debit', array(
 echo $this->Form->input('credit', array(
   'label' => 'Crédit&nbsp;:'));
 
+echo $this->Form->submit('Valider');
+echo $this->Form->button('Annuler', array(
+  'type' => 'button',
+  'onclick' => 'closePopup()'));
+
 echo $this->Form->end();
