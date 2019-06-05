@@ -22,12 +22,12 @@ body {
 .ecritures th {
   text-align: center;
 }
-.ecritures td {
+.ecritures td, #EcritureEditForm .input {
   background-color: #fff0b1;
 }
 
 /* Débits et crédits */
-.ecritures td:nth-last-child(-n+2) {
+.ecritures td:nth-last-child(-n+2), #EcritureEditForm .number {
   text-align: right;
   background-color: #c5d8f9;
 }
@@ -72,7 +72,7 @@ body {
   transform: translateX(-50%);
   padding: 10px;
   border-radius: 10px;
-  background-color: white;
+  background-color: #ededed;
   display: flex;
   flex-direction: column;
 }
@@ -83,6 +83,43 @@ body {
   width: 15px;
   height: 15px;
 }
+
 #popupContent {
   padding: 5px;
+}
+
+#EcritureEditForm > div {
+  display: flex;
+}
+#EcritureEditForm .input {
+  margin: 2px;
+  padding: 5px;
+  border: solid 1px gray;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+#EcritureEditForm .input label {
+  font-size: xx-small;
+}
+#EcritureDescription, #EcriturePersonne {
+  width: 200px;
+}
+#EcriturePiece {
+  max-width: 50px;
+}
+#EcritureEditForm .numberInputs {
+  justify-content: center;
+} 
+#EcritureEditForm .number input {
+  width: 80px;
+  text-align: right;
+}
+#EcritureEditForm .submit {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+#EcritureEditForm .submit button {
+  background-color: gray;
 }

@@ -1,5 +1,6 @@
 <?php
 $this->Html->css('ecritures', array('inline' => false));
+$this->Html->css('button', array('inline' => false));
 $this->element('currency');
 
 /**
