@@ -1,0 +1,18 @@
+/* Mise en forme des boutons */
+.button {
+  padding: 5px 15px;
+  margin: 5px;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 7px;
+  transition: box-shadow 200ms;
+}
+
+.submit .button {
+  background-color: #4bb74b;
+}
+
+.button:hover {
+  box-shadow: 0 2px 5px gray;
+}
