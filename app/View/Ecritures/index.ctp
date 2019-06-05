@@ -118,6 +118,10 @@ $this->element('jquery');
 $this->append('scriptBottom');
 ?>
 <script type="text/javascript">
+  // Icône "croix" pour fermer le popup
+  $('#close').click(closePopup);
+
+  // Fonction appelée par #close et par "onclick" du bouton Annuler 
   function closePopup() {
     $('#ajax').fadeOut();
   }
@@ -131,10 +135,7 @@ $this->append('scriptBottom');
   }
 
   var popupContent = $('#popupContent');
-  $('tr').click(function(event) {
-
-    // Icône "croix" pour fermer le popup
-    $('#close').click(closePopup);
+  $('tr[ref]').click(function(event) {
 
     // Afficher le popup avec image d'attente
     popupContent.html('<?php echo $this->Html->image('ajax-loader.gif'); ?>');
@@ -142,7 +143,7 @@ $this->append('scriptBottom');
     cancelPreviousXHR();
 
     // Charger la page d'édition
-    var id = event.currentTarget.attributes.ref.value;
+    var id = $(event.currentTarget).attr('ref');
     xhr = $.get(
       '<?php echo $this->Html->url(array('action' => 'edit')); ?>/' + id,
       '')
