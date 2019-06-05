@@ -122,21 +122,52 @@ $this->append('scriptBottom');
     $('#ajax').fadeOut();
   }
 
+  var xhr;
+
+  function cancelPreviousXHR() {
+    if (xhr != null) {
+      xhr.abort();
+    }
+  }
+
+  var popupContent = $('#popupContent');
   $('tr').click(function(event) {
+
+    // Icône "croix" pour fermer le popup
     $('#close').click(closePopup);
-  
-    var popupContent = $('#popupContent');
+
+    // Afficher le popup avec image d'attente
     popupContent.html('<?php echo $this->Html->image('ajax-loader.gif'); ?>');
     $('#ajax').fadeIn();
-    
+    cancelPreviousXHR();
+
+    // Charger la page d'édition
     var id = event.currentTarget.attributes.ref.value;
-    $.get(
+    xhr = $.get(
       '<?php echo $this->Html->url(array('action' => 'edit')); ?>/' + id,
       '')
     .done(function(data) {
       popupContent.html(data);
+      handleFormSubmit();
     });
   });
+
+  function handleFormSubmit() {
+    var form = $('#EcritureEditForm');
+    form.submit(function(event) {
+      event.preventDefault();
+      cancelPreviousXHR();
+
+      // Charger la page cible en AJAX dans le popup
+      xhr = $.post(
+        form.attr('action'),
+        form.serialize())
+      .done(function(data) {
+        popupContent.html(data);
+        handleFormSubmit();
+      });
+    });
+  }
 </script>
 <?php
 $this->end();
