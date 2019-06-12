@@ -47,11 +47,13 @@ echo $this->Form->create();
     ?>
   </div>
   <?php
+
+  echo $this->Flash->render();
   
   // Boutons Valider et Annuler dans la même div
   echo $this->Form->submit('Valider', array(
     'class' => 'button',
-    'after' => $this->Form->button('Annuler', array(
+    'after' => $this->Form->button('Fermer', array(
       'class' => 'button',
       'type' => 'button',
       'onclick' => 'closePopup()'))

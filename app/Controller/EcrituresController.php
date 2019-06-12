@@ -60,6 +60,13 @@ class EcrituresController extends AppController {
    */
   public function edit($id = null) {
     if ($this->request->is(array('put', 'post'))) {
+      $this->Ecriture->id = $id;  // id peut être null
+      $saved = $this->Ecriture->save($this->request->data);
+      if ($saved) {
+        $this->Flash->success("L'écriture a été sauvegardée");
+      } else {
+        $this->Flash->error('Erreur pendant la sauvegarde');
+      }
       
     } else if ($id !== null) {
       $this->request->data = $this->Ecriture->findById($id);
