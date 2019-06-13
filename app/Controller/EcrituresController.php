@@ -54,7 +54,7 @@ class EcrituresController extends AppController {
   }
   
   /**
-   * Édite une écriture.
+   * Édite ou ajoute une écriture.
    * 
    * @param int $id L'identifiant de l'écriture.
    */

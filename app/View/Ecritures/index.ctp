@@ -1,6 +1,6 @@
 <?php
-$this->Html->css('ecritures', array('inline' => false));
 $this->Html->css('button', array('inline' => false));
+$this->Html->css('ecritures', array('inline' => false));
 $this->element('currency');
 
 /**
@@ -97,6 +97,15 @@ function displaySolde($self, $date, $montant) {
   </tbody>
 </table>
 
+<div class="center">
+  <?php
+  echo $this->Html->link(
+    'Nouvelle écriture',
+    array('action' => 'edit'),
+    array('class' => 'button addEcriture'));
+  ?>
+</div>
+
 <div class="months">
   <?php
   $previousMonthUrl = ($month == 1)
@@ -159,15 +168,28 @@ $this->append('scriptBottom');
   }
 
   var popupContent = $('#popupContent');
+
+  // Clics sur les lignes
   $('tr[ref]').click(function(event) {
+    loadInPopup( $(event.currentTarget).attr('ref') );
+  });
+
+  // Charge un formulaire vierge dans le popup
+  function newEcriture(event) {
+    event.preventDefault();
+    loadInPopup('');
+  }
+
+  // Clique sur le bouton "nouvelle écriture"
+  $('.addEcriture').click(newEcriture);
+
+  function loadInPopup(id) {
 
     // Afficher le popup avec image d'attente
     popupContent.html('<?php echo $this->Html->image('ajax-loader.gif'); ?>');
     $('#ajax').fadeIn();
     cancelPreviousXHR();
 
-    // Charger la page d'édition
-    var id = $(event.currentTarget).attr('ref');
     xhr = $.get(
       '<?php echo $this->Html->url(array('action' => 'edit')); ?>/' + id,
       '')
@@ -175,7 +197,7 @@ $this->append('scriptBottom');
       popupContent.html(data);
       handleFormSubmit();
     });
-  });
+  }
 
   function handleFormSubmit() {
     var form = $('#EcritureEditForm');
@@ -192,6 +214,9 @@ $this->append('scriptBottom');
         handleFormSubmit();
       });
     });
+
+    // Clic sur le bouton "nouvelle écriture" dans le popup
+    $('#EcritureEditForm .addEcriture').click(newEcriture);
   }
 </script>
 <?php
