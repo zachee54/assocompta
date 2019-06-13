@@ -3,7 +3,7 @@ class EcrituresController extends AppController {
   
   public function index($year = null, $month = null) {
     
-    // Année et mois par défaut : les derniers saisis
+    // Année et mois par défaut : les plus récents saisis
     if (!$year) {
       $max_date = $this->Ecriture->find('first', array(
         'fields' => 'MAX(date_bancaire) as max_date',
@@ -64,6 +64,10 @@ class EcrituresController extends AppController {
       $saved = $this->Ecriture->save($this->request->data);
       if ($saved) {
         $this->Flash->success("L'écriture a été sauvegardée");
+        
+        // Indiquer à la vue le (nouveau) mois à afficher
+        $this->set('month', $this->_getMonth());
+        
       } else {
         $this->Flash->error('Erreur pendant la sauvegarde');
       }
@@ -77,6 +81,27 @@ class EcrituresController extends AppController {
     
     $this->set('postes', $this->Ecriture->Poste->find('list'));
     $this->set('activites', $this->Ecriture->Activite->find('list'));
+  }
+  
+  /**
+   * Renvoie le mois de la date bancaire de l'écriture (écriture dans
+   * $this->request->data).
+   * 
+   * @return array  Un tableau contenant les clés 'year' et 'month' avec valeurs
+   *                numériques, ou avec des chaînes vides si la date bancaire
+   *                n'est pas fournie.
+   */
+  private function _getMonth() {
+    if (empty($this->request->data['Ecriture']['date_bancaire'])) {
+      return array(
+        'year' => '',
+        'month' => '');
+    }
+    
+    $date = date_create($this->request->data['Ecriture']['date_bancaire']);
+    return array(
+      'year' => date_format($date, 'Y'),    // Année sur 4 chiffres
+      'month' => date_format($date, 'n'));  // Mois sur 1 ou 2 chiffres
   }
   
   /**
