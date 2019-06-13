@@ -7,6 +7,7 @@ echo $this->Form->create();
     <?php
     echo $this->Form->input('date_engagement', array(
       'type' => 'DATE',
+      'default' => date_format(date_create(), 'Y-m-d'),
       'label' => 'Date&nbsp;:'));
     
     echo $this->Form->input('date_bancaire', array(
