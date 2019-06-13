@@ -9,7 +9,7 @@
   transition: box-shadow 200ms;
 }
 
-.submit .button {
+.submit input {
   background-color: #4bb74b;
 }
 

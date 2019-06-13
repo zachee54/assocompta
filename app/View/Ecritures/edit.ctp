@@ -60,13 +60,23 @@ echo $this->Form->create();
       'value' => $month['month']));
   }
   
-  // Boutons Valider et Annuler dans la même div
-  echo $this->Form->submit('Valider', array(
-    'class' => 'button',
-    'after' => $this->Form->button('Fermer', array(
+  ?>
+  <div class="submit">
+    <?php
+    echo $this->Form->submit('Valider', array(
       'class' => 'button',
+      'div' => false));
+    
+    echo $this->Form->button('Nouvelle écriture', array(
+      'class' => 'addEcriture button',
+      'type' => 'button'));
+    
+    echo $this->Form->button('Fermer', array(
+      'class' => 'button closeButton',
       'type' => 'button',
-      'onclick' => 'closePopupOrRedirect()'))
-  ));
+      'onclick' => 'closePopupOrRedirect()'));
+    ?>
+  </div>
+  <?php
   
 echo $this->Form->end();
