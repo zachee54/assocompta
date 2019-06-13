@@ -119,10 +119,34 @@ $this->append('scriptBottom');
 ?>
 <script type="text/javascript">
   // Icône "croix" pour fermer le popup
-  $('#close').click(closePopup);
+  $('#close').click(closePopupOrRedirect);
 
-  // Fonction appelée par #close et par "onclick" du bouton Annuler 
-  function closePopup() {
+  /*
+   * Fonction appelée par #close et par "onclick" du bouton Annuler.
+   *
+   * Si le formulaire ne spécifie pas de mois de redirection, on ferme
+   * simplement le popup.
+   * Si le formulaire spécifie un mois vide, c'est qu'il n'y a pas de date
+   * bancaire. Recharger simplement la page actuelle pour prendre en compte les
+   * changements.
+   * Sinon, on redirige vers le mois spécifié.
+   */ 
+  function closePopupOrRedirect() {
+    var year = $('#EcritureYear');
+    var month = $('#EcritureMonth');
+
+    // Si un mois est spécifié (même vide)
+    if (year.get().length && month.get().length) {
+
+      // Rediriger vers le mois spécifié, ou si vide recharger l'URL actuelle
+      if (year.val() && month.val()) {
+        window.location = '<?php echo $this->Html->url(array('')); ?>/' + year.val() + '/' + month.val();
+      } else {
+        window.location = '<?php echo $this->request->here; ?>';
+      }
+    }
+
+    // Pas de mois spécifié : fermer simplement le popup
     $('#ajax').fadeOut();
   }
 

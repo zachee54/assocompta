@@ -50,13 +50,23 @@ echo $this->Form->create();
 
   echo $this->Flash->render();
   
+  // Mois bancaire à afficher
+  if (isset($month)) {
+    echo $this->Form->input('year', array(
+      'type' => 'hidden',
+      'value' => $month['year']));
+    echo $this->Form->input('month', array(
+      'type' => 'hidden',
+      'value' => $month['month']));
+  }
+  
   // Boutons Valider et Annuler dans la même div
   echo $this->Form->submit('Valider', array(
     'class' => 'button',
     'after' => $this->Form->button('Fermer', array(
       'class' => 'button',
       'type' => 'button',
-      'onclick' => 'closePopup()'))
+      'onclick' => 'closePopupOrRedirect()'))
   ));
   
 echo $this->Form->end();
