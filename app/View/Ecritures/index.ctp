@@ -46,6 +46,12 @@ function displaySolde($self, $date, $montant) {
   </div>
 </div>
 
+<h1>
+  <div>Relevé bancaire de <?php
+    echo utf8_encode(strftime('%B %Y', date_timestamp_get($debut)));
+  ?></div>
+</h1>
+
 <table class="ecritures">
   <thead>
     <tr>
@@ -119,6 +125,55 @@ function displaySolde($self, $date, $montant) {
   echo $this->Html->link('Mois suivant >>', $nextMonthUrl);
   ?>
 </div>
+
+<h1>
+  <div>Opérations en attente</div>
+</h1>
+
+<table class="ecritures">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Poste</th>
+      <th>Activité</th>
+      <th>Description</th>
+      <th>Personne</th>
+      <th>N° pièce</th>
+      <th>Débit</th>
+      <th>Crédit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    foreach ($enAttente as $ecriture) {
+    ?>
+    <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
+      <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
+      <td><?php echo $ecriture['Poste']['name']; ?></td>
+      <td><?php echo $ecriture['Activite']['name']; ?></td>
+      <td><?php echo $ecriture['Ecriture']['description']; ?></td>
+      <td><?php echo $ecriture['Ecriture']['personne']; ?></td>
+      <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
+      <td>
+        <?php
+        if ($ecriture['Ecriture']['debit'] != 0) {
+          echo $this->Number->currency($ecriture['Ecriture']['debit']);
+        }
+        ?>
+      </td>
+      <td>
+        <?php
+        if ($ecriture['Ecriture']['credit'] != 0) {
+          echo $this->Number->currency($ecriture['Ecriture']['credit']);
+        }
+        ?>
+      </td>
+    </tr>
+    <?php
+    }
+    ?>
+  </tbody>
+</table>
 <?php
 
 // Scripts JS de fin de page

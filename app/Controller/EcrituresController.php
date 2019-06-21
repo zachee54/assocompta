@@ -28,6 +28,11 @@ class EcrituresController extends AppController {
         'date_bancaire >=' => $debut,
         'date_bancaire <=' => $fin),
       'order' => array('date_bancaire', 'created'))));
+    
+    $this->set('enAttente', $this->Ecriture->find('all', array(
+      'conditions' => array(
+        'date_bancaire' => null),
+      'order' => array('created'))));
   }
   
   /**
