@@ -8,6 +8,11 @@ a {
   text-decoration: none;
 }
 
+input[type="DATE"] {
+  font-family: inherit;
+  font-size: inherit;
+}
+
 .message {
   margin: 20px 40px 0 40px;
   border: solid 1px;
