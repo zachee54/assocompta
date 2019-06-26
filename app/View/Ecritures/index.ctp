@@ -46,134 +46,167 @@ function displaySolde($self, $date, $montant) {
   </div>
 </div>
 
-<h1>
-  <div>Relevé bancaire de <?php
-    echo utf8_encode(strftime('%B %Y', date_timestamp_get($debut)));
-  ?></div>
-</h1>
-
-<table class="ecritures">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Date banque</th>
-      <th>Poste</th>
-      <th>Activité</th>
-      <th>Description</th>
-      <th>Personne</th>
-      <th>N° pièce</th>
-      <th>Débit</th>
-      <th>Crédit</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php
-    displaySolde($this, $debut, $a_nouveau);
-    
-    foreach ($ecritures as $ecriture) {
-    ?>
-    <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
-      <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['bancaire']; ?></td>
-      <td><?php echo $ecriture['Poste']['name']; ?></td>
-      <td><?php echo $ecriture['Activite']['name']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['description']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['personne']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
-      <td>
-        <?php
-        if ($ecriture['Ecriture']['debit'] != 0) {
-          echo $this->Number->currency($ecriture['Ecriture']['debit']);
-        }
+<div id="content">
+  <nav class="navMonths">
+    Aller au mois de&nbsp;:
+    <ul>
+      <?php
+      foreach ($months as $navYear => $navMonths) {
         ?>
-      </td>
-      <td>
+        <li><?php echo $navYear; ?>
+          <ul>
+            <?php
+            foreach ($navMonths as $navMonth) {
+              ?>
+              <li>
+                <?php
+                echo $this->Html->link(
+                  utf8_encode(strftime('%B', mktime(0, 0, 0, $navMonth, 10))),
+                  array($navYear, $navMonth));
+                ?>
+              </li>
+              <?php
+            }
+            ?>
+          </ul>
+        </li>
         <?php
-        if ($ecriture['Ecriture']['credit'] != 0) {
-          echo $this->Number->currency($ecriture['Ecriture']['credit']);
-        }
-        ?>
-      </td>
-    </tr>
-    <?php
-    }
-    
-    displaySolde($this, $fin, $solde);
-    ?>
-  </tbody>
-</table>
-
-<div class="center">
-  <?php
-  echo $this->Html->link(
-    'Nouvelle écriture',
-    array('action' => 'edit'),
-    array('class' => 'button addEcriture'));
-  ?>
-</div>
-
-<div class="months">
-  <?php
-  $previousMonthUrl = ($month == 1)
-    ? array($year - 1, 12)
-    : array($year, $month -1);
-  echo $this->Html->link('<< Mois précédent', $previousMonthUrl);
+      }
+      ?>
+    </ul>
+  </nav>
   
-  $nextMonthUrl = ($month == 12)
-    ? array($year + 1, 1)
-    : array($year, $month + 1);
-  echo $this->Html->link('Mois suivant >>', $nextMonthUrl);
-  ?>
+  <section>
+    <h1>
+      <div>Relevé bancaire de <?php
+        echo utf8_encode(strftime('%B %Y', date_timestamp_get($debut)));
+      ?></div>
+    </h1>
+    
+    <table class="ecritures">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Date banque</th>
+          <th>Poste</th>
+          <th>Activité</th>
+          <th>Description</th>
+          <th>Personne</th>
+          <th>N° pièce</th>
+          <th>Débit</th>
+          <th>Crédit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        displaySolde($this, $debut, $a_nouveau);
+        
+        foreach ($ecritures as $ecriture) {
+        ?>
+        <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
+          <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
+          <td><?php echo $ecriture['Ecriture']['bancaire']; ?></td>
+          <td><?php echo $ecriture['Poste']['name']; ?></td>
+          <td><?php echo $ecriture['Activite']['name']; ?></td>
+          <td><?php echo $ecriture['Ecriture']['description']; ?></td>
+          <td><?php echo $ecriture['Ecriture']['personne']; ?></td>
+          <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
+          <td>
+            <?php
+            if ($ecriture['Ecriture']['debit'] != 0) {
+              echo $this->Number->currency($ecriture['Ecriture']['debit']);
+            }
+            ?>
+          </td>
+          <td>
+            <?php
+            if ($ecriture['Ecriture']['credit'] != 0) {
+              echo $this->Number->currency($ecriture['Ecriture']['credit']);
+            }
+            ?>
+          </td>
+        </tr>
+        <?php
+        }
+        
+        displaySolde($this, $fin, $solde);
+        ?>
+      </tbody>
+    </table>
+    
+    <div class="center">
+      <?php
+      echo $this->Html->link(
+        'Nouvelle écriture',
+        array('action' => 'edit'),
+        array('class' => 'button addEcriture'));
+      ?>
+    </div>
+    
+    <div class="months">
+      <?php
+      $previousMonthUrl = ($month == 1)
+        ? array($year - 1, 12)
+        : array($year, $month -1);
+      echo $this->Html->link('<< Mois précédent', $previousMonthUrl);
+      
+      $nextMonthUrl = ($month == 12)
+        ? array($year + 1, 1)
+        : array($year, $month + 1);
+      echo $this->Html->link('Mois suivant >>', $nextMonthUrl);
+      ?>
+    </div>
+    
+    <h1>
+      <div>Opérations en attente</div>
+    </h1>
+    
+    <table class="ecritures">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Poste</th>
+          <th>Activité</th>
+          <th>Description</th>
+          <th>Personne</th>
+          <th>N° pièce</th>
+          <th>Débit</th>
+          <th>Crédit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        foreach ($enAttente as $ecriture) {
+        ?>
+        <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
+          <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
+          <td><?php echo $ecriture['Poste']['name']; ?></td>
+          <td><?php echo $ecriture['Activite']['name']; ?></td>
+          <td><?php echo $ecriture['Ecriture']['description']; ?></td>
+          <td><?php echo $ecriture['Ecriture']['personne']; ?></td>
+          <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
+          <td>
+            <?php
+            if ($ecriture['Ecriture']['debit'] != 0) {
+              echo $this->Number->currency($ecriture['Ecriture']['debit']);
+            }
+            ?>
+          </td>
+          <td>
+            <?php
+            if ($ecriture['Ecriture']['credit'] != 0) {
+              echo $this->Number->currency($ecriture['Ecriture']['credit']);
+            }
+            ?>
+          </td>
+        </tr>
+        <?php
+        }
+        ?>
+      </tbody>
+    </table>
+  </section>
 </div>
-
-<h1>
-  <div>Opérations en attente</div>
-</h1>
-
-<table class="ecritures">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Poste</th>
-      <th>Activité</th>
-      <th>Description</th>
-      <th>Personne</th>
-      <th>N° pièce</th>
-      <th>Débit</th>
-      <th>Crédit</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php
-    foreach ($enAttente as $ecriture) {
-    ?>
-    <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
-      <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
-      <td><?php echo $ecriture['Poste']['name']; ?></td>
-      <td><?php echo $ecriture['Activite']['name']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['description']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['personne']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
-      <td>
-        <?php
-        if ($ecriture['Ecriture']['debit'] != 0) {
-          echo $this->Number->currency($ecriture['Ecriture']['debit']);
-        }
-        ?>
-      </td>
-      <td>
-        <?php
-        if ($ecriture['Ecriture']['credit'] != 0) {
-          echo $this->Number->currency($ecriture['Ecriture']['credit']);
-        }
-        ?>
-      </td>
-    </tr>
-    <?php
-    }
-    ?>
-  </tbody>
-</table>
 <?php
 
 // Scripts JS de fin de page

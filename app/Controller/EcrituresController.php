@@ -23,6 +23,8 @@ class EcrituresController extends AppController {
     
     $this->_setSoldesDebutFin($debut, $fin);
     
+    $this->_setMonths();
+    
     $this->set('ecritures', $this->Ecriture->find('all', array(
       'conditions' => array(
         'date_bancaire >=' => $debut,
@@ -56,6 +58,19 @@ class EcrituresController extends AppController {
       'conditions' => array(
         'date_bancaire <=' => $fin)));
     $this->set('solde', $solde[0]['solde']);
+  }
+  
+  /**
+   * Met à disposition de la vue la liste des mois contenant des écritures.
+   */
+  private function _setMonths() {
+    $this->Ecriture->virtualFields['month'] = 'MONTH(date_bancaire)'; 
+    $this->Ecriture->virtualFields['year'] = 'YEAR(date_bancaire)'; 
+    
+    $this->set('months', $this->Ecriture->find('list', array(
+      'conditions' => array('date_bancaire IS NOT NULL'),
+      'fields' => array('month', 'month', 'year'),
+      'order' => array('date_bancaire' => 'DESC'))));
   }
   
   /**

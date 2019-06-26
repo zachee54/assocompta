@@ -15,30 +15,30 @@ body > header {
   background-color: cornsilk;
 }
 
-body > nav {
+body > nav:first-of-type {
   font-weight: bold;
   background-color: brown;
 }
-body > nav ul {
+body > nav:first-of-type ul {
   margin: 0;
   display: flex;
   list-style: none;
 }
-body > nav li {
+body > nav:first-of-type li {
   min-width: 100px;
   padding: 10px;
   text-align: center;
   color: cornsilk;
   transition: 400ms;
 }
-body > nav a {
+body > nav:first-of-type a {
   color: cornsilk;
   transition: 400ms;
 }
-body > nav li:hover {
+body > nav:first-of-type li:hover {
   background-color: cornsilk;
 }
-body > nav li:hover a {
+body > nav:first-of-type li:hover a {
   color: brown;
 }
 
