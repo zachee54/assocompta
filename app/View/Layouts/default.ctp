@@ -9,6 +9,25 @@
   ?>
 </head>
 <body>
+  <header>Centre de Formation et d'Entraide</header>
+  <nav>
+    <ul>
+      <li>
+        <?php
+        echo $this->Html->link('Opérations', array(
+          'controller' => 'ecritures',
+          'action' => 'index'));
+        ?>
+      </li>
+      <li>
+        <?php
+        echo $this->Html->link('Frères', array(
+          'controller' => 'freres',
+          'action' => 'index'));
+        ?>
+      </li>
+    </ul>
+  </nav>
   <?php
   echo $this->Flash->render();
   echo $this->fetch('content');
