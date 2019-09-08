@@ -2,6 +2,7 @@
 <html>
 <head>
   <?php echo $this->Html->charset(); ?>
+  <meta name="robots" content="noindex, nofollow">
   <title>CFE</title>
   <?php
     echo $this->Html->css('cfe');
