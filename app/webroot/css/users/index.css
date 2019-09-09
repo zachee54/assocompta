@@ -1,0 +1,14 @@
+#usersIndex {
+  border-collapse: separate;
+  margin: 20px;
+}
+
+#usersIndex td {
+  border: solid 1px black;
+  text-align: center;
+  padding: 3px 10px;
+}
+
+#usersIndex a {
+  color: blue;
+}
