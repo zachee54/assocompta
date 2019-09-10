@@ -4,25 +4,25 @@
   align-items: center;
 }
 
-#UserLoginForm {
+#UserLogin form {
   margin: 20px;
   display: grid;
   grid-template-columns: auto auto;
   align-items: center;
-  grid-row-gap: 10px;
+  grid-row-gap: 5px;
   grid-column-gap: 5px;
 }
 
-#UserLoginForm label {
+#UserLogin label {
   color: brown;
 }
 
-#UserLoginForm input {
+#UserLogin input[type=text], #UserLogin input[type=password] {
   padding: 4px;
   border-radius: 8px;
 }
 
-#UserLoginForm .submit {
+#UserLogin .submit {
   grid-column: 1 / -1;
   text-align: center;
 }
