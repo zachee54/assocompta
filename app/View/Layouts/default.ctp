@@ -56,6 +56,19 @@
           'action' => 'index'));
         ?>
       </li>
+      <?php
+      if (AuthComponent::user('admin')) {
+        ?>
+        <li>
+          <?php
+          echo $this->Html->link('Administration', array(
+            'controller' => 'users',
+            'action' => 'index'));
+          ?>
+        </li>
+        <?php
+      }
+      ?>
     </ul>
   </nav>
   <?php
