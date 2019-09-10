@@ -4,15 +4,37 @@ body {
 }
 
 body > header {
-  height: 50px;
+  min-height: 50px;
+  padding: 10px;
   font-size: xx-large;
   font-weight: bold;
   font-family: Candara, Calibri, Verdana, sans-serif;
   color: brown;
-  padding: 10px;
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: end;
   background-color: cornsilk;
+}
+
+body > header aside {
+  text-align: right;
+  font-size: large;
+  color: darkblue;
+}
+
+body > header aside ul {
+  font-size: x-small;
+  list-style-type: none;
+  margin: 0;
+}
+
+body > header aside a {
+  color: inherit;
+}
+
+body > header aside a:hover {
+  text-decoration: underline;
 }
 
 body > nav:first-of-type {
