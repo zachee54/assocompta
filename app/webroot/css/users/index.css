@@ -1,4 +1,8 @@
-#usersIndex {
+#usersIndex nav {
+  margin: 20px;
+}
+
+#usersIndex table{
   border-collapse: separate;
   margin: 20px;
 }
@@ -7,8 +11,4 @@
   border: solid 1px black;
   text-align: center;
   padding: 3px 10px;
-}
-
-#usersIndex a {
-  color: blue;
 }

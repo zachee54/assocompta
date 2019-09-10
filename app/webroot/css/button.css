@@ -9,6 +9,15 @@
   transition: box-shadow 200ms;
 }
 
+.addButton {
+  padding-left: 27px;
+  background-size: 17px;
+  background-position: 5px;
+  background-image: url('../img/plus.png');
+  background-repeat: no-repeat;
+  background-color: mediumblue;
+}
+
 .submit input {
   background-color: #4bb74b;
 }
