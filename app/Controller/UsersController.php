@@ -97,7 +97,7 @@ class UsersController extends AppController {
     if ($this->request->isDelete()) {
       if (($id != $this->Auth->user('id')) && $this->User->delete($id)) {
         $this->Flash->success("L'utilisateur $name a été supprimé");
-        $this->redirect('/');
+        $this->redirect(array('action' => 'index'));
       } else {
         $this->Flash->error("Erreur pendant la suppression de l'utilisateur");
       }

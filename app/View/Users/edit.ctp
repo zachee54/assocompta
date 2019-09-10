@@ -1,27 +1,39 @@
 <?php
-$this->Html->css('users/edit', array('inline' => false));
+$this->Html->css(
+  array('users/login', 'button'),
+  array('inline' => false));
 
-echo $this->Form->create();
+?>
+<section id="UserLogin">
+  <?php
+  echo $this->Form->create(null, array(
+    'inputDefaults' => array(
+      'div' => false)));
+    
+    echo $this->Form->input('nom', array(
+      'label' => 'Nom&nbsp;:'));
+    
+    echo $this->Form->input('login', array(
+      'label' => 'Login&nbsp;:'));
+    
+    echo $this->Form->input('mdp', array(
+      'label' => 'Mot de passe&nbsp;:',
+      'type' => 'password',
+      'placeholder' => "garder l'existant",
+      'required' => false));
+    
+    echo $this->Form->input('admin', array(
+      'div' => true,
+      'label' => 'Administrateur'));
+    
+    echo $this->Form->submit('Valider', array(
+      'class' => 'button',
+      'after' => $this->Html->link('Annuler',
+        array('action' => 'index'),
+        array(
+          'class' => 'button',
+          'escape' => false))));
   
-  echo $this->Html->link(
-    '&#8617; Retour à la liste',
-    array('action' => 'index'),
-    array('escape' => false));
-
-  echo $this->Form->input('nom', array(
-    'label' => 'Nom&nbsp;:'));
-  
-  echo $this->Form->input('login', array(
-    'label' => 'Login&nbsp;:'));
-  
-  echo $this->Form->input('admin', array(
-    'label' => 'Administrateur'));
-  
-  echo $this->Form->input('mdp', array(
-    'label' => 'Mot de passe&nbsp;:',
-    'type' => 'password',
-    'required' => false));
-  
-  echo $this->Form->submit('Valider');
-  
-echo $this->Form->end();
+  echo $this->Form->end();
+  ?>
+</section>
