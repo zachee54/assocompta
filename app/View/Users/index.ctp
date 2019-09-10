@@ -7,8 +7,7 @@ echo $this->Html->css(
 <section id="usersIndex">
   <nav>
     <?php
-    echo $this->Html->link(
-      'Ajouter un utilisateur',
+    echo $this->Html->link('Ajouter un utilisateur',
       array('action' => 'edit'),
       array('class' => 'button addButton'));
     ?>
@@ -34,11 +33,15 @@ echo $this->Html->css(
         <td><?php if ($userData['admin']) echo 'X'; ?></td>
         <td>
           <?php
-          echo $this->Html->link(
-            'Modifier',
-            array(
-              'action' => 'edit',
-              $userData['id']));
+          echo $this->Html->link('Modifier', array(
+            'action' => 'edit',
+            $userData['id']));
+          
+          echo '&nbsp;';
+          
+          echo $this->Html->link('Supprimer', array(
+            'action' => 'delete',
+            $userData['id']));
           ?>
         </td>
       </tr>
