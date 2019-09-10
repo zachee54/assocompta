@@ -1,6 +1,20 @@
 <?php
 class UsersController extends AppController {
   
+  public function login() {
+    if ($this->request->isPost()) {
+      if ($this->Auth->login()) {
+        $this->redirect($this->Auth->redirectUrl());
+      } else {
+        $this->Flash->error('Identifiant ou mot de passe invalide');
+      }
+    }
+  }
+  
+  public function logout() {
+    $this->redirect($this->Auth->logout());
+  }
+  
   public function index() {
     $this->set('users', $this->User->find('all'));
   }

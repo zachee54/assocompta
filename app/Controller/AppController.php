@@ -47,9 +47,4 @@ class AppController extends Controller {
         'controller' => 'ecritures',
         'action' => 'index'),
       'authError' => false));
-  
-  public function beforeFilter() {
-    parent::beforeFilter();
-    $this->Auth->allow();
-  }
 }
