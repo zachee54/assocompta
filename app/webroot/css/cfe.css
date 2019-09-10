@@ -74,17 +74,25 @@ input[type="DATE"] {
 }
 
 .message {
-  margin: 20px 40px 0 40px;
-  border: solid 1px;
+  margin: 20px auto 0 auto;
+  max-width: 400px;
+  border: solid 2px;
   border-radius: 10px;
   padding: 10px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
   font-size: larger;
   font-weight: bold;
-  justify-content: center;
   background-color: white;
 }
 
 .success {
   border-color: green;
   color: green;
+}
+
+.error {
+  border-color: #e80000;
+  color: #e80000;
 }

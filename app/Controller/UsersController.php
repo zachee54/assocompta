@@ -42,6 +42,35 @@ class UsersController extends AppController {
       'nom', 'login', 'admin'));
   }
   
+  public function moncompte() {
+    if (!$this->request->isPost()) {
+      return;
+    }
+    $data = $this->request->data;
+    
+    if ($data['new_password'] != $data['password_confirm']) {
+      $this->Flash->error('Les nouveaux mots de passe ne correspondent pas');
+      return;
+    }
+    
+    $oldHash = $this->_hashPassword($data['old_password']);
+    $userId = $this->Auth->user('id');
+    $password = $this->User->field('mdp', array('id' => $userId));
+    if ($oldHash != $password) {
+      $this->Flash->error('Votre mot de passe est erroné');
+      return;
+    }
+    
+    $this->User->id = $userId;
+    $hash = $this->_hashPassword($data['new_password']);
+    if ($this->User->saveField('mdp', $hash)) {
+      $this->Flash->success('Votre mot de passe a été modifié');
+      $this->redirect('/');
+    } else {
+      $this->Flash->error('Erreur pendant la mise à jour du mot de passe');
+    }
+  }
+  
   private function _hashPassword($password) {
     $authenticates = $this->Auth->constructAuthenticate();
     $hasher = $authenticates[0]->passwordHasher();

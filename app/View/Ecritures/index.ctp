@@ -77,6 +77,11 @@ function displaySolde($self, $date, $montant) {
   </nav>
   
   <section>
+    <?php
+    // Sur cette page, afficher les flashs ici plutôt que dans le layout principal
+    echo $this->Flash->render();
+    ?>
+    
     <h1>
       <div>Relevé bancaire de <?php
         echo utf8_encode(strftime('%B %Y', date_timestamp_get($debut)));
