@@ -10,7 +10,36 @@
   ?>
 </head>
 <body>
-  <header>Centre de Formation et d'Entraide</header>
+  <header>
+    <div>Centre de Formation et d'Entraide</div>
+    <?php
+    if (AuthComponent::user()) {
+      ?>
+      <aside>
+        <header><?php echo AuthComponent::user('nom'); ?></header>
+        <nav>
+          <ul>
+            <li>
+              <?php
+              echo $this->Html->link(
+                'Changer mon mot de passe',
+                array('controller' => 'users', 'action' => 'moncompte'));
+              ?>
+            </li>
+            <li>
+              <?php
+              echo $this->Html->link(
+                'Déconnexion',
+                array('controller' => 'users', 'action' => 'logout'));
+              ?>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      <?php
+    }
+    ?>
+  </header>
   <nav>
     <ul>
       <li>
