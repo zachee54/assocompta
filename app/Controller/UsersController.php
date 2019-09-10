@@ -29,6 +29,13 @@ class UsersController extends AppController {
         $data['mdp'] = $this->_hashPassword($data['mdp']);
       }
       
+      if (isset($data['admin']) && !$data['admin']) {
+        if (!$this->_hasOtherAdmin($id)) {
+          $this->Flash->error("L'application doit avoir au moins un administrateur");
+          return;
+        }
+      }
+      
       $this->User->id = $id;
       if ($this->User->save($data)) {
         $this->Flash->success('Les modifications ont été sauvegardées');
@@ -75,5 +82,32 @@ class UsersController extends AppController {
     $authenticates = $this->Auth->constructAuthenticate();
     $hasher = $authenticates[0]->passwordHasher();
     return $hasher->hash($password);
+  }
+  
+  public function delete($id) {
+    $user = $this->User->findById($id);
+    $name = $user['User']['nom'];
+    $this->set('username', $name);
+    
+    if (!$this->_hasOtherAdmin($id)) {
+      $this->Flash->error('Vous ne pouvez pas supprimer le dernier administrateur');
+      $this->redirect(array('action' => 'index'));
+    }
+    
+    if ($this->request->isDelete()) {
+      if (($id != $this->Auth->user('id')) && $this->User->delete($id)) {
+        $this->Flash->success("L'utilisateur $name a été supprimé");
+        $this->redirect('/');
+      } else {
+        $this->Flash->error("Erreur pendant la suppression de l'utilisateur");
+      }
+    }
+  }
+  
+  private function _hasOtherAdmin($id) {
+    return $this->User->find('count', array(
+      'conditions' => array(
+        'admin' => true,
+        'id !=' => $id)));
   }
 }
