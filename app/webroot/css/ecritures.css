@@ -69,14 +69,6 @@ body {
   display: flex;
   justify-content: center;
 }
-.addEcriture {
-  padding-left: 27px;
-  background-size: 17px;
-  background-position: 5px;
-  background-image: url('../img/plus.png');
-  background-repeat: no-repeat;
-  background-color: mediumblue;
-}
 
 .months {
   display: flex;
