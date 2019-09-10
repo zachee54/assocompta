@@ -33,5 +33,23 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller {
   public $components = array(
     'Flash',
-    'DebugKit.Toolbar');
+    'DebugKit.Toolbar',
+    'Auth' => array(
+      'authenticate' => array(
+        'Form' => array(
+          'fields' => array(
+            'username' => 'login',
+            'password' => 'mdp'),
+          'passwordHasher' => array(
+            'className' => 'Simple',
+            'hashType' => 'sha256'))),
+      'loginRedirect' => array(
+        'controller' => 'ecritures',
+        'action' => 'index'),
+      'authError' => false));
+  
+  public function beforeFilter() {
+    parent::beforeFilter();
+    $this->Auth->allow();
+  }
 }
