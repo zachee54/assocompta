@@ -39,10 +39,10 @@ class UsersController extends AppController {
       $this->User->id = $id;
       if ($this->User->save($data)) {
         $this->Flash->success('Les modifications ont été sauvegardées');
+        $this->redirect(array('action' => 'index'));
       } else {
         $this->Flash->error("Erreur pendant l'enregistrement");
       }
-      $this->redirect(array('action' => 'index'));
     }
     
     $this->request->data = $this->User->findById($id, array(

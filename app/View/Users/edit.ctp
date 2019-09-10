@@ -19,7 +19,8 @@ echo $this->Form->create();
   
   echo $this->Form->input('mdp', array(
     'label' => 'Mot de passe&nbsp;:',
-    'type' => 'password'));
+    'type' => 'password',
+    'required' => false));
   
   echo $this->Form->submit('Valider');
   
