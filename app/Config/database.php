@@ -69,8 +69,8 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'cfe',
+		'host' => 'mysql-oshaas.alwaysdata.net',
+		'login' => 'oshaas_cfe',
 		'password' => 'emmanuel-est',
 		'database' => 'oshaas_cfe',
 		'prefix' => '',
