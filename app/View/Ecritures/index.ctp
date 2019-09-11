@@ -61,7 +61,7 @@ function displaySolde($self, $date, $montant) {
               <li>
                 <?php
                 echo $this->Html->link(
-                  utf8_encode(strftime('%B', mktime(0, 0, 0, $navMonth, 10))),
+                  strftime('%B', mktime(0, 0, 0, $navMonth, 10)),
                   array($navYear, $navMonth));
                 ?>
               </li>
@@ -84,7 +84,7 @@ function displaySolde($self, $date, $montant) {
     
     <h1>
       <div>Relevé bancaire de <?php
-        echo utf8_encode(strftime('%B %Y', date_timestamp_get($debut)));
+        echo strftime('%B %Y', date_timestamp_get($debut));
       ?></div>
     </h1>
     

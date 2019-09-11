@@ -18,7 +18,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-setLocale(LC_ALL, 'fra');
+setLocale(LC_ALL, 'fr_FR.UTF8');
 // Configure::write('Config.language', 'fra');
 
 /**
