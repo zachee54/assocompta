@@ -72,7 +72,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'cfe',
 		'password' => 'emmanuel-est',
-		'database' => 'cfe',
+		'database' => 'oshaas_cfe',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
