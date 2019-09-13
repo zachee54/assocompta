@@ -15,11 +15,11 @@ class UsersController extends AppController {
     $this->redirect($this->Auth->logout());
   }
   
-  public function index() {
+  public function admin_index() {
     $this->set('users', $this->User->find('all'));
   }
   
-  public function edit($id = null) {
+  public function admin_edit($id = null) {
     if ($this->request->is(array('post', 'put'))) {
       $data = $this->request->data['User'];
       
@@ -84,7 +84,7 @@ class UsersController extends AppController {
     return $hasher->hash($password);
   }
   
-  public function delete($id) {
+  public function admin_delete($id) {
     $user = $this->User->findById($id);
     $name = $user['User']['nom'];
     $this->set('username', $name);

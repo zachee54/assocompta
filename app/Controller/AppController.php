@@ -46,5 +46,13 @@ class AppController extends Controller {
       'loginRedirect' => array(
         'controller' => 'ecritures',
         'action' => 'index'),
-      'authError' => false));
+      'authError' => false,
+      'authorize' => array('Controller')));
+  
+  /**
+   * Limite les préfixes 'admin' aux profils administrateurs.
+   */
+  public function isAuthorized() {
+    return $this->Auth->user('admin') || ($this->request->prefix != 'admin');
+  }
 }
