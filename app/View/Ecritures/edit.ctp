@@ -40,9 +40,11 @@ echo $this->Form->create();
   <div class="numberInputs">
     <?php
     echo $this->Form->input('debit', array(
+      'required' => false,
       'label' => 'Débit&nbsp;:'));
     
     echo $this->Form->input('credit', array(
+      'required' => false,
       'label' => 'Crédit&nbsp;:'));
     
     ?>
