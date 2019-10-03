@@ -69,7 +69,7 @@ echo $this->Form->create();
       'div' => false));
     
     echo $this->Form->button('Nouvelle écriture', array(
-      'class' => 'addEcriture button',
+      'class' => 'addEcriture addButton button',
       'type' => 'button'));
     
     echo $this->Form->button('Fermer', array(

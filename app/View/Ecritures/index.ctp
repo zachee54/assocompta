@@ -144,7 +144,7 @@ function displaySolde($self, $date, $montant) {
       echo $this->Html->link(
         'Nouvelle écriture',
         array('action' => 'edit'),
-        array('class' => 'button addButton'));
+        array('class' => 'button addButton addEcriture'));
       ?>
     </div>
     
