@@ -1,6 +1,7 @@
 <?php
-$this->Html->css('button', array('inline' => false));
-$this->Html->css('ecritures', array('inline' => false));
+$this->Html->css(
+  array('ecritures/index', 'button'),
+  array('inline' => false));
 $this->element('currency');
 
 /**
@@ -33,19 +34,6 @@ function displaySolde($self, $date, $montant) {
   <?php
 }
 ?>
-<div id="ajax">
-  <div id="ajaxBackground"></div>
-  <div id="popup">
-    <div id="close">
-      <?php
-      echo $this->Html->image('close.png', array('class' => 'close'));
-      ?>
-    </div>
-    <div id="popupContent">
-    </div>
-  </div>
-</div>
-
 <div id="content">
   <nav class="navMonths">
     Aller au mois de&nbsp;:
@@ -80,7 +68,12 @@ function displaySolde($self, $date, $montant) {
     <?php
     // Sur cette page, afficher les flashs ici plutôt que dans le layout principal
     echo $this->Flash->render();
+    
     ?>
+    <fieldset>
+      <legend>Ajouter une écriture</legend>
+      <?php echo $this->element('ecritures/edit_form'); ?>
+    </fieldset>
     
     <h1>
       <div>Relevé bancaire de <?php
@@ -220,97 +213,11 @@ $this->element('jquery');
 $this->append('scriptBottom');
 ?>
 <script type="text/javascript">
-  // Icône "croix" pour fermer le popup
-  $('#close').click(closePopupOrRedirect);
-
-  /*
-   * Fonction appelée par #close et par "onclick" du bouton Annuler.
-   *
-   * Si le formulaire ne spécifie pas de mois de redirection, on ferme
-   * simplement le popup.
-   * Si le formulaire spécifie un mois vide, c'est qu'il n'y a pas de date
-   * bancaire. Recharger simplement la page actuelle pour prendre en compte les
-   * changements.
-   * Sinon, on redirige vers le mois spécifié.
-   */ 
-  function closePopupOrRedirect() {
-    var year = $('#EcritureYear');
-    var month = $('#EcritureMonth');
-
-    // Si un mois est spécifié (même vide)
-    if (year.get().length && month.get().length) {
-
-      // Rediriger vers le mois spécifié, ou si vide recharger l'URL actuelle
-      if (year.val() && month.val()) {
-        window.location = '<?php echo $this->Html->url(array('')); ?>/' + year.val() + '/' + month.val();
-      } else {
-        window.location = '<?php echo $this->request->here; ?>';
-      }
-    }
-
-    // Pas de mois spécifié : fermer simplement le popup
-    $('#ajax').fadeOut();
-  }
-
-  var xhr;
-
-  function cancelPreviousXHR() {
-    if (xhr != null) {
-      xhr.abort();
-    }
-  }
-
-  var popupContent = $('#popupContent');
-
-  // Clics sur les lignes
   $('tr[ref]').click(function(event) {
-    loadInPopup( $(event.currentTarget).attr('ref') );
+    window.location = '<?php
+      echo $this->Html->url(array('action' => 'edit'));
+    ?>/' + $(event.currentTarget).attr('ref');
   });
-
-  // Charge un formulaire vierge dans le popup
-  function newEcriture(event) {
-    event.preventDefault();
-    loadInPopup('');
-  }
-
-  // Clique sur le bouton "nouvelle écriture"
-  $('.addEcriture').click(newEcriture);
-
-  function loadInPopup(id) {
-
-    // Afficher le popup avec image d'attente
-    popupContent.html('<?php echo $this->Html->image('ajax-loader.gif'); ?>');
-    $('#ajax').fadeIn();
-    cancelPreviousXHR();
-
-    xhr = $.get(
-      '<?php echo $this->Html->url(array('action' => 'edit')); ?>/' + id,
-      '')
-    .done(function(data) {
-      popupContent.html(data);
-      handleFormSubmit();
-    });
-  }
-
-  function handleFormSubmit() {
-    var form = $('#EcritureEditForm');
-    form.submit(function(event) {
-      event.preventDefault();
-      cancelPreviousXHR();
-
-      // Charger la page cible en AJAX dans le popup
-      xhr = $.post(
-        form.attr('action'),
-        form.serialize())
-      .done(function(data) {
-        popupContent.html(data);
-        handleFormSubmit();
-      });
-    });
-
-    // Clic sur le bouton "nouvelle écriture" dans le popup
-    $('#EcritureEditForm .addEcriture').click(newEcriture);
-  }
 </script>
 <?php
 $this->end();

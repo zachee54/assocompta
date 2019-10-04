@@ -9,6 +9,16 @@ class Ecriture extends AppModel {
   
   public $hasAndBelongsToMany = array('Frere');
   
+  public $validate = array(
+    'debit' => array(
+      'rule' => 'amountsNotEmpty',
+      'message' => 'Indiquez un montant en débit ou en crédit'));
+  
+  public function amountsNotEmpty($check) {
+    $data = $this->data['Ecriture'];
+    return !empty($data['debit']) || !empty($data['credit']);
+  }
+  
   public function beforeSave($options = array()) {
     $this->_zeroIfEmpty('debit');
     $this->_zeroIfEmpty('credit');
@@ -22,7 +32,7 @@ class Ecriture extends AppModel {
    */
   private function _zeroIfEmpty($field) {
     if (isset($this->data['Ecriture'][$field])
-      && $this->data['Ecriture']['field'] === '') {
+      && $this->data['Ecriture'][$field] === '') {
         
       $this->data['Ecriture'][$field] = 0;
     }

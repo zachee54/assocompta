@@ -3,6 +3,11 @@ class EcrituresController extends AppController {
   
   public function index($year = null, $month = null) {
     
+    // Inclure le traitement du formulaire d'ajout d'une écriture
+    $this->edit();
+    // Ne pas réutiliser les données de l'écriture ajoutée, s'il y en a une
+    $this->request->data = null;
+    
     // Année et mois par défaut : les plus récents saisis
     if (!$year) {
       $max_date = $this->Ecriture->find('first', array(
@@ -48,7 +53,7 @@ class EcrituresController extends AppController {
     $a_nouveau = $this->Ecriture->find('first', array(
       'recursive' => -1,
       'fields' => 'SUM(credit-debit) as solde',
-      'conditions' => array(
+        'conditions' => array(
         'date_bancaire <' => $debut)));
     $this->set('a_nouveau', $a_nouveau[0]['solde']);
     
@@ -84,10 +89,11 @@ class EcrituresController extends AppController {
       $saved = $this->Ecriture->save($this->request->data);
       if ($saved) {
         $this->Flash->success("L'écriture a été sauvegardée");
-        
-        // Indiquer à la vue le (nouveau) mois à afficher
-        $this->set('month', $this->_getMonth());
-        
+        $yearMonth = $this->_getMonth();
+        $this->redirect(array(
+          'action' => 'index',
+          $yearMonth['year'],
+          $yearMonth['month']));
       } else {
         $this->Flash->error('Erreur pendant la sauvegarde');
       }
