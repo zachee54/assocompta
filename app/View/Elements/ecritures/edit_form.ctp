@@ -52,9 +52,11 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
         'class' => 'button',
         'div' => false));
       
-      echo $this->Html->link('Annuler',
-        array('action' => 'index'),
-        array('class' => 'button cancelButton'));
+      if (!empty($showCancel)) {
+        echo $this->Html->link('Annuler',
+          array('action' => 'index'),
+          array('class' => 'button cancelButton'));
+      }
       ?>
     </div>
   </article>
