@@ -1,6 +1,6 @@
 <?php
 $this->Html->css(
-  array('ecritures/index', 'button'),
+  array('ecritures/index', 'ecritures/common', 'button'),
   array('inline' => false));
 $this->element('currency');
 
@@ -35,35 +35,11 @@ function displaySolde($self, $date, $montant) {
 }
 ?>
 <div id="content">
-  <nav class="navMonths">
-    Aller au mois de&nbsp;:
-    <ul>
-      <?php
-      foreach ($months as $navYear => $navMonths) {
-        ?>
-        <li><?php echo $navYear; ?>
-          <ul>
-            <?php
-            foreach ($navMonths as $navMonth) {
-              ?>
-              <li>
-                <?php
-                echo $this->Html->link(
-                  strftime('%B', mktime(0, 0, 0, $navMonth, 10)),
-                  array($navYear, $navMonth));
-                ?>
-              </li>
-              <?php
-            }
-            ?>
-          </ul>
-        </li>
-        <?php
-      }
-      ?>
-    </ul>
-  </nav>
+  <?php
+
+  echo $this->element('ecritures/nav_months');
   
+  ?>
   <section>
     <?php
     // Sur cette page, afficher les flashs ici plutôt que dans le layout principal

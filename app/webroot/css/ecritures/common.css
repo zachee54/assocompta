@@ -1,0 +1,19 @@
+#content {
+  display: flex;
+  align-items: stretch;
+}
+
+h1 {
+  display: flex;
+  justify-content: start;
+}
+
+h1 div, #content legend {
+  margin: 20px 20px 0 20px;
+  padding: 5px;
+  color: brown;
+  font-style: italic;
+  border: solid coral;
+  border-radius: 10px;
+  border-width: medium 0 0 medium;
+}
