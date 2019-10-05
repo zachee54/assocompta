@@ -108,15 +108,6 @@ function displaySolde($self, $date, $montant) {
       </tbody>
     </table>
     
-    <div class="center">
-      <?php
-      echo $this->Html->link(
-        'Nouvelle écriture',
-        array('action' => 'edit'),
-        array('class' => 'button addButton addEcriture'));
-      ?>
-    </div>
-    
     <div class="months">
       <?php
       $previousMonthUrl = ($month == 1)
