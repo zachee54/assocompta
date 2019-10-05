@@ -105,6 +105,7 @@ class EcrituresController extends AppController {
       $this->_nullIfZero('credit');
     }
     
+    $this->_setMonths();
     $this->set('postes', $this->Ecriture->Poste->find('list'));
     $this->set('activites', $this->Ecriture->Activite->find('list'));
   }

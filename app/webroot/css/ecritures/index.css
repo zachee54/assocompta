@@ -1,28 +1,3 @@
-body {
-	margin: 0;
-}
-
-#content {
-  display: flex;
-  align-items: stretch;
-}
-.navMonths {
-  float: left;
-  padding: 8px;
-  color: maroon;
-  background-color: wheat;
-}
-.navMonths ul {
-  list-style: none;
-  padding: 0 8px 0 16px;
-}
-.navMonths li {
-  padding: 5px 0;
-}
-.navMonths a {
-  color: inherit;
-}
-
 .ecritures {
   margin: 20px;
   border-collapse: separate;
@@ -84,17 +59,14 @@ body {
   background-color: brown;
 }
 
-h1 {
-  display: flex;
-  justify-content: start;
+#content fieldset {
+  margin: 20px;
+  border-radius: 10px;
+  border-color: coral;
+  background-color: wheat;
 }
 
-h1 div {
-  margin: 20px 20px 0 20px;
-  padding: 5px;
-  color: brown;
-  font-style: italic;
-  border: solid coral;
-  border-radius: 10px;
-  border-width: medium 0 0 medium;
+#content legend {
+  font-weight: bold;
+  background-color: wheat;
 }
