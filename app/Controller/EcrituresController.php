@@ -28,7 +28,7 @@ class EcrituresController extends AppController {
     
     $this->_setSoldesDebutFin($debut, $fin);
     
-    $this->_setMonths();
+//     $this->_setMonths(); // Déjà dans la méthode edit
     
     $this->set('ecritures', $this->Ecriture->find('all', array(
       'conditions' => array(
