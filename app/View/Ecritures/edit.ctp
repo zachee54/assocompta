@@ -11,7 +11,8 @@ $this->Html->css('ecritures/common', array('inline' => false));
     </h1>
     <?php
     
-    echo $this->element('ecritures/edit_form');
+    echo $this->element('ecritures/edit_form',
+      array('showCancel' => true));
     ?>
   </section>
 </div>
