@@ -10,7 +10,9 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
       <?php
       echo $this->Form->input('date_engagement', array(
         'type' => 'DATE',
-        'default' => date_format(date_create(), 'Y-m-d'),
+        'default' => date_format(
+            date_modify(date_create(), 'first day of -1 month'),
+            'Y-m-d'),
         'label' => 'Date&nbsp;:'));
       
       echo $this->Form->input('date_bancaire', array(
