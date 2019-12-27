@@ -5,17 +5,23 @@ body {
 }
 
 body > header {
+  position: sticky;
+  width: 100%;
+  top: 0;
+}
+
+body > header .title {
   min-height: 50px;
   padding: 10px;
   font-size: xx-large;
   font-weight: bold;
   font-family: Candara, Calibri, Verdana, sans-serif;
   color: brown;
+  background-color: cornsilk;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: end;
-  background-color: cornsilk;
 }
 
 body > header aside {
@@ -38,24 +44,24 @@ body > header aside a:hover {
   text-decoration: underline;
 }
 
-body > nav:first-of-type {
+body > header > nav {
   font-weight: bold;
   background-color: brown;
 }
-body > nav:first-of-type ul {
+body > header > nav ul {
   margin: 0;
   min-height: 35px;
   display: flex;
   list-style: none;
 }
-body > nav:first-of-type li {
+body > header > nav li {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
   color: cornsilk;
   transition: 400ms;
 }
-body > nav:first-of-type a {
+body > header > nav a {
   min-width: 100px;
   padding: 0 10px;
   display: flex;
@@ -64,10 +70,10 @@ body > nav:first-of-type a {
   color: cornsilk;
   transition: 400ms;
 }
-body > nav:first-of-type li:hover {
+body > header > nav li:hover {
   background-color: cornsilk;
 }
-body > nav:first-of-type li:hover a {
+body > header > nav li:hover a {
   color: brown;
 }
 
