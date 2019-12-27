@@ -53,6 +53,13 @@ function displaySolde($self, $date, $montant) {
       </fieldset>
     </article>
     
+    <?php
+    $browse_months = $this->element('ecritures/browse_months', array(
+      'year' => $year,
+      'month' => $month));
+    echo $browse_months;
+    ?>
+    
     <h1>
       <div>Relevé bancaire de <?php
         echo strftime('%B %Y', date_timestamp_get($debut));
@@ -110,20 +117,10 @@ function displaySolde($self, $date, $montant) {
           ?>
         </tbody>
       </table>
-      
-      <div class="months">
-        <?php
-        $previousMonthUrl = ($month == 1)
-          ? array($year - 1, 12)
-          : array($year, $month -1);
-        echo $this->Html->link('<< Mois précédent', $previousMonthUrl);
-        
-        $nextMonthUrl = ($month == 12)
-          ? array($year + 1, 1)
-          : array($year, $month + 1);
-        echo $this->Html->link('Mois suivant >>', $nextMonthUrl);
-        ?>
-      </div>
+    
+    <?php
+    echo $browse_months;
+    ?>
     </article>
     
     <h1>
