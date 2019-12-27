@@ -10,6 +10,7 @@ $this->Html->css(
   
     echo $this->Form->input('login', array(
       'div' => false,
+      'autofocus' => true,
       'label' => 'Identifiant&nbsp;:'));
     
     echo $this->Form->input('mdp', array(
