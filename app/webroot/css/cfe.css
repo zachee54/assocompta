@@ -5,23 +5,17 @@ body {
 }
 
 body > header {
-  position: sticky;
-  width: 100%;
-  top: 0;
-}
-
-body > header .title {
   min-height: 50px;
   padding: 10px;
   font-size: xx-large;
   font-weight: bold;
   font-family: Candara, Calibri, Verdana, sans-serif;
   color: brown;
-  background-color: cornsilk;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: end;
+  background-color: cornsilk;
 }
 
 body > header aside {
@@ -44,24 +38,24 @@ body > header aside a:hover {
   text-decoration: underline;
 }
 
-body > header > nav {
+body > nav:first-of-type {
   font-weight: bold;
   background-color: brown;
 }
-body > header > nav ul {
+body > nav:first-of-type ul {
   margin: 0;
   min-height: 35px;
   display: flex;
   list-style: none;
 }
-body > header > nav li {
+body > nav:first-of-type li {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
   color: cornsilk;
   transition: 400ms;
 }
-body > header > nav a {
+body > nav:first-of-type a {
   min-width: 100px;
   padding: 0 10px;
   display: flex;
@@ -70,10 +64,10 @@ body > header > nav a {
   color: cornsilk;
   transition: 400ms;
 }
-body > header > nav li:hover {
+body > nav:first-of-type li:hover {
   background-color: cornsilk;
 }
-body > header > nav li:hover a {
+body > nav:first-of-type li:hover a {
   color: brown;
 }
 

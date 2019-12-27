@@ -12,68 +12,66 @@
 </head>
 <body>
   <header>
-    <div class="title">
-      Centre de Formation et d'Entraide
+    <div>Centre de Formation et d'Entraide</div>
+    <?php
+    if (AuthComponent::user()) {
+      ?>
+      <aside>
+        <header><?php echo AuthComponent::user('nom'); ?></header>
+        <nav>
+          <ul>
+            <li>
+              <?php
+              echo $this->Html->link(
+                'Changer mon mot de passe',
+                array('controller' => 'users', 'action' => 'moncompte'));
+              ?>
+            </li>
+            <li>
+              <?php
+              echo $this->Html->link(
+                'Déconnexion',
+                array('controller' => 'users', 'action' => 'logout'));
+              ?>
+            </li>
+          </ul>
+        </nav>
+      </aside>
       <?php
-      if (AuthComponent::user()) {
+    }
+    ?>
+  </header>
+  <nav>
+    <ul>
+      <li>
+        <?php
+        echo $this->Html->link('Opérations', array(
+          'controller' => 'ecritures',
+          'action' => 'index'));
         ?>
-        <aside>
-          <header><?php echo AuthComponent::user('nom'); ?></header>
-          <nav>
-            <ul>
-              <li>
-                <?php
-                echo $this->Html->link(
-                  'Changer mon mot de passe',
-                  array('controller' => 'users', 'action' => 'moncompte'));
-                ?>
-              </li>
-              <li>
-                <?php
-                echo $this->Html->link(
-                  'Déconnexion',
-                  array('controller' => 'users', 'action' => 'logout'));
-                ?>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+      </li>
+      <li>
+        <?php
+        echo $this->Html->link('Frères', array(
+          'controller' => 'freres',
+          'action' => 'index'));
+        ?>
+      </li>
+      <?php
+      if (AuthComponent::user('admin')) {
+        ?>
+        <li>
+          <?php
+          echo $this->Html->link('Administration', array(
+            'controller' => 'users',
+            'action' => 'index'));
+          ?>
+        </li>
         <?php
       }
       ?>
-    </div>
-    <nav>
-      <ul>
-        <li>
-          <?php
-          echo $this->Html->link('Opérations', array(
-            'controller' => 'ecritures',
-            'action' => 'index'));
-          ?>
-        </li>
-        <li>
-          <?php
-          echo $this->Html->link('Frères', array(
-            'controller' => 'freres',
-            'action' => 'index'));
-          ?>
-        </li>
-        <?php
-        if (AuthComponent::user('admin')) {
-          ?>
-          <li>
-            <?php
-            echo $this->Html->link('Administration', array(
-              'controller' => 'users',
-              'action' => 'index'));
-            ?>
-          </li>
-          <?php
-        }
-        ?>
-      </ul>
-    </nav>
-  </header>
+    </ul>
+  </nav>
   <?php
   echo $this->Flash->render();
   echo $this->fetch('content');
