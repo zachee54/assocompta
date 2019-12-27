@@ -20,9 +20,11 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
         'label' => 'Date banque&nbsp;:'));
       
       echo $this->Form->input('poste_id', array(
+        'default' => 8,
         'label' => 'Poste&nbsp;:'));
       
       echo $this->Form->input('activite_id', array(
+        'default' => 2,
         'label' => 'Activité&nbsp;:'));
       ?>
     </div>
