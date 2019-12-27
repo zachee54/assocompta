@@ -16,4 +16,5 @@
 
 .navMonths a {
   color: inherit;
+  display: block;
 }
