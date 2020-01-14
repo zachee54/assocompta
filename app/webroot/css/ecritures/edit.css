@@ -56,3 +56,7 @@
 .EcritureEditForm .submit .cancelButton {
   background-color: gray;
 }
+
+#deleteButton {
+  background-color: brown;
+}
