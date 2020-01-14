@@ -16,7 +16,11 @@ $this->Html->css('ecritures/nav_months', array('inline' => false));
             <?php
             echo $this->Html->link(
               strftime('%B', mktime(0, 0, 0, $navMonth, 10)),
-              array($navYear, $navMonth));
+                array(
+                  'controller' => 'ecritures',
+                  'action' => 'index',
+                  $navYear,
+                  $navMonth));
             ?>
           </li>
           <?php
