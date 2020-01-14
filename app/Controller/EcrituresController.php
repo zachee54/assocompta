@@ -142,4 +142,20 @@ class EcrituresController extends AppController {
       unset($this->request->data['Ecriture'][$ecritureField]);
     }
   }
+  
+  /**
+   * Efface une écriture.
+   * 
+   * @param int id  L'identifiant de l'écriture à supprimer.
+   */
+  public function delete($id) {
+    if ($id && $this->request->is('put', 'post')) {
+      if ($this->Ecriture->delete($id)) {
+        $this->Flash->success("L'écriture a été supprimée");
+      } else {
+        $this->Flash->error("Erreur lors de la suppression de l'écriture");
+      }
+    }
+    $this->redirect('/');
+  }
 }
