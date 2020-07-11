@@ -7,8 +7,6 @@ class Ecriture extends AppModel {
   
   public $belongsTo = array('Poste', 'Activite');
   
-  public $hasAndBelongsToMany = array('Frere');
-  
   public $validate = array(
     'debit' => array(
       'rule' => 'amountsNotEmpty',
