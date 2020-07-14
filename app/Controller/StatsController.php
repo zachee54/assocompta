@@ -1,13 +1,19 @@
 <?php
 class StatsController extends AppController {
   
+  /**
+   * Fonction SQL donnant l'année de clôture à partir d'une date.
+   * Le principe est celui d'un exercice clôturé au 30/09, donc les
+   * dates d'octobre à décembre renvoient l'année N+1.
+   */
+  const EXERCICE = 'YEAR(ADDDATE(Ecriture.date_bancaire, INTERVAL 3 MONTH))';
+  
   public $uses = array('Ecriture');
   
   /**
    * Affiche un bilan de l'exercice par postes et par activités.
    * 
-   * @param year: Année de clôture de l'exercice à afficher. La période
-   *              retenue court du 01/10/N-1 au 30/09/N.
+   * @param year: Année de clôture de l'exercice à afficher.
    */
   public function bilan($year=null) {
     if (!$year) {
@@ -17,7 +23,7 @@ class StatsController extends AppController {
     $ecritures = $this->Ecriture->find('all', array(
       'fields' => array(
         'SUM(Ecriture.credit - Ecriture.debit) AS montant',
-        'YEAR(ADDDATE(Ecriture.date_bancaire, INTERVAL 3 MONTH)) AS exercice',
+        $this::EXERCICE.' AS exercice',
         'Poste.name',
         'Poste.recettes',
         'Activite.name'),
@@ -26,7 +32,7 @@ class StatsController extends AppController {
         'Poste.recettes',
         'Activite.name'),
       'conditions' => array(
-        "YEAR(ADDDATE(Ecriture.date_bancaire, INTERVAL 3 MONTH)) = $year")));
+        $this::EXERCICE." = $year")));
     
     $this->set('ecritures', array_map(
       array('StatsController', '_flatten'),
