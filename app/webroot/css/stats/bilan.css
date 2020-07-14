@@ -1,5 +1,6 @@
-#bilan {
+.pvtUi {
   padding: 20px;
+  background-color: inherit;
 }
 
 .pvtTable .pvtVal, .pvtTable .pvtTotal {
