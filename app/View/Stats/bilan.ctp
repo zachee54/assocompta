@@ -40,7 +40,7 @@ $this->append('scriptBottom');
             colorScaleGenerator: function(values) {
               // Plotly happens to come with d3 on board
               return Plotly.d3.scale.linear()
-                  .domain([-10000, 0, 10000])
+                  .domain([-1000, 0, 1000])
                   .range(["#F77", "#FFF", "#7F7"])
             }
           }
