@@ -4,8 +4,8 @@ $this->Html->css(
   array('inline' => false));
 
 ?>
-<div id="bilan">
-</div>
+<div id="bilan"></div>
+<div id="detail"></div>
 <?php
 
 echo $this->element('jquery');
@@ -43,11 +43,27 @@ $this->append('scriptBottom');
                   .domain([-1000, 0, 1000])
                   .range(["#F77", "#FFF", "#7F7"])
             }
+          },
+          table: {
+            clickCallback: displayEcritures
           }
         },
         showUI: false
       }
     );
+    
+    function displayEcritures(e, value, filters, pivotData) {
+      $.post(
+        '<?php echo $this->Html->url(array(
+          'action' => 'bilan_detail',
+          $year));
+        ?>',
+        filters,
+        function(data, textStatus, jqXHR) {
+          $('#detail').html(data);
+        }
+      );
+    }
     
   });
   -->

@@ -37,6 +37,7 @@ class StatsController extends AppController {
     $this->set('ecritures', array_map(
       array('StatsController', '_flatten'),
       $ecritures));
+    $this->set('year', $year);
   }
   
   /**
@@ -50,5 +51,20 @@ class StatsController extends AppController {
       'Sens' => $ecriture['Poste']['recettes'] ? 'Recettes' : 'Dépenses',
       'Activité' => $ecriture['Activite']['name'],
       'Montant' => $ecriture['0']['montant']);
+  }
+  
+  /**
+   * Affiche les écritures correspondant aux filtres postés.
+   */
+  public function bilan_detail($year) {
+    if ($this->request->is('post')) {
+      $data = $this->request->data;
+      
+      $this->set('ecritures', $this->Ecriture->find('all', array(
+        'conditions' => array(
+          $this::EXERCICE." = $year",
+          'Activite.name' => $data['Activité'],
+          'Poste.name' => $data['Poste']))));
+    }
   }
 }
