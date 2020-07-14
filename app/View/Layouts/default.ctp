@@ -52,9 +52,9 @@
       </li>
       <li>
         <?php
-        echo $this->Html->link('Frères', array(
-          'controller' => 'freres',
-          'action' => 'index'));
+        echo $this->Html->link('Bilan', array(
+          'controller' => 'stats',
+          'action' => 'bilan'));
         ?>
       </li>
       <?php

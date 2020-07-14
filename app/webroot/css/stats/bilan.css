@@ -1,0 +1,7 @@
+#bilan {
+  padding: 20px;
+}
+
+.pvtTable .pvtVal, .pvtTable .pvtTotal {
+  white-space: nowrap;
+}
