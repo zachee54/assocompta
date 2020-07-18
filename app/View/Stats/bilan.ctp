@@ -49,7 +49,9 @@ $this->append('scriptBottom');
           }
         },
         showUI: false
-      }
+      },
+      false,
+      'fr'
     );
     
     function displayEcritures(e, value, filters, pivotData) {
