@@ -1,6 +1,6 @@
 <?php
 $this->Html->css(
-  array('stats/pivot.min', 'stats/bilan'),
+  array('stats/pivot.min', 'stats/bilan', 'ecritures/index'),
   array('inline' => false));
 
 ?>
