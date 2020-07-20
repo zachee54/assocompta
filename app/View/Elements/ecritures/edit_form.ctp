@@ -69,6 +69,22 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
           'formmethod' => 'post',
           'class' => 'button',
           'div' => false));
+        
+        echo $this->element('jquery');
+
+        $this->append('scriptBottom');
+        ?>
+        <script type="text/javascript">
+          $(function() {
+            $('#deleteButton').click(function(evt) {
+              if (!confirm("Confirmez la suppression de l'écriture")) {
+          evt.preventDefault();
+              }
+            });
+          });
+        </script>
+        <?php
+        $this->end();
       }
       ?>
     </div>
@@ -76,19 +92,3 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
   <?php
   
 echo $this->Form->end();
-
-$this->element('jquery');
-
-$this->append('scriptBottom');
-?>
-<script type="text/javascript">
-  $(function() {
-    $('#deleteButton').click(function(evt) {
-      if (!confirm("Confirmez la suppression de l'écriture")) {
-  evt.preventDefault();
-      }
-    });
-  });
-</script>
-<?php
-$this->end();
