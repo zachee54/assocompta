@@ -3,6 +3,8 @@ $this->Html->css(
   array('stats/pivot.min', 'stats/bilan', 'ecritures/index'),
   array('inline' => false));
 
+$this->element('ecritures/click2edit');
+
 ?>
 <div id="bilan"></div>
 <div id="detail"></div>
@@ -63,6 +65,9 @@ $this->append('scriptBottom');
         filters,
         function(data, textStatus, jqXHR) {
           $('#detail').html(data);
+          <?php
+          echo $this->element('ecritures/click2edit_script');
+          ?>
         }
       );
     }

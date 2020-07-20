@@ -3,6 +3,8 @@ $this->Html->css(
   array('ecritures/index', 'ecritures/common', 'button'),
   array('inline' => false));
 
+$this->element('ecritures/click2edit');
+
 ?>
 <div id="content">
   <?php
@@ -58,19 +60,3 @@ $this->Html->css(
     </article>
   </section>
 </div>
-<?php
-
-// Scripts JS de fin de page
-$this->element('jquery');
-
-$this->append('scriptBottom');
-?>
-<script type="text/javascript">
-  $('tr[ref]').click(function(event) {
-    window.location = '<?php
-      echo $this->Html->url(array('action' => 'edit'));
-    ?>/' + $(event.currentTarget).attr('ref');
-  });
-</script>
-<?php
-$this->end();
