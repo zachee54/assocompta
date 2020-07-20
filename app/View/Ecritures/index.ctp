@@ -2,37 +2,7 @@
 $this->Html->css(
   array('ecritures/index', 'ecritures/common', 'button'),
   array('inline' => false));
-$this->element('currency');
 
-/**
- * Affiche une ligne de tableau indiquant le solde à une date donnée.
- * 
- * @param object $self    L'objet dans lequel s'exécute la vue.
- * @param string $date    La date.
- * @param float $montant  Le montant, négatif pour le débit ou positif pour le
- *                        crédit.
- */
-function displaySolde($self, $date, $montant) {
-  ?>
-  <tr class="solde">
-    <td colspan="7">Solde au <?php echo date_format($date, 'd/m/Y'); ?></td>
-    <td>
-      <?php
-      if ($montant < 0) {
-        echo $self->Number->currency(-$montant); 
-      }
-      ?>
-    </td>
-    <td>
-      <?php
-      if ($montant >= 0) {
-        echo $self->Number->currency($montant); 
-      }
-      ?>
-    </td>
-  </tr>
-  <?php
-}
 ?>
 <div id="content">
   <?php
@@ -67,60 +37,12 @@ function displaySolde($self, $date, $montant) {
     </h1>
     
     <article>
-      <table class="ecritures">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Date banque</th>
-            <th>Poste</th>
-            <th>Activité</th>
-            <th>Description</th>
-            <th>Personne</th>
-            <th>N° pièce</th>
-            <th>Débit</th>
-            <th>Crédit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          displaySolde($this, $debut, $a_nouveau);
-          
-          foreach ($ecritures as $ecriture) {
-          ?>
-          <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
-            <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
-            <td><?php echo $ecriture['Ecriture']['bancaire']; ?></td>
-            <td><?php echo $ecriture['Poste']['name']; ?></td>
-            <td><?php echo $ecriture['Activite']['name']; ?></td>
-            <td><?php echo $ecriture['Ecriture']['description']; ?></td>
-            <td><?php echo $ecriture['Ecriture']['personne']; ?></td>
-            <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
-            <td>
-              <?php
-              if ($ecriture['Ecriture']['debit'] != 0) {
-                echo $this->Number->currency($ecriture['Ecriture']['debit']);
-              }
-              ?>
-            </td>
-            <td>
-              <?php
-              if ($ecriture['Ecriture']['credit'] != 0) {
-                echo $this->Number->currency($ecriture['Ecriture']['credit']);
-              }
-              ?>
-            </td>
-          </tr>
-          <?php
-          }
-          
-          displaySolde($this, $fin, $solde);
-          ?>
-        </tbody>
-      </table>
-    
-    <?php
-    echo $browse_months;
-    ?>
+      <?php
+      echo $this->element('ecritures/table', array(
+        'displaySoldes' => true));
+      
+      echo $browse_months;
+      ?>
     </article>
     
     <h1>
@@ -128,50 +50,11 @@ function displaySolde($self, $date, $montant) {
     </h1>
    
     <article>
-      <table class="ecritures">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Poste</th>
-            <th>Activité</th>
-            <th>Description</th>
-            <th>Personne</th>
-            <th>N° pièce</th>
-            <th>Débit</th>
-            <th>Crédit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          foreach ($enAttente as $ecriture) {
-          ?>
-          <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
-            <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
-            <td><?php echo $ecriture['Poste']['name']; ?></td>
-            <td><?php echo $ecriture['Activite']['name']; ?></td>
-            <td><?php echo $ecriture['Ecriture']['description']; ?></td>
-            <td><?php echo $ecriture['Ecriture']['personne']; ?></td>
-            <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
-            <td>
-              <?php
-              if ($ecriture['Ecriture']['debit'] != 0) {
-                echo $this->Number->currency($ecriture['Ecriture']['debit']);
-              }
-              ?>
-            </td>
-            <td>
-              <?php
-              if ($ecriture['Ecriture']['credit'] != 0) {
-                echo $this->Number->currency($ecriture['Ecriture']['credit']);
-              }
-              ?>
-            </td>
-          </tr>
-          <?php
-          }
-          ?>
-        </tbody>
-      </table>
+      <?php
+      echo $this->element('ecritures/table', array(
+        'ecritures' => $enAttente,
+        'no_bancaire' => true));
+      ?>
     </article>
   </section>
 </div>
