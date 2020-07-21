@@ -7,6 +7,7 @@
   <?php
     echo $this->Html->css('cfe');
     echo $this->fetch('css');
+    echo $this->fetch('jquery');
   ?>
   <link rel="icon" href="<?php echo $this->Html->url('/img/favicon.ico'); ?>"/>
 </head>

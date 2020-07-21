@@ -77,7 +77,7 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
   
 echo $this->Form->end();
 
-echo $this->element('jquery');
+$this->element('jquery');
 
 $this->append('scriptBottom');
 ?>
@@ -85,7 +85,7 @@ $this->append('scriptBottom');
   $(function() {
     $('#deleteButton').click(function(evt) {
       if (!confirm("Confirmez la suppression de l'écriture")) {
-        evt.preventDefault();
+  evt.preventDefault();
       }
     });
   });

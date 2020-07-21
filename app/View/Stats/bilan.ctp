@@ -8,7 +8,7 @@ $this->Html->css(
 <div id="detail"></div>
 <?php
 
-echo $this->element('jquery');
+$this->element('jquery');
 $this->element('jquery-ui');
 
 $scriptBottom = array('inline' => 'scriptBottom');
