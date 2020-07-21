@@ -58,13 +58,29 @@ class StatsController extends AppController {
    */
   public function bilan_detail($year) {
     if ($this->request->is('post')) {
-      $data = $this->request->data;
-      
       $this->set('ecritures', $this->Ecriture->find('all', array(
-        'conditions' => array(
-          $this::EXERCICE." = $year",
-          'Activite.name' => $data['Activité'],
-          'Poste.name' => $data['Poste']))));
+        'conditions' => $this->_getDetailConditions($year))));
     }
+  }
+  
+  /**
+   * Renvoie les conditions de la requête en fonction des données
+   * postées.
+   * 
+   * @param year  L'année de clôture.
+   * 
+   * @return      Un tableau de conditions au format attendu par find().
+   */
+  private function _getDetailConditions($year) {
+    $data = $this->request->data;
+    
+    $conditions = array($this::EXERCICE." = $year");
+    if (isset($data['Activité'])) {
+      $conditions['Activite.name'] = $data['Activité'];
+    }
+    if (isset($data['Poste'])) {
+      $conditions['Poste.name'] = $data['Poste'];
+    }
+    return $conditions;
   }
 }
