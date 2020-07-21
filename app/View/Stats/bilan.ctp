@@ -6,6 +6,24 @@ $this->Html->css(
 $this->element('ecritures/click2edit');
 
 ?>
+<nav id="years">
+  <ul>
+    <?php
+    foreach ($years as $value) {
+      $exercice = $value[0]['years'];
+      ?>
+      <li>
+        <?php
+        echo $this->Html->link(
+          $exercice,
+          array($exercice));
+        ?>
+      </li>
+      <?php
+    }
+    ?>
+  </ul>
+</nav>
 <div id="bilan"></div>
 <div id="detail"></div>
 <?php

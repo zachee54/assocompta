@@ -37,6 +37,11 @@ class StatsController extends AppController {
     $this->set('ecritures', array_map(
       array('StatsController', '_flatten'),
       $ecritures));
+    
+    $this->set('years', $this->Ecriture->find('all', array(
+      'fields' => array('DISTINCT '.$this::EXERCICE.' AS years'),
+      'conditions' => array('date_bancaire IS NOT NULL'),
+      'order' => 'years DESC')));
     $this->set('year', $year);
   }
   
