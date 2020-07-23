@@ -15,7 +15,7 @@ $this->element('ecritures/click2edit');
       <li>
         <?php
         echo $this->Html->link(
-          $exercice,
+          ($exercice-1).'-'.$exercice,
           array($exercice));
         ?>
       </li>

@@ -1,5 +1,26 @@
+#years ul {
+  display: flex;
+  list-style-type: none;
+}
+
+#years li {
+  min-width: 100px;
+  margin: 0 10px;
+  padding: 2px;
+  border-radius: 8px / 50%;
+  background-color: bisque;
+  text-align: center;
+  display: flex;
+  justify-content: stretch;
+}
+
+#years a {
+  min-width: 100px;
+  color: brown;
+}
+
 .pvtUi {
-  padding: 20px;
+  padding: 0 20px;
   background-color: inherit;
 }
 
