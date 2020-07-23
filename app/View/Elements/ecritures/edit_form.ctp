@@ -58,7 +58,7 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
       
       if (!empty($showCancel)) {
         echo $this->Html->link('Annuler',
-          array('action' => 'index'),
+          $this->request->referer(),
           array('class' => 'button cancelButton'));
         
         echo $this->Form->submit('Supprimer', array(
