@@ -19,6 +19,11 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
         'type' => 'DATE',
         'label' => 'Date banque&nbsp;:'));
       
+      if (AuthComponent::user('admin')) {
+        echo $this->Form->input('rattachement', array(
+          'label' => 'Rattachement&nbsp;:'));
+      }
+      
       echo $this->Form->input('poste_id', array(
         'default' => 8,
         'label' => 'Poste&nbsp;:'));
