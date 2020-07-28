@@ -20,7 +20,7 @@ class StatsController extends AppController {
       $year = date_format(date_create(), 'Y');
     }
     
-    $ecritures = $this->Ecriture->find('all', array(
+    $findOptions = array(
       'fields' => array(
         'SUM(Ecriture.credit - Ecriture.debit) AS montant',
         $this::EXERCICE.' AS exercice',
@@ -34,16 +34,35 @@ class StatsController extends AppController {
         'Poste.recettes',
         'Activite.name'),
       'conditions' => array(
-        'OR' => array(
-          array(
-            'Ecriture.rattachement IS NULL',
-            $this::EXERCICE." = $year"),
-          array(
-            'Ecriture.rattachement' => $year)))));
+        $this::EXERCICE." = $year"));
     
-    $this->set('ecritures', array_map(
+    // Écritures normales
+    $ecritures = $this->Ecriture->find('all', $findOptions);
+    $ecritures = array_map(
       array('StatsController', '_flatten'),
-      $ecritures));
+      $ecritures);
+    
+    // Écritures à attacher
+    $attachedEcritures = $this->Ecriture->find('all',
+      array_merge($findOptions, array(
+        'conditions' => array(
+          'Ecriture.rattachement' => $year,
+          'Ecriture.rattachement != '.$this::EXERCICE))));
+    $ecritures = array_merge($ecritures, array_map(
+      array('StatsController', '_flattenAttached'),
+      $attachedEcritures));
+    
+    // Écritures à détacher
+    $detachedEcritures = $this->Ecriture->find('all',
+      array_merge($findOptions, array(
+        'conditions' => array(
+          $this::EXERCICE." = $year",
+          'Ecriture.rattachement != '.$this::EXERCICE))));
+    $ecritures = array_merge($ecritures, array_map(
+      array('StatsController', '_flattenDetached'),
+      $detachedEcritures));
+    
+    $this->set('ecritures', $ecritures);
     
     $this->set('years', $this->Ecriture->find('all', array(
       'fields' => array('DISTINCT '.$this::EXERCICE.' AS years'),
@@ -55,23 +74,45 @@ class StatsController extends AppController {
   /**
    * Renvoie l'écriture sous la forme d'un tableau dont les clés sont
    * user-friendly.
+   * Le sens (recettes/dépenses) est modifié pour que les écritures
+   * apparaissent comme provenant se rapportant à un exercice différent.
+   * Le poste est supprimé, ce qui permet que ces écritures seront
+   * toutes affichées sur la même ligne, tous postes confondus.
+   */
+  private static function _flattenDetached($ecriture) {
+    $flat = self::_flatten($ecriture);
+    $flat['Poste'] = '';
+    $flat['Montant'] = -$flat['Montant'];
+    $flat['Sens'] = 'Opérations à enlever';
+    return $flat;
+  }
+  
+  /**
+   * Renvoie l'écriture sous la forme d'un tableau dont les clés sont
+   * user-friendly.
+   * Le sens (recettes/dépenses) est modifié pour que les écritures
+   * apparaissent à part, comme provenant d'un exercice différent.
+   * Le poste est supprimé, ce qui permet que ces écritures seront
+   * toutes affichées sur la même ligne, tous postes confondus.
+   */
+  private static function _flattenAttached($ecriture) {
+    $flat = self::_flatten($ecriture);
+    $flat['Poste'] = '';
+    $flat['Sens'] = 'Opérations à ajouter';
+    return $flat;
+  }
+  
+  /**
+   * Renvoie l'écriture sous la forme d'un tableau dont les clés sont
+   * user-friendly.
    */
   private static function _flatten($ecriture) {
     return array(
       'Exercice' => $ecriture['0']['exercice'],
-      'Poste' => $ecriture['Ecriture']['rattachement'] ? '' : $ecriture['Poste']['name'],
-      'Sens' => self::_getSens($ecriture),
+      'Poste' => $ecriture['Poste']['name'],
+      'Sens' => $ecriture['0']['sens'],
       'Activité' => $ecriture['Activite']['name'],
       'Montant' => $ecriture['0']['montant']);
-  }
-  
-  private static function _getSens($ecriture) {
-    $rattachement = $ecriture['Ecriture']['rattachement'];
-    if ($rattachement) {
-      return $rattachement < $ecriture['0']['exercice']
-        ? 'Opérations en avance' : 'Exercices antérieurs';
-    }
-    return $ecriture['0']['sens'];
   }
   
   /**
