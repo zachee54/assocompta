@@ -72,8 +72,8 @@ $this->append('scriptBottom');
           'Sens': $.pivotUtilities.sortAs([
             'Recettes',
             'Dépenses',
-            'Opérations à ajouter',
-            'Opérations à enlever'])
+            '<?php echo StatsController::ATTACHED; ?>',
+            '<?php echo StatsController::DETACHED; ?>'])
         },
         showUI: false
       },

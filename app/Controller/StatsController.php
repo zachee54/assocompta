@@ -8,6 +8,12 @@ class StatsController extends AppController {
    */
   const EXERCICE = 'YEAR(ADDDATE(Ecriture.date_bancaire, INTERVAL 3 MONTH))';
   
+  /** Libellé des opérations à ajouter pour affichage utilisateur. */
+  const ATTACHED = 'À ajouter';
+  
+  /** Libellé des opérations à enlever pour affichage utilisateur. */
+  const DETACHED = 'À enlever';
+  
   public $uses = array('Ecriture');
   
   /**
@@ -83,7 +89,7 @@ class StatsController extends AppController {
     $flat = self::_flatten($ecriture);
     $flat['Poste'] = '';
     $flat['Montant'] = -$flat['Montant'];
-    $flat['Sens'] = 'Opérations à enlever';
+    $flat['Sens'] = self::DETACHED;
     return $flat;
   }
   
@@ -98,7 +104,7 @@ class StatsController extends AppController {
   private static function _flattenAttached($ecriture) {
     $flat = self::_flatten($ecriture);
     $flat['Poste'] = '';
-    $flat['Sens'] = 'Opérations à ajouter';
+    $flat['Sens'] = self::ATTACHED;
     return $flat;
   }
   
