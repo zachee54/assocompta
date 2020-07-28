@@ -25,7 +25,7 @@ class StatsController extends AppController {
         'SUM(Ecriture.credit - Ecriture.debit) AS montant',
         $this::EXERCICE.' AS exercice',
         'Poste.name',
-        'Poste.recettes',
+        "IF (Poste.recettes, 'Recettes', 'Dépenses') AS sens",
         'Activite.name'),
       'group' => array(
         'Poste.name',
@@ -53,7 +53,7 @@ class StatsController extends AppController {
     return array(
       'Exercice' => $ecriture['0']['exercice'],
       'Poste' => $ecriture['Poste']['name'],
-      'Sens' => $ecriture['Poste']['recettes'] ? 'Recettes' : 'Dépenses',
+      'Sens' => $ecriture['0']['sens'],
       'Activité' => $ecriture['Activite']['name'],
       'Montant' => $ecriture['0']['montant']);
   }
