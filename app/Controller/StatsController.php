@@ -24,15 +24,22 @@ class StatsController extends AppController {
       'fields' => array(
         'SUM(Ecriture.credit - Ecriture.debit) AS montant',
         $this::EXERCICE.' AS exercice',
+        'Ecriture.rattachement',
         'Poste.name',
         "IF (Poste.recettes, 'Recettes', 'Dépenses') AS sens",
         'Activite.name'),
       'group' => array(
+        'exercice',
         'Poste.name',
         'Poste.recettes',
         'Activite.name'),
       'conditions' => array(
-        $this::EXERCICE." = $year")));
+        'OR' => array(
+          array(
+            'Ecriture.rattachement IS NULL',
+            $this::EXERCICE." = $year"),
+          array(
+            'Ecriture.rattachement' => $year)))));
     
     $this->set('ecritures', array_map(
       array('StatsController', '_flatten'),
@@ -52,10 +59,19 @@ class StatsController extends AppController {
   private static function _flatten($ecriture) {
     return array(
       'Exercice' => $ecriture['0']['exercice'],
-      'Poste' => $ecriture['Poste']['name'],
-      'Sens' => $ecriture['0']['sens'],
+      'Poste' => $ecriture['Ecriture']['rattachement'] ? '' : $ecriture['Poste']['name'],
+      'Sens' => self::_getSens($ecriture),
       'Activité' => $ecriture['Activite']['name'],
       'Montant' => $ecriture['0']['montant']);
+  }
+  
+  private static function _getSens($ecriture) {
+    $rattachement = $ecriture['Ecriture']['rattachement'];
+    if ($rattachement) {
+      return $rattachement < $ecriture['0']['exercice']
+        ? 'Opérations en avance' : 'Exercices antérieurs';
+    }
+    return $ecriture['0']['sens'];
   }
   
   /**
