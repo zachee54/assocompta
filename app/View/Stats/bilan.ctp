@@ -68,6 +68,13 @@ $this->append('scriptBottom');
             clickCallback: displayEcritures
           }
         },
+        sorters: {
+          'Sens': $.pivotUtilities.sortAs([
+            'Recettes',
+            'Dépenses',
+            'Opérations à ajouter',
+            'Opérations à enlever'])
+        },
         showUI: false
       },
       false,
