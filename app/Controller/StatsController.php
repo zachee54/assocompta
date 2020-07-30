@@ -19,9 +19,31 @@ class StatsController extends AppController {
   /**
    * Affiche un bilan de l'exercice par postes et par activités.
    * 
-   * @param year: Année de clôture de l'exercice à afficher.
+   * @param $year: Année de clôture de l'exercice à afficher.
    */
   public function bilan($year=null) {
+    $this->_buildBilan($year, false);
+  }
+  
+  /**
+   * Affiche un bilan de l'exercice par postes et par activités.
+   * Le bilan est ajusté en fonction du rattachement explicite des
+   * écritures.
+   * 
+   * @param $year:  Année de clôture de l'exercice à afficher.
+   */
+  public function bilan_ajuste($year=null) {
+    $this->_buildBilan($year, true);
+  }
+  
+  /**
+   * Affiche un bilan de l'exercice par postes et par activités.
+   * 
+   * @param $year:    Année de clôture de l'exercice à afficher.
+   * @param $ajuste:  true pour ajuster le bilan en fonction du
+   *                  rattachement explicite des écritures.
+   */
+  private function _buildBilan($year, $ajuste=false) {
     if (!$year) {
       $year = date_format(date_create(), 'Y');
     }
@@ -48,25 +70,27 @@ class StatsController extends AppController {
       array('StatsController', '_flatten'),
       $ecritures);
     
-    // Écritures à attacher
-    $attachedEcritures = $this->Ecriture->find('all',
-      array_merge($findOptions, array(
-        'conditions' => array(
-          'Ecriture.rattachement' => $year,
-          'Ecriture.rattachement != '.$this::EXERCICE))));
-    $ecritures = array_merge($ecritures, array_map(
-      array('StatsController', '_flattenAttached'),
-      $attachedEcritures));
-    
-    // Écritures à détacher
-    $detachedEcritures = $this->Ecriture->find('all',
-      array_merge($findOptions, array(
-        'conditions' => array(
-          $this::EXERCICE." = $year",
-          'Ecriture.rattachement != '.$this::EXERCICE))));
-    $ecritures = array_merge($ecritures, array_map(
-      array('StatsController', '_flattenDetached'),
-      $detachedEcritures));
+    if ($ajuste) {
+      // Écritures à attacher
+      $attachedEcritures = $this->Ecriture->find('all',
+        array_merge($findOptions, array(
+          'conditions' => array(
+            'Ecriture.rattachement' => $year,
+            'Ecriture.rattachement != '.$this::EXERCICE))));
+      $ecritures = array_merge($ecritures, array_map(
+        array('StatsController', '_flattenAttached'),
+        $attachedEcritures));
+      
+      // Écritures à détacher
+      $detachedEcritures = $this->Ecriture->find('all',
+        array_merge($findOptions, array(
+          'conditions' => array(
+            $this::EXERCICE." = $year",
+            'Ecriture.rattachement != '.$this::EXERCICE))));
+      $ecritures = array_merge($ecritures, array_map(
+        array('StatsController', '_flattenDetached'),
+        $detachedEcritures));
+    }
     
     $this->set('ecritures', $ecritures);
     
