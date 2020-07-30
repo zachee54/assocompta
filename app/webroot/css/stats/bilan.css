@@ -3,23 +3,27 @@
   list-style-type: none;
 }
 
-#years a {
+#years span, #years a {
+  display: block;
   min-width: 100px;
-  color: brown;
-}
-
-#years li {
-  background-color: bisque;
   padding: 2px;
 }
 
-#years li, #toggleAttached span, #toggleAttached a {
+#years span {
+  background-color: bisque;
+  color: brown;
+}
+
+#years span, #years a, #toggleAttached span, #toggleAttached a {
   min-width: 100px;
   margin: 0 10px;
   border-radius: 8px / 50%;
   text-align: center;
-  display: flex;
-  justify-content: stretch;
+}
+
+#toggleAttached a, #years a {
+  background-color: #e6e6e6;
+  color: gray;
 }
 
 #toggleAttached span, #toggleAttached a {
@@ -28,11 +32,6 @@
 
 #toggleAttached span {
   background-color: #b9e3e3;
-}
-
-#toggleAttached a {
-  background-color: #e6e6e6;
-  color: gray;
 }
 
 #toggleAttached ul {
