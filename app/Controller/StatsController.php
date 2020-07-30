@@ -77,6 +77,12 @@ class StatsController extends AppController {
     $this->set('year', $year);
   }
   
+  private function _getAttachedEcrituresConditions($year) {
+    return array(
+      'Ecriture.rattachement' => $year,
+      'Ecriture.rattachement != '.$this::EXERCICE);
+  }
+  
   /**
    * Renvoie l'écriture sous la forme d'un tableau dont les clés sont
    * user-friendly.
@@ -142,13 +148,29 @@ class StatsController extends AppController {
   private function _getDetailConditions($year) {
     $data = $this->request->data;
     
+    // Conditions de temps
     $conditions = array($this::EXERCICE." = $year");
-    if (isset($data['Activité'])) {
-      $conditions['Activite.name'] = $data['Activité'];
+    if (isset($data['Sens'])) {
+      if ($data['Sens'] == $this::ATTACHED) {
+        $conditions = array(
+          'Ecriture.rattachement' => $year,
+          'Ecriture.rattachement != '.$this::EXERCICE);
+          
+      } else if ($data['Sens'] == $this::DETACHED) {
+        $conditions[] = 'Ecriture.rattachement != '.$this::EXERCICE;
+      }
     }
-    if (isset($data['Poste'])) {
+    
+    // Condition sur le poste
+    if (!empty($data['Poste'])) {
       $conditions['Poste.name'] = $data['Poste'];
     }
+    
+    // Condition sur l'activité
+    if (!empty($data['Activité'])) {
+      $conditions['Activite.name'] = $data['Activité'];
+    }
+    
     return $conditions;
   }
 }
