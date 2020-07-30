@@ -153,11 +153,15 @@ class StatsController extends AppController {
   
   /**
    * Affiche les écritures correspondant aux filtres postés.
+   * 
+   * @param $year:    L'année de clôture de l'exercice.
+   * @param $ajuste:  true pour tenir compte du rattachement explicite
+   *                  des écritures.
    */
-  public function bilan_detail($year) {
+  public function bilan_detail($year, $ajuste=false) {
     if ($this->request->is('post')) {
       $this->set('ecritures', $this->Ecriture->find('all', array(
-        'conditions' => $this->_getDetailConditions($year))));
+        'conditions' => $this->_getDetailConditions($year, $ajuste))));
     }
   }
   
@@ -165,36 +169,69 @@ class StatsController extends AppController {
    * Renvoie les conditions de la requête en fonction des données
    * postées.
    * 
-   * @param year  L'année de clôture.
+   * @param $year:    L'année de clôture.
+   * @param $ajuste:  true pour tenir compte du rattachement explicite
+   *                  des écritures.
    * 
-   * @return      Un tableau de conditions au format attendu par find().
+   * @return          Un tableau de conditions au format attendu par
+   *                  find().
    */
-  private function _getDetailConditions($year) {
+  private function _getDetailConditions($year, $ajuste) {
     $data = $this->request->data;
     
-    // Conditions de temps
-    $conditions = array($this::EXERCICE." = $year");
-    if (isset($data['Sens'])) {
-      if ($data['Sens'] == $this::ATTACHED) {
-        $conditions = array(
-          'Ecriture.rattachement' => $year,
-          'Ecriture.rattachement != '.$this::EXERCICE);
-          
-      } else if ($data['Sens'] == $this::DETACHED) {
-        $conditions[] = 'Ecriture.rattachement != '.$this::EXERCICE;
-      }
-    }
+    $conditions = $this->_getDetailTimeConditions($year, $ajuste);
     
-    // Condition sur le poste
     if (!empty($data['Poste'])) {
       $conditions['Poste.name'] = $data['Poste'];
     }
     
-    // Condition sur l'activité
     if (!empty($data['Activité'])) {
       $conditions['Activite.name'] = $data['Activité'];
     }
     
     return $conditions;
+  }
+  
+  /**
+   * Renvoie les conditions de temps pour le détail des écritures.
+   * 
+   * @param $year:    L'année de clôture.
+   * @param $ajuste:  true pour tenir compte du rattachement explicite
+   *                  des écritures.
+   * 
+   * @return          Un tableau de conditions au format attendu par
+   *                  find().
+   */
+  private function _getDetailTimeConditions($year, $ajuste) {
+    $data = $this->request->data;
+    
+    if (isset($data['Sens'])) {
+      
+      // Lignes d'écritures attachées/détachées : conditions spécifiques
+      if ($data['Sens'] == $this::ATTACHED) {
+        return array(
+          'Ecriture.rattachement' => $year,
+          'Ecriture.rattachement != '.$this::EXERCICE);
+          
+      } else if ($data['Sens'] == $this::DETACHED) {
+        return array(
+          $this::EXERCICE." = $year",
+          'Ecriture.rattachement != '.$this::EXERCICE);
+      }
+      
+    } else if ($ajuste) {
+      
+      /*
+       * Pas de sens => total des colonnes.
+       * $ajuste => tenir compte en priorité du rattachement pour
+       *  prendre les écritures attachées et ne pas prendre les
+       *  écritures détachées.
+       */
+      return array(
+        "COALESCE(Ecriture.rattachement, ".$this::EXERCICE.") = $year");
+    }
+    
+    // Par défaut : écritures de l'exercice
+    return array($this::EXERCICE." = $year");
   }
 }
