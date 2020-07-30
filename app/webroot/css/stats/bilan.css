@@ -3,20 +3,41 @@
   list-style-type: none;
 }
 
+#years a {
+  min-width: 100px;
+  color: brown;
+}
+
 #years li {
+  background-color: bisque;
+  padding: 2px;
+}
+
+#years li, #toggleAttached span, #toggleAttached a {
   min-width: 100px;
   margin: 0 10px;
-  padding: 2px;
   border-radius: 8px / 50%;
-  background-color: bisque;
   text-align: center;
   display: flex;
   justify-content: stretch;
 }
 
-#years a {
-  min-width: 100px;
-  color: brown;
+#toggleAttached span, #toggleAttached a {
+  padding: 2px 10px;
+}
+
+#toggleAttached span {
+  background-color: #b9e3e3;
+}
+
+#toggleAttached a {
+  background-color: #e6e6e6;
+  color: gray;
+}
+
+#toggleAttached ul {
+  display: flex;
+  list-style-type: none;
 }
 
 .pvtUi {

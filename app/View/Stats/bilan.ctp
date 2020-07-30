@@ -3,7 +3,9 @@ $this->extend('bilan_core');
 
 ?>
 <ul>
-  <li>Afficher les opérations de l'exercice</li>
+  <li>
+    <span>Afficher les opérations de l'exercice</span>
+  </li>
   <li>
     <?php
     echo $this->Html->link(
