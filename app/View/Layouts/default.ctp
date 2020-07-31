@@ -74,9 +74,18 @@
     </ul>
   </nav>
   <?php
+  
   echo $this->Flash->render();
   echo $this->fetch('content');
   echo $this->fetch('scriptBottom');
+  
   ?>
+  <footer>
+    <?php
+    echo $this->Html->link('Mentions légales', array(
+      'controller' => 'pages',
+      'action' => 'legal'));
+    ?>
+  </footer>
 </body>
 </html>

@@ -71,6 +71,17 @@ body > nav:first-of-type li:hover a {
   color: brown;
 }
 
+body > footer {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  font-size: xx-small;
+}
+
+body > footer a {
+  color: brown;
+}
+
 a {
   text-decoration: none;
 }
