@@ -94,6 +94,10 @@ class StatsController extends AppController {
     
     $this->set('ecritures', $ecritures);
     
+    $this->set('activites', $this->Ecriture->Activite->find('list',
+      array('order' => 'id')));
+    $this->set('postes', $this->Ecriture->Poste->find('list',
+      array('order' => 'id')));
     $this->set('years', $this->Ecriture->find('all', array(
       'fields' => array('DISTINCT '.$this::EXERCICE.' AS years'),
       'conditions' => array('date_bancaire IS NOT NULL'),

@@ -45,6 +45,11 @@ echo $this->Html->script('pivottable/pivot.fr.min', $scriptBottom);
 echo $this->Html->script('plotly-basic-latest.min', $scriptBottom);
 echo $this->Html->script('pivottable/plotly_renderers.min', $scriptBottom);
 
+function quote_array($text) {
+  $escapedText = addcslashes($text, "'");
+  return "'$escapedText'";
+}
+
 $this->append('scriptBottom');
 ?>
 <script type="text/javascript">
@@ -81,7 +86,11 @@ $this->append('scriptBottom');
             'Recettes',
             'Dépenses',
             '<?php echo StatsController::ATTACHED; ?>',
-            '<?php echo StatsController::DETACHED; ?>'])
+            '<?php echo StatsController::DETACHED; ?>']),
+          'Activite': $.pivotUtilities.sortAs(
+            [<?php echo implode(',', array_map('quote_array', $activites)); ?>]),
+          'Poste': $.pivotUtilities.sortAs(
+            [<?php echo implode(',', array_map('quote_array', $postes)); ?>])
         },
         showUI: false
       },
