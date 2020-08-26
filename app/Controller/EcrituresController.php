@@ -84,7 +84,7 @@ class EcrituresController extends AppController {
    * @param int $id L'identifiant de l'écriture.
    */
   public function edit($id = null) {
-    if ($this->request->is(array('put', 'post'))) {
+    if ($this->request->is(array('put', 'post')) && $this->_checkReadOnly()) {
       $this->Ecriture->id = $id;  // id peut être null
       $saved = $this->Ecriture->save($this->request->data);
       if ($saved) {
@@ -149,7 +149,7 @@ class EcrituresController extends AppController {
    * @param int id  L'identifiant de l'écriture à supprimer.
    */
   public function delete($id) {
-    if ($id && $this->request->is('put', 'post')) {
+    if ($id && $this->request->is('put', 'post') && $this->_checkReadOnly()) {
       if ($this->Ecriture->delete($id)) {
         $this->Flash->success("L'écriture a été supprimée");
       } else {
@@ -157,5 +157,17 @@ class EcrituresController extends AppController {
       }
     }
     $this->redirect('/');
+  }
+  
+  /**
+   * Vérifie que l'utilisateur a les droits en écriture.
+   */
+  private function _checkReadOnly() {
+    if ($this->Auth->user('readonly')) {
+      $this->Flash->error(
+        'Votre profil ne vous permet de modifier les données');
+      return false;
+    }
+    return true;
   }
 }

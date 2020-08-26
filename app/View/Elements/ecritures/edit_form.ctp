@@ -3,6 +3,8 @@ $this->Html->css(
   array('ecritures/edit', 'button'),
   array('inline' => false));
 
+$readonly = AuthComponent::user('readonly');
+
 echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
 ?>
   <article>
@@ -57,39 +59,43 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
     </div>
     <div class="submit">
       <?php
-      echo $this->Form->submit('Valider', array(
-        'class' => 'button',
-        'div' => false));
+      if (!$readonly) {
+        echo $this->Form->submit('Valider', array(
+          'class' => 'button',
+          'div' => false));
+      }
       
       if (!empty($showCancel)) {
         echo $this->Html->link('Annuler',
           $this->request->referer(),
           array('class' => 'button cancelButton'));
         
-        echo $this->Form->submit('Supprimer', array(
-          'id' => 'deleteButton',
-          'formaction' => $this->Html->url(array(
-            'action' => 'delete',
-            $this->data['Ecriture']['id'])),
-          'formmethod' => 'post',
-          'class' => 'button',
-          'div' => false));
-        
-        echo $this->element('jquery');
+        if (!$readonly) {
+          echo $this->Form->submit('Supprimer', array(
+            'id' => 'deleteButton',
+            'formaction' => $this->Html->url(array(
+              'action' => 'delete',
+              $this->data['Ecriture']['id'])),
+            'formmethod' => 'post',
+            'class' => 'button',
+            'div' => false));
+          
+          echo $this->element('jquery');
 
-        $this->append('scriptBottom');
-        ?>
-        <script type="text/javascript">
-          $(function() {
-            $('#deleteButton').click(function(evt) {
-              if (!confirm("Confirmez la suppression de l'écriture")) {
-          evt.preventDefault();
-              }
+          $this->append('scriptBottom');
+          ?>
+          <script type="text/javascript">
+            $(function() {
+              $('#deleteButton').click(function(evt) {
+                if (!confirm("Confirmez la suppression de l'écriture")) {
+            evt.preventDefault();
+                }
+              });
             });
-          });
-        </script>
-        <?php
-        $this->end();
+          </script>
+          <?php
+          $this->end();
+        }
       }
       ?>
     </div>

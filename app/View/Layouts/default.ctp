@@ -21,13 +21,20 @@
         <header><?php echo AuthComponent::user('nom'); ?></header>
         <nav>
           <ul>
-            <li>
-              <?php
-              echo $this->Html->link(
-                'Changer mon mot de passe',
-                array('controller' => 'users', 'action' => 'moncompte'));
+            <?php
+            if (!AuthComponent::user('readonly')) {
               ?>
-            </li>
+              <li>
+                <?php
+                echo $this->Html->link(
+                  'Changer mon mot de passe',
+                  array('controller' => 'users', 'action' => 'moncompte'));
+                ?>
+              </li>
+              <?php
+            }
+            
+            ?>
             <li>
               <?php
               echo $this->Html->link(

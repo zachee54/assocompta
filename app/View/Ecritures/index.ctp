@@ -17,15 +17,17 @@ $this->element('ecritures/click2edit');
     // Sur cette page, afficher les flashs ici plutôt que dans le layout principal
     echo $this->Flash->render();
     
-    ?>
-    <article class="align_left">
-      <fieldset>
-        <legend>Ajouter une écriture</legend>
-        <?php echo $this->element('ecritures/edit_form'); ?>
-      </fieldset>
-    </article>
+    if (!AuthComponent::user('readonly')) {
+      ?>
+      <article class="align_left">
+        <fieldset>
+          <legend>Ajouter une écriture</legend>
+          <?php echo $this->element('ecritures/edit_form'); ?>
+        </fieldset>
+      </article>
+      <?php
+    }
     
-    <?php
     $browse_months = $this->element('ecritures/browse_months', array(
       'year' => $year,
       'month' => $month));

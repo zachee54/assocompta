@@ -53,6 +53,11 @@ class UsersController extends AppController {
     if (!$this->request->isPost()) {
       return;
     }
+    if ($this->Auth->user('readonly')) {
+      $this->Flash->error(
+        'Votre profil ne vous permet pas de modifier le mot de passe');
+      return;
+    }
     $data = $this->request->data;
     
     if ($data['new_password'] != $data['password_confirm']) {
