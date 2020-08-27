@@ -71,6 +71,7 @@
         <li>
           <?php
           echo $this->Html->link('Administration', array(
+            'admin' => true,
             'controller' => 'users',
             'action' => 'index'));
           ?>
