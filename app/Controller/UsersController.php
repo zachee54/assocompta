@@ -1,6 +1,9 @@
 <?php
 class UsersController extends AppController {
   
+  /**
+   * Page de connexion.
+   */
   public function login() {
     if ($this->request->isPost()) {
       if ($this->Auth->login()) {
@@ -11,14 +14,23 @@ class UsersController extends AppController {
     }
   }
   
+  /**
+   * Page de déconnexion.
+   */
   public function logout() {
     $this->redirect($this->Auth->logout());
   }
   
+  /**
+   * Liste des utilisateurs.
+   */
   public function admin_index() {
     $this->set('users', $this->User->find('all'));
   }
   
+  /**
+   * Modification d'un utilisateur par l'administrateur.
+   */
   public function admin_edit($id = null) {
     if ($this->request->is(array('post', 'put'))) {
       $data = $this->request->data['User'];
@@ -49,6 +61,9 @@ class UsersController extends AppController {
       'nom', 'login', 'admin'));
   }
   
+  /**
+   * Modification du mot de passe de l'utilisateur courant.
+   */
   public function moncompte() {
     if (!$this->request->isPost()) {
       return;
@@ -83,12 +98,18 @@ class UsersController extends AppController {
     }
   }
   
+  /**
+   * Hachage du mot de passe pour modification.
+   */
   private function _hashPassword($password) {
     $authenticates = $this->Auth->constructAuthenticate();
     $hasher = $authenticates[0]->passwordHasher();
     return $hasher->hash($password);
   }
   
+  /**
+   * Suppression d'un utilisateur.
+   */
   public function admin_delete($id) {
     $user = $this->User->findById($id);
     $name = $user['User']['nom'];
@@ -109,6 +130,14 @@ class UsersController extends AppController {
     }
   }
   
+  /**
+   * Vérification de l'existence d'un administrateur, autre que l'utilisateur
+   * spécifié.
+   * 
+   * @param $id:  Identifiant d'un utilisateur.
+   * @return      true s'il existe un administrateur portant un autre
+   *              identifiant que $id.
+   */
   private function _hasOtherAdmin($id) {
     return $this->User->find('count', array(
       'conditions' => array(
