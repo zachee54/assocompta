@@ -28,7 +28,10 @@
                 <?php
                 echo $this->Html->link(
                   'Changer mon mot de passe',
-                  array('controller' => 'users', 'action' => 'moncompte'));
+                  array(
+                    'admin' => false,
+                    'controller' => 'users',
+                    'action' => 'moncompte'));
                 ?>
               </li>
               <?php
@@ -39,7 +42,10 @@
               <?php
               echo $this->Html->link(
                 'Déconnexion',
-                array('controller' => 'users', 'action' => 'logout'));
+                array(
+                  'admin' => false,
+                  'controller' => 'users',
+                  'action' => 'logout'));
               ?>
             </li>
           </ul>
@@ -54,6 +60,7 @@
       <li>
         <?php
         echo $this->Html->link('Opérations', array(
+          'admin' => false,
           'controller' => 'ecritures',
           'action' => 'index'));
         ?>
@@ -61,6 +68,7 @@
       <li>
         <?php
         echo $this->Html->link('Bilan', array(
+          'admin' => false,
           'controller' => 'stats',
           'action' => 'bilan'));
         ?>
