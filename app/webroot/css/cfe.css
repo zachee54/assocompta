@@ -72,8 +72,6 @@ body > nav:first-of-type li:hover a {
 }
 
 body > footer {
-  position: sticky;
-  bottom: 0;
   background-color: white;
   font-size: xx-small;
 }
