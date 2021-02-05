@@ -5,13 +5,27 @@ class UsersController extends AppController {
    * Page de connexion.
    */
   public function login() {
-    if ($this->request->isPost()) {
+    if ($this->request->isPost() || $this->_allowLoginInGet()) {
       if ($this->Auth->login()) {
         $this->redirect($this->Auth->redirectUrl());
       } else {
         $this->Flash->error('Identifiant ou mot de passe invalide');
       }
     }
+  }
+  
+  /**
+   * Copie les identifiants de login en GET comme s'ils avaient été passés en
+   * POST dans la requête, s'ils existent.
+   * 
+   * @return  true si l'identifiant avait été passé en GET.
+   */
+  private function _allowLoginInGet() {
+    if (isset($this->request->query['data']['User']['login'])) {
+      $this->request->data = $this->request->query['data'];
+      return true;
+    }
+    return false;
   }
   
   /**
