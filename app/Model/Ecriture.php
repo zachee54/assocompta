@@ -10,7 +10,17 @@ class Ecriture extends AppModel {
   public $validate = array(
     'debit' => array(
       'rule' => 'amountsNotEmpty',
-      'message' => 'Indiquez un montant en débit ou en crédit'));
+      'message' => 'Indiquez un montant en débit ou en crédit'),
+    'date_engagement' => array(
+      'notBlank' => array(
+        'rule' => 'notBlank',
+        'message' => 'La date est obligatoire'),
+      'date' => array(
+        'rule' => array('date', 'ymd'),
+        'message' => 'Date incorrecte')),
+    'date_bancaire' => array(
+      'rule' => array('date', 'ymd'),
+      'message' => 'Date incorrecte'));
   
   public function amountsNotEmpty($check) {
     $data = $this->data['Ecriture'];

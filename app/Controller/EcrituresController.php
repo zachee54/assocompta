@@ -96,6 +96,11 @@ class EcrituresController extends AppController {
           $yearMonth['month']));
       } else {
         $this->Flash->error('Erreur pendant la sauvegarde');
+        
+        // Réinsérer l'id dans les données. Il est utilisé pour le bouton Supprimer
+        if ($id !== null) {
+          $this->request->data['Ecriture']['id'] = $id;
+        }
       }
       
     } else if ($id !== null) {
