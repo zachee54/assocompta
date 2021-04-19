@@ -13,8 +13,9 @@
  * @since         CakePHP(tm) v 2.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Utility;
 
-App::uses('CakeText', 'Utility');
+
 
 /**
  * Library of array functions for manipulating and extracting data
@@ -52,8 +53,7 @@ class Hash {
 			$parts = array($path);
 		} else {
 			if (!is_array($path)) {
-				throw new InvalidArgumentException(__d('cake_dev',
-					'Invalid path parameter: %s, should be dot separated path or array.',
+				throw new InvalidArgumentException(__d('cake_dev', 'Invalid path parameter: {0}, should be dot separated path or array.',
 					var_export($path, true)
 				));
 			}
@@ -389,7 +389,7 @@ class Hash {
  * @param string $groupPath A dot-separated string.
  * @return array Combined array
  * @link https://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::combine
- * @throws CakeException CakeException When keys and values count is unequal.
+ * @throws \Exception \Exception When keys and values count is unequal.
  */
 	public static function combine(array $data, $keyPath, $valuePath = null, $groupPath = null) {
 		if (empty($data)) {
@@ -417,7 +417,7 @@ class Hash {
 		}
 
 		if (count($keys) !== count($vals)) {
-			throw new CakeException(__d(
+			throw new \Exception(__d(
 				'cake_dev',
 				'Hash::combine() needs an equal number of keys + values.'
 			));

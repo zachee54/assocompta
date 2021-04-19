@@ -15,6 +15,8 @@
  * @since         CakePHP(tm) v 1.2.0.4433
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite\templates;
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">

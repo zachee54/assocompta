@@ -15,8 +15,9 @@
  * @since         CakePHP(tm) v 1.2.0.4116
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\I18n;
 
-App::uses('CakeRequest', 'Network');
+
 
 /**
  * Localization
@@ -429,7 +430,7 @@ class L10n {
  * @return bool Success
  */
 	protected function _autoLanguage() {
-		$_detectableLanguages = CakeRequest::acceptLanguage();
+		$_detectableLanguages = Request::acceptLanguage();
 		foreach ($_detectableLanguages as $langKey) {
 			if (isset($this->_l10nCatalog[$langKey])) {
 				$this->_setLanguage($langKey);

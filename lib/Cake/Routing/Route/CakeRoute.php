@@ -12,8 +12,9 @@
  * @since         CakePHP(tm) v 1.3
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Routing\Route;
 
-App::uses('Hash', 'Utility');
+
 
 /**
  * A single Route used by the Router to connect requests to
@@ -24,7 +25,7 @@ App::uses('Hash', 'Utility');
  *
  * @package Cake.Routing.Route
  */
-class CakeRoute {
+class Route {
 
 /**
  * An array of named segments in a Route.
@@ -552,7 +553,7 @@ class CakeRoute {
  * router caching.
  *
  * @param array $fields Key/Value of object attributes
- * @return CakeRoute A new instance of the route
+ * @return Route A new instance of the route
  */
 	public static function __set_state($fields) {
 		$class = function_exists('get_called_class') ? get_called_class() : __CLASS__;

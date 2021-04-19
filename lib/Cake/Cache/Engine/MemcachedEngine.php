@@ -12,6 +12,8 @@
  * @since         CakePHP(tm) v 2.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Cache\Engine;
+
 
 /**
  * Memcached storage engine for cache. Memcached has some limitations in the amount of
@@ -159,13 +161,13 @@ class MemcachedEngine extends CacheEngine {
 		$serializer = strtolower($this->settings['serialize']);
 		if (!isset($this->_serializers[$serializer])) {
 			throw new CacheException(
-				__d('cake_dev', '%s is not a valid serializer engine for Memcached', $serializer)
+				__d('cake_dev', '{0} is not a valid serializer engine for Memcached', $serializer)
 			);
 		}
 
 		if ($serializer !== 'php' && !constant('Memcached::HAVE_' . strtoupper($serializer))) {
 			throw new CacheException(
-				__d('cake_dev', 'Memcached extension is not compiled with %s support', $serializer)
+				__d('cake_dev', 'Memcached extension is not compiled with {0} support', $serializer)
 			);
 		}
 

@@ -13,6 +13,8 @@
  * @since         CakePHP(tm) v 1.0.0.2363
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Configure;
+
 
 /**
  * An interface for creating objects compatible with Configure::load()

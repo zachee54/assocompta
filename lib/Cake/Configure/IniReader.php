@@ -15,9 +15,9 @@
  * @since         CakePHP(tm) v 2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Configure;
 
-App::uses('Hash', 'Utility');
-App::uses('CakePlugin', 'Core');
+
 
 /**
  * Ini file configuration engine.
@@ -103,7 +103,7 @@ class IniReader implements ConfigReaderInterface {
 
 		$file = $this->_getFilePath($key);
 		if (!is_file(realpath($file))) {
-			throw new ConfigureException(__d('cake_dev', 'Could not load configuration file: %s', $file));
+			throw new ConfigureException(__d('cake_dev', 'Could not load configuration file: {0}', $file));
 		}
 
 		$contents = parse_ini_file($file, true);
@@ -219,7 +219,7 @@ class IniReader implements ConfigReaderInterface {
 		}
 
 		if ($plugin) {
-			$file = CakePlugin::path($plugin) . 'Config' . DS . $key;
+			$file = Plugin::path($plugin) . 'Config' . DS . $key;
 		} else {
 			$file = $this->_path . $key;
 		}

@@ -15,7 +15,8 @@
  * @since         CakePHP(tm) v 2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-App::uses('AbstractTransport', 'Network/Email');
+namespace lib\Cake\Network\Email;
+
 
 /**
  * Send mail using mail() function
@@ -27,11 +28,11 @@ class MailTransport extends AbstractTransport {
 /**
  * Send mail
  *
- * @param CakeEmail $email CakeEmail
+ * @param Email $email Email
  * @return array
  * @throws SocketException When mail cannot be sent.
  */
-	public function send(CakeEmail $email) {
+	public function send(Email $email) {
 		$eol = PHP_EOL;
 		if (isset($this->_config['eol'])) {
 			$eol = $this->_config['eol'];

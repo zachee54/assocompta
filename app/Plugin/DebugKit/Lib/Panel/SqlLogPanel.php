@@ -11,7 +11,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('DebugPanel', 'DebugKit.Lib');
 
 /**
  * Provides debug information on the SQL logs and provides links to an ajax explain interface.
@@ -41,7 +40,7 @@ class SqlLogPanel extends DebugPanel {
 		$dbConfigs = ConnectionManager::sourceList();
 		foreach ($dbConfigs as $configName) {
 			$driver = null;
-			$db = ConnectionManager::getDataSource($configName);
+			$db = ConnectionManager::get($configName);
 			if (
 				(empty($db->config['driver']) && empty($db->config['datasource'])) ||
 				!method_exists($db, 'getLog')

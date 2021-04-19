@@ -12,7 +12,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('Debugger', 'Utility');
 
 /**
  * Contains methods for Profiling memory usage.

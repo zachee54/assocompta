@@ -1,4 +1,6 @@
 <?php
+namespace lib\Cake\TestSuite\templates;
+
 // @codingStandardsIgnoreFile
 /**
  * Short description for file.

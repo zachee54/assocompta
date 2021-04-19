@@ -1,6 +1,6 @@
 <?php
 /**
- * CakeRequest
+ * Request
  *
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,8 +14,9 @@
  * @since         CakePHP(tm) v 2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Network;
 
-App::uses('Hash', 'Utility');
+
 
 /**
  * A class that helps wrap Request information and particulars about a single request.
@@ -32,7 +33,7 @@ App::uses('Hash', 'Utility');
  * @property array $pass        Array of passed arguments parsed from the URL.
  * @package       Cake.Network
  */
-class CakeRequest implements ArrayAccess {
+class Request implements ArrayAccess {
 
 /**
  * Array of parameters parsed from the URL.
@@ -95,7 +96,7 @@ class CakeRequest implements ArrayAccess {
 /**
  * The built in detectors used with `is()` can be modified with `addDetector()`.
  *
- * There are several ways to specify a detector, see CakeRequest::addDetector() for the
+ * There are several ways to specify a detector, see Request::addDetector() for the
  * various formats and ways to define detectors.
  *
  * @var array
@@ -465,14 +466,14 @@ class CakeRequest implements ArrayAccess {
  * @param string $name The method called
  * @param array $params Array of parameters for the method call
  * @return mixed
- * @throws CakeException when an invalid method is called.
+ * @throws \Exception when an invalid method is called.
  */
 	public function __call($name, $params) {
 		if (strpos($name, 'is') === 0) {
 			$type = strtolower(substr($name, 2));
 			return $this->is($type);
 		}
-		throw new CakeException(__d('cake_dev', 'Method %s does not exist', $name));
+		throw new \Exception(__d('cake_dev', 'Method {0} does not exist', $name));
 	}
 
 /**
@@ -505,7 +506,7 @@ class CakeRequest implements ArrayAccess {
  * Check whether or not a Request is a certain type.
  *
  * Uses the built in detection rules as well as additional rules
- * defined with CakeRequest::addDetector(). Any detector can be called
+ * defined with Request::addDetector(). Any detector can be called
  * as `is($type)` or `is$Type()`.
  *
  * @param string|array $type The type of request you want to check. If an array
@@ -635,12 +636,12 @@ class CakeRequest implements ArrayAccess {
  * Check that a request matches all the given types.
  *
  * Allows you to test multiple types and union the results.
- * See CakeRequest::is() for how to add additional types and the
+ * See Request::is() for how to add additional types and the
  * built-in types.
  *
  * @param array $types The types to check.
  * @return bool Success.
- * @see CakeRequest::is()
+ * @see Request::is()
  */
 	public function isAll(array $types) {
 		$result = array_filter(array_map(array($this, 'is'), $types));
@@ -856,7 +857,7 @@ class CakeRequest implements ArrayAccess {
  * Parse the HTTP_ACCEPT header and return a sorted array with content types
  * as the keys, and pref values as the values.
  *
- * Generally you want to use CakeRequest::accept() to get a simple list
+ * Generally you want to use Request::accept() to get a simple list
  * of the accepted content types.
  *
  * @return array An array of prefValue => array(content/types)
@@ -870,11 +871,11 @@ class CakeRequest implements ArrayAccess {
  *
  * Get the list of accepted languages:
  *
- * ``` CakeRequest::acceptLanguage(); ```
+ * ``` Request::acceptLanguage(); ```
  *
  * Check if a specific language is accepted:
  *
- * ``` CakeRequest::acceptLanguage('es-es'); ```
+ * ``` Request::acceptLanguage('es-es'); ```
  *
  * @param string $language The language to test.
  * @return mixed If a $language is provided, a boolean. Otherwise the array of accepted languages.
@@ -938,7 +939,7 @@ class CakeRequest implements ArrayAccess {
 
 /**
  * Provides a read accessor for `$this->query`. Allows you
- * to use a syntax similar to `CakeSession` for reading URL query data.
+ * to use a syntax similar to `Session` for reading URL query data.
  *
  * @param string $name Query string variable name
  * @return mixed The value being read
@@ -949,7 +950,7 @@ class CakeRequest implements ArrayAccess {
 
 /**
  * Provides a read/write accessor for `$this->data`. Allows you
- * to use a syntax similar to `CakeSession` for reading post data.
+ * to use a syntax similar to `Session` for reading post data.
  *
  * ## Reading values.
  *
@@ -1069,13 +1070,13 @@ class CakeRequest implements ArrayAccess {
 	}
 
 /**
- * Alias of CakeRequest::allowMethod() for backwards compatibility.
+ * Alias of Request::allowMethod() for backwards compatibility.
  *
  * @param string|array $methods Allowed HTTP request methods.
  * @return bool true
  * @throws MethodNotAllowedException
- * @see CakeRequest::allowMethod()
- * @deprecated 3.0.0 Since 2.5, use CakeRequest::allowMethod() instead.
+ * @see Request::allowMethod()
+ * @deprecated 3.0.0 Since 2.5, use Request::allowMethod() instead.
  */
 	public function onlyAllow($methods) {
 		if (!is_array($methods)) {

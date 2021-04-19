@@ -11,7 +11,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('File', 'Utility');
 
 /**
  * TidyHelper class
@@ -160,8 +159,8 @@ class TidyHelper extends AppHelper {
 
 		if (Configure::read('debug')) {
 			$source = Debugger::trace(array('depth' => 1, 'start' => 2)) . "\n";
-			//CakeLog::write('system_calls_' . date('Y-m-d'), "\n" . $source . Debugger::exportVar(compact('cmd','out','return')));
-			//CakeLog::write('system_calls', "\n" . $source . Debugger::exportVar(compact('cmd','out','return')));
+			//Log::write('system_calls_' . date('Y-m-d'), "\n" . $source . Debugger::exportVar(compact('cmd','out','return')));
+			//Log::write('system_calls', "\n" . $source . Debugger::exportVar(compact('cmd','out','return')));
 		}
 		if ($return) {
 			return false;

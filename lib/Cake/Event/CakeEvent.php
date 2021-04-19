@@ -13,6 +13,8 @@
  * @since		  CakePHP(tm) v 2.1
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Event;
+
 
 /**
  * Represents the transport class of events across the system. It receives a name, subject and an optional
@@ -21,7 +23,7 @@
  *
  * @package Cake.Event
  */
-class CakeEvent {
+class Event {
 
 /**
  * Name of the event
@@ -68,8 +70,8 @@ class CakeEvent {
  * ## Examples of usage:
  *
  * ```
- *	$event = new CakeEvent('Order.afterBuy', $this, array('buyer' => $userData));
- *	$event = new CakeEvent('User.afterRegister', $UserModel);
+ *	$event = new Event('Order.afterBuy', $this, array('buyer' => $userData));
+ *	$event = new Event('User.afterRegister', $UserModel);
  * ```
  */
 	public function __construct($name, $subject = null, $data = null) {

@@ -13,11 +13,9 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Core;
 
-App::uses('CakeLog', 'Log');
-App::uses('Dispatcher', 'Routing');
-App::uses('Router', 'Routing');
-App::uses('Set', 'Utility');
+
 
 /**
  * CakeObject class provides a few generic methods used in several subclasses.
@@ -90,18 +88,18 @@ class CakeObject {
 			$url = Router::normalize(str_replace(Router::fullBaseUrl(), '', $url));
 		}
 		if (is_string($url)) {
-			$request = new CakeRequest($url);
+			$request = new Request($url);
 		} elseif (is_array($url)) {
 			$params = $url + array('pass' => array(), 'named' => array(), 'base' => false);
 			$params = $extra + $params;
-			$request = new CakeRequest(Router::reverse($params));
+			$request = new Request(Router::reverse($params));
 		}
 		if (isset($data)) {
 			$request->data = $data;
 		}
 
 		$dispatcher = new Dispatcher();
-		$result = $dispatcher->dispatch($request, new CakeResponse(), $extra);
+		$result = $dispatcher->dispatch($request, new Response(), $extra);
 		Router::popRequest();
 		return $result;
 	}
@@ -145,13 +143,13 @@ class CakeObject {
 	}
 
 /**
- * Convenience method to write a message to CakeLog. See CakeLog::write()
+ * Convenience method to write a message to Log. See Log::write()
  * for more information on writing to logs.
  *
  * @param mixed $msg Log message
  * @param int $type Error type constant. Defined in app/Config/core.php.
  * @param null|string|array $scope The scope(s) a log message is being created in.
- *    See CakeLog::config() for more information on logging scopes.
+ *    See Log::config() for more information on logging scopes.
  * @return bool Success of log write
  */
 	public function log($msg, $type = LOG_ERR, $scope = null) {
@@ -159,7 +157,7 @@ class CakeObject {
 			$msg = print_r($msg, true);
 		}
 
-		return CakeLog::write($type, $msg, $scope);
+		return Log::write($type, $msg, $scope);
 	}
 
 /**

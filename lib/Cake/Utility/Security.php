@@ -15,8 +15,9 @@
  * @since         CakePHP(tm) v .0.10.0.1233
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Utility;
 
-App::uses('CakeText', 'Utility');
+
 
 /**
  * Security Library contains utility methods related to security
@@ -219,8 +220,7 @@ class Security {
  */
 	public static function cipher($text, $key) {
 		if (empty($key)) {
-			trigger_error(__d('cake_dev', 'You cannot use an empty key for %s', 'Security::cipher()'), E_USER_WARNING);
-			return '';
+			trigger_error(__d('cake_dev', 'You cannot			return '';
 		}
 
 		srand((int)(float)Configure::read('Security.cipherSeed'));
@@ -252,16 +252,14 @@ class Security {
  */
 	public static function rijndael($text, $key, $operation) {
 		if (empty($key)) {
-			trigger_error(__d('cake_dev', 'You cannot use an empty key for %s', 'Security::rijndael()'), E_USER_WARNING);
-			return '';
+			trigger_error(__d('cake_dev', 'You cannot			return '';
 		}
 		if (empty($operation) || !in_array($operation, array('encrypt', 'decrypt'))) {
 			trigger_error(__d('cake_dev', 'You must specify the operation for Security::rijndael(), either encrypt or decrypt'), E_USER_WARNING);
 			return '';
 		}
 		if (strlen($key) < 32) {
-			trigger_error(__d('cake_dev', 'You must use a key larger than 32 bytes for Security::rijndael()'), E_USER_WARNING);
-			return '';
+			trigger_error(__d('cake_dev', 'You must			return '';
 		}
 		$algorithm = MCRYPT_RIJNDAEL_256;
 		$mode = MCRYPT_MODE_CBC;
@@ -340,7 +338,7 @@ class Security {
  * @param string $key The 256 bit/32 byte key to use as a cipher key.
  * @param string $hmacSalt The salt to use for the HMAC process. Leave null to use Security.salt.
  * @return string Encrypted data.
- * @throws CakeException On invalid data or key.
+ * @throws \Exception On invalid data or key.
  */
 	public static function encrypt($plain, $key, $hmacSalt = null) {
 		static::_checkKey($key, 'encrypt()');
@@ -380,11 +378,11 @@ class Security {
  * @param string $key Key to check.
  * @param string $method The method the key is being checked for.
  * @return void
- * @throws CakeException When key length is not 256 bit/32 bytes
+ * @throws \Exception When key length is not 256 bit/32 bytes
  */
 	protected static function _checkKey($key, $method) {
 		if (strlen($key) < 32) {
-			throw new CakeException(__d('cake_dev', 'Invalid key for %s, key must be at least 256 bits (32 bytes) long.', $method));
+			throw new \Exception(__d('cake_dev', 'Invalid key for {0}, key must be at least 256 bits (32 bytes) long.', $method));
 		}
 	}
 
@@ -395,12 +393,12 @@ class Security {
  * @param string $key The 256 bit/32 byte key to use as a cipher key.
  * @param string $hmacSalt The salt to use for the HMAC process. Leave null to use Security.salt.
  * @return string Decrypted data. Any trailing null bytes will be removed.
- * @throws CakeException On invalid data or key.
+ * @throws \Exception On invalid data or key.
  */
 	public static function decrypt($cipher, $key, $hmacSalt = null) {
 		static::_checkKey($key, 'decrypt()');
 		if (empty($cipher)) {
-			throw new CakeException(__d('cake_dev', 'The data to decrypt cannot be empty.'));
+			throw new \Exception(__d('cake_dev', 'The data to decrypt cannot be empty.'));
 		}
 		if ($hmacSalt === null) {
 			$hmacSalt = Configure::read('Security.salt');

@@ -14,6 +14,8 @@
  * @since         CakePHP(tm) v 1.3
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite\Reporter;
+
 
 if (!class_exists('PHPUnit_TextUI_ResultPrinter')) {
 	require_once 'PHPUnit/TextUI/ResultPrinter.php';
@@ -198,7 +200,7 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 		if (!$this->_headerSent) {
 			echo $this->paintHeader();
 		}
-		echo __d('cake_dev', 'Running  %s', $suite->getName()) . "\n";
+		echo __d('cake_dev', 'Running  {0}', $suite->getName()) . "\n";
 	}
 
 /**

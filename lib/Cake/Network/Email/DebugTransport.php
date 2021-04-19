@@ -15,7 +15,8 @@
  * @since         CakePHP(tm) v 2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-App::uses('AbstractTransport', 'Network/Email');
+namespace lib\Cake\Network\Email;
+
 
 /**
  * Debug Transport class, useful for emulate the email sending process and inspect the resulted
@@ -28,10 +29,10 @@ class DebugTransport extends AbstractTransport {
 /**
  * Send mail
  *
- * @param CakeEmail $email CakeEmail
+ * @param Email $email Email
  * @return array
  */
-	public function send(CakeEmail $email) {
+	public function send(Email $email) {
 		$headers = $email->getHeaders(array('from', 'sender', 'replyTo', 'readReceipt', 'returnPath', 'to', 'cc', 'subject'));
 		$headers = $this->_headersToString($headers);
 		$message = implode("\r\n", (array)$email->message());

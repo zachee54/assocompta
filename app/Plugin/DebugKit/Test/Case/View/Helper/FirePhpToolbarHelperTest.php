@@ -16,14 +16,8 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  **/
 
-$path = CakePlugin::path('DebugKit');
+$path = Plugin::path('DebugKit');
 
-App::uses('View', 'View');
-App::uses('Controller', 'Controller');
-App::uses('CakeResponse', 'Network');
-App::uses('Router', 'Routing');
-App::uses('ToolbarHelper', 'DebugKit.View/Helper');
-App::uses('FirePhpToolbarHelper', 'DebugKit.View/Helper');
 
 require_once $path . 'Test' . DS . 'Case' . DS . 'TestFireCake.php';
 
@@ -32,7 +26,7 @@ require_once $path . 'Test' . DS . 'Case' . DS . 'TestFireCake.php';
  *
  * @since         DebugKit 0.1
  */
-class FirePhpToolbarHelperTestCase extends CakeTestCase {
+class FirePhpToolbarHelperTestCase extends TestCase {
 
 /**
  * setUp
@@ -46,7 +40,7 @@ class FirePhpToolbarHelperTestCase extends CakeTestCase {
 		Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
 		Router::parse('/');
 
-		$this->Controller = new Controller($this->getMock('CakeRequest'), new CakeResponse());
+		$this->Controller = new Controller($this->getMock('Request'), new Response());
 		$this->View = new View($this->Controller);
 		$this->Toolbar = new ToolbarHelper($this->View, array('output' => 'DebugKit.FirePhpToolbar'));
 		$this->Toolbar->FirePhpToolbar = new FirePhpToolbarHelper($this->View);
@@ -108,7 +102,7 @@ class FirePhpToolbarHelperTestCase extends CakeTestCase {
  */
 	public function testAfterLayout() {
 		$this->Controller->viewPath = 'Posts';
-		$request = new CakeRequest('/posts/index');
+		$request = new Request('/posts/index');
 		$request->addParams(Router::parse($request->url));
 		$request->addPaths(array(
 			'webroot' => '/',

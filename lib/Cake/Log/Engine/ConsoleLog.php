@@ -15,9 +15,9 @@
  * @since         CakePHP(tm) v 2.2
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Log\Engine;
 
-App::uses('BaseLog', 'Log/Engine');
-App::uses('ConsoleOutput', 'Console');
+
 
 /**
  * Console logging. Writes logs to console output.

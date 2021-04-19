@@ -13,23 +13,22 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('SqlLogPanel', 'DebugKit.Lib/Panel');
-App::uses('Model', 'Model');
-App::uses('Controller', 'Controller');
 
 /**
  * Class SqlLogPanelTest
  *
  * @since         DebugKit 2.1
  */
-class SqlLogPanelTest extends CakeTestCase {
+class SqlLogPanelTest extends TestCase {
 
 /**
  * fixtures.
  *
  * @var array
  */
-	public $fixtures = array('core.article');
+	public $fixtures = array(
+		'core.articles'
+	);
 
 /**
  * Setup

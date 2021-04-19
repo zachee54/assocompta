@@ -12,9 +12,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('DebugKitDebugger', 'DebugKit.Lib');
-App::uses('AppHelper', 'View/Helper');
-App::uses('ConnectionManager', 'Model');
 
 /**
  * Provides Base methods for content specific debug toolbar helpers.
@@ -162,7 +159,7 @@ class ToolbarHelper extends AppHelper {
  */
 	public function getQueryLogs($connection, $options = array()) {
 		$options += array('explain' => false, 'cache' => true, 'threshold' => 20);
-		$db = ConnectionManager::getDataSource($connection);
+		$db = ConnectionManager::get($connection);
 
 		if (!method_exists($db, 'getLog')) {
 			return array();

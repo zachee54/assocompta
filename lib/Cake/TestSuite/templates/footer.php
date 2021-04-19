@@ -15,6 +15,8 @@
  * @since         CakePHP(tm) v 1.2.0.4433
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite\templates;
+
 ?>	</div>
 		</div>
 		<div id="footer">
@@ -25,7 +27,6 @@
 			</p>
 		</div>
 		<?php
-			App::uses('View', 'View');
 			$null = null;
 			$View = new View($null, false);
 			echo $View->element('sql_dump');

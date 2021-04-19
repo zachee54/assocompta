@@ -16,21 +16,13 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('View', 'View');
-App::uses('Controller', 'Controller');
-App::uses('Router', 'Routing');
-App::uses('CakeResponse', 'Network');
-App::uses('ToolbarHelper', 'DebugKit.View/Helper');
-App::uses('HtmlToolbarHelper', 'DebugKit.View/Helper');
-App::uses('HtmlHelper', 'View/Helper');
-App::uses('FormHelper', 'View/Helper');
 
 /**
  * Class HtmlToolbarHelperTestCase
  *
  * @since         DebugKit 0.1
  */
-class HtmlToolbarHelperTestCase extends CakeTestCase {
+class HtmlToolbarHelperTestCase extends TestCase {
 
 /**
  * Setup Test Case
@@ -66,10 +58,10 @@ class HtmlToolbarHelperTestCase extends CakeTestCase {
 
 		Router::connect('/:controller/:action');
 
-		$request = new CakeRequest();
+		$request = new Request();
 		$request->addParams(array('controller' => 'pages', 'action' => 'display'));
 
-		$this->Controller = new Controller($request, new CakeResponse());
+		$this->Controller = new Controller($request, new Response());
 		$this->View = new View($this->Controller);
 		$this->Toolbar = new ToolbarHelper($this->View, array('output' => 'DebugKit.HtmlToolbar'));
 		$this->Toolbar->HtmlToolbar = new HtmlToolbarHelper($this->View);
@@ -316,7 +308,7 @@ class HtmlToolbarHelperTestCase extends CakeTestCase {
  */
 	public function testInjectToolbar() {
 		$this->Controller->viewPath = 'Posts';
-		$request = new CakeRequest('/posts/index');
+		$request = new Request('/posts/index');
 		$request->addParams(Router::parse($request->url));
 		$request->addPaths(array(
 			'webroot' => '/',
@@ -344,7 +336,7 @@ class HtmlToolbarHelperTestCase extends CakeTestCase {
 	public function testJavascriptInjection() {
 		$this->Controller->viewPath = 'Posts';
 		$this->Controller->uses = null;
-		$request = new CakeRequest('/posts/index');
+		$request = new Request('/posts/index');
 		$request->addParams(Router::parse($request->url));
 		$request->addPaths(array(
 			'webroot' => '/',

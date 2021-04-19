@@ -16,21 +16,22 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  **/
 
-App::uses('ToolbarAccess', 'DebugKit.Model');
 
 /**
  * Test case for ToolbarAccess model
  *
  * @since         DebugKit 1.3
  */
-class ToolbarAccessTestCase extends CakeTestCase {
+class ToolbarAccessTestCase extends TestCase {
 
 /**
  * Included fixtures
  *
  * @var array
  */
-	public $fixtures = array('core.post');
+	public $fixtures = array(
+		'core.posts'
+	);
 
 /**
  * setUp method

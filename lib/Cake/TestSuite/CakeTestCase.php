@@ -1,6 +1,6 @@
 <?php
 /**
- * CakeTestCase file
+ * TestCase file
  *
  * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,16 +15,16 @@
  * @since         CakePHP(tm) v 1.2.0.4667
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite;
 
-App::uses('CakeFixtureManager', 'TestSuite/Fixture');
-App::uses('CakeTestFixture', 'TestSuite/Fixture');
+
 
 /**
- * CakeTestCase class
+ * TestCase class
  *
  * @package       Cake.TestSuite
  */
-abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
+abstract class TestCase extends PHPUnit_Framework_TestCase {
 
 /**
  * The class responsible for managing the creation, loading and removing of fixtures
@@ -208,7 +208,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
  * Each parameter is a model name that corresponds to a fixture, i.e. 'Post', 'Author', etc.
  *
  * @return void
- * @see CakeTestCase::$autoFixtures
+ * @see TestCase::$autoFixtures
  * @throws Exception when no fixture manager is available.
  */
 	public function loadFixtures() {
@@ -856,7 +856,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 		unset($defaults['ds']);
 
 		list($plugin, $name) = pluginSplit($model, true);
-		App::uses($name, $plugin . 'Model');
+		/* TODO: App::uses($name, $plugin . 'Model'); */
 
 		$config = array_merge($defaults, (array)$config, array('name' => $name));
 

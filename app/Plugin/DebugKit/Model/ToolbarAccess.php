@@ -12,8 +12,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('ConnectionManager', 'Model');
-App::uses('Model', 'Model');
 
 /**
  * Class ToolbarAccess
@@ -38,7 +36,7 @@ class ToolbarAccess extends Model {
  * @return array Array of explain information or empty array if connection is unsupported.
  */
 	public function explainQuery($connection, $query) {
-		$db = ConnectionManager::getDataSource($connection);
+		$db = ConnectionManager::get($connection);
 		$datasource = $db->config['datasource'];
 
 		$return = array();

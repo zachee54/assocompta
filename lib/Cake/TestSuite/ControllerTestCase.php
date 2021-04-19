@@ -15,14 +15,9 @@
  * @since         CakePHP(tm) v 2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite;
 
-App::uses('Dispatcher', 'Routing');
-App::uses('CakeTestCase', 'TestSuite');
-App::uses('Router', 'Routing');
-App::uses('CakeRequest', 'Network');
-App::uses('CakeResponse', 'Network');
-App::uses('Helper', 'View');
-App::uses('CakeEvent', 'Event');
+
 
 /**
  * ControllerTestDispatcher class
@@ -48,8 +43,8 @@ class ControllerTestDispatcher extends Dispatcher {
 /**
  * Returns the test controller
  *
- * @param CakeRequest $request The request instance.
- * @param CakeResponse $response The response instance.
+ * @param Request $request The request instance.
+ * @param Response $response The response instance.
  * @return Controller
  */
 	protected function _getController($request, $response) {
@@ -111,7 +106,7 @@ class InterceptContentHelper extends Helper {
  * @package       Cake.TestSuite
  * @method        mixed testAction() testAction($url, $options = array())  Lets you do functional tests of a controller action.
  */
-abstract class ControllerTestCase extends CakeTestCase {
+abstract class ControllerTestCase extends TestCase {
 
 /**
  * The controller to test in testAction
@@ -183,7 +178,7 @@ abstract class ControllerTestCase extends CakeTestCase {
  *
  * @var string
  */
-	protected $_responseClass = 'CakeResponse';
+	protected $_responseClass = 'Response';
 
 /**
  * Used to enable calling ControllerTestCase::testAction() without the testing
@@ -256,8 +251,8 @@ abstract class ControllerTestCase extends CakeTestCase {
 		}
 
 		$_SERVER['REQUEST_URI'] = $url;
-		/** @var CakeRequest|PHPUnit_Framework_MockObject_MockObject $request */
-		$request = $this->getMock('CakeRequest', array('_readInput'));
+		/** @var Request|PHPUnit_Framework_MockObject_MockObject $request */
+		$request = $this->getMock('Request', array('_readInput'));
 
 		if (is_string($options['data'])) {
 			$request->expects($this->any())
@@ -268,11 +263,11 @@ abstract class ControllerTestCase extends CakeTestCase {
 		$Dispatch = new ControllerTestDispatcher();
 		foreach (Router::$routes as $route) {
 			if ($route instanceof RedirectRoute) {
-				$route->response = $this->getMock('CakeResponse', array('send'));
+				$route->response = $this->getMock('Response', array('send'));
 			}
 		}
 		$Dispatch->loadRoutes = $this->loadRoutes;
-		$Dispatch->parseParams(new CakeEvent('ControllerTestCase', $Dispatch, array('request' => $request)));
+		$Dispatch->parseParams(new Event('ControllerTestCase', $Dispatch, array('request' => $request)));
 		if (!isset($request->params['controller']) && Router::currentRoute()) {
 			$this->headers = Router::currentRoute()->response->header();
 			return null;
@@ -339,10 +334,10 @@ abstract class ControllerTestCase extends CakeTestCase {
 	public function generate($controller, $mocks = array()) {
 		list($plugin, $controller) = pluginSplit($controller);
 		if ($plugin) {
-			App::uses($plugin . 'AppController', $plugin . '.Controller');
+			/* TODO: App::uses($plugin . 'AppController', $plugin . '.Controller'); */
 			$plugin .= '.';
 		}
-		App::uses($controller . 'Controller', $plugin . 'Controller');
+		/* TODO: App::uses($controller . 'Controller', $plugin . 'Controller'); */
 		if (!class_exists($controller . 'Controller')) {
 			throw new MissingControllerException(array(
 				'class' => $controller . 'Controller',
@@ -361,9 +356,9 @@ abstract class ControllerTestCase extends CakeTestCase {
 		/** @var Controller|PHPUnit_Framework_MockObject_MockObject $controllerObj */
 		$controllerObj = $this->getMock($name . 'Controller', $mocks['methods'], array(), '', false);
 		$controllerObj->name = $name;
-		/** @var CakeRequest|PHPUnit_Framework_MockObject_MockObject $request */
-		$request = $this->getMock('CakeRequest');
-		/** @var CakeResponse|PHPUnit_Framework_MockObject_MockObject $response */
+		/** @var Request|PHPUnit_Framework_MockObject_MockObject $request */
+		$request = $this->getMock('Request');
+		/** @var Response|PHPUnit_Framework_MockObject_MockObject $response */
 		$response = $this->getMock($this->_responseClass, array('_sendHeader'));
 		$controllerObj->__construct($request, $response);
 		$controllerObj->Components->setController($controllerObj);
@@ -398,7 +393,7 @@ abstract class ControllerTestCase extends CakeTestCase {
 				$alias = $name;
 			}
 			$componentClass = $name . 'Component';
-			App::uses($componentClass, $plugin . 'Controller/Component');
+			/* TODO: App::uses($componentClass, $plugin . 'Controller/Component'); */
 			if (!class_exists($componentClass)) {
 				throw new MissingComponentException(array(
 					'class' => $componentClass

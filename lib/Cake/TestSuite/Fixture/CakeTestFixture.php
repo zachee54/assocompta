@@ -13,8 +13,9 @@
  * @since         CakePHP(tm) v 1.2.0.4667
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite\Fixture;
 
-App::uses('CakeSchema', 'Model');
+
 
 /**
  * CakeTestFixture is responsible for building and destroying tables to be used
@@ -93,7 +94,7 @@ class CakeTestFixture {
 /**
  * Instantiate the fixture.
  *
- * @throws CakeException on invalid datasource usage.
+ * @throws \Exception on invalid datasource usage.
  */
 	public function __construct() {
 		if ($this->name === null) {
@@ -113,7 +114,7 @@ class CakeTestFixture {
 					$connection,
 					$this->name
 				);
-				throw new CakeException($message);
+				throw new \Exception($message);
 			}
 		}
 		$this->Schema = new CakeSchema(array('name' => 'TestSuite', 'connection' => $connection));
@@ -136,7 +137,7 @@ class CakeTestFixture {
 			$this->Schema->connection = $import['connection'];
 			if (isset($import['model'])) {
 				list($plugin, $modelClass) = pluginSplit($import['model'], true);
-				App::uses($modelClass, $plugin . 'Model');
+				/* TODO: App::uses($modelClass, $plugin . 'Model'); */
 				if (!class_exists($modelClass)) {
 					throw new MissingModelException(array('class' => $modelClass));
 				}
@@ -153,7 +154,7 @@ class CakeTestFixture {
 				ClassRegistry::flush();
 			} elseif (isset($import['table'])) {
 				$model = new Model(null, $import['table'], $import['connection']);
-				$db = ConnectionManager::getDataSource($import['connection']);
+				$db = ConnectionManager::get($import['connection']);
 				$db->cacheSources = false;
 				$model->useDbConfig = $import['connection'];
 				$model->name = Inflector::camelize(Inflector::singularize($import['table']));
@@ -240,7 +241,7 @@ class CakeTestFixture {
 				$this->table,
 				$e->getMessage()
 			);
-			CakeLog::error($msg);
+			Log::error($msg);
 			trigger_error($msg, E_USER_WARNING);
 			return false;
 		}
@@ -274,7 +275,7 @@ class CakeTestFixture {
  *
  * @param DboSource $db An instance of the database into which the records will be inserted
  * @return bool on success or if there are no records to insert, or false on failure
- * @throws CakeException if counts of values and fields do not match.
+ * @throws \Exception if counts of values and fields do not match.
  */
 	public function insert($db) {
 		if (!isset($this->_insert)) {
@@ -298,7 +299,7 @@ class CakeTestFixture {
 							$message .= "The field '" . $field . "' is in the data fixture but not in the schema." . "\n";
 						}
 
-						throw new CakeException($message);
+						throw new \Exception($message);
 					}
 					$values[] = $merge;
 				}

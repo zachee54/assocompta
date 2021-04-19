@@ -11,7 +11,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('DebugPanel', 'DebugKit.Lib');
 
 /**
  * Log Panel - Reads log entries made this request.
@@ -25,13 +24,13 @@ class LogPanel extends DebugPanel {
  */
 	public function __construct() {
 		parent::__construct();
-		$existing = CakeLog::configured();
+		$existing = Log::configured();
 		if (empty($existing)) {
-			CakeLog::config('default', array(
+			Log::config('default', array(
 				'engine' => 'FileLog'
 			));
 		}
-		CakeLog::config('debug_kit_log_panel', array(
+		Log::config('debug_kit_log_panel', array(
 			'engine' => 'DebugKit.DebugKitLog',
 			'panel' => $this
 		));

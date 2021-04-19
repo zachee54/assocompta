@@ -16,11 +16,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('View', 'View');
-App::uses('Controller', 'Controller');
-App::uses('Helper', 'View');
-App::uses('ToolbarHelper', 'DebugKit.View/Helper');
-App::uses('ConnectionManager', 'Manager');
 
 /**
  * Class MockBackendHelper
@@ -33,14 +28,16 @@ class MockBackendHelper extends Helper {
 /**
  * Class ToolbarHelperTestCase
  */
-class ToolbarHelperTestCase extends CakeTestCase {
+class ToolbarHelperTestCase extends TestCase {
 
 /**
  * Fixtures
  *
  * @var array
  */
-	public $fixtures = array('core.post');
+	public $fixtures = array(
+		'core.posts'
+	);
 
 /**
  * setUp

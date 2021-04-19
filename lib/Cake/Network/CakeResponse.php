@@ -1,6 +1,6 @@
 <?php
 /**
- * CakeResponse
+ * Response
  *
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,18 +15,19 @@
  * @since         CakePHP(tm) v 2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Network;
 
-App::uses('File', 'Utility');
+
 
 /**
- * CakeResponse is responsible for managing the response text, status and headers of a HTTP response.
+ * Response is responsible for managing the response text, status and headers of a HTTP response.
  *
  * By default controllers will use this class to render their response. If you are going to use
  * a custom response class it should subclass this object in order to ensure compatibility.
  *
  * @package       Cake.Network
  */
-class CakeResponse {
+class Response {
 
 /**
  * Holds HTTP response statuses
@@ -445,7 +446,7 @@ class CakeResponse {
 	}
 
 /**
- * Sets the cookies that have been added via CakeResponse::cookie() before any
+ * Sets the cookies that have been added via Response::cookie() before any
  * other output is sent to the client. Will set the cookies in the order they
  * have been set.
  *
@@ -633,14 +634,14 @@ class CakeResponse {
  *
  * @param int $code the HTTP status code
  * @return int current status code
- * @throws CakeException When an unknown status code is reached.
+ * @throws \Exception When an unknown status code is reached.
  */
 	public function statusCode($code = null) {
 		if ($code === null) {
 			return $this->_status;
 		}
 		if (!isset($this->_statusCodes[$code])) {
-			throw new CakeException(__d('cake_dev', 'Unknown status code'));
+			throw new \Exception(__d('cake_dev', 'Unknown status code'));
 		}
 		return $this->_status = $code;
 	}
@@ -675,7 +676,7 @@ class CakeResponse {
  * @return array|null|true associative array of the HTTP codes as keys, and the message
  *    strings as values, or null of the given $code does not exist. `true` if `$code` is
  *    an array of valid codes.
- * @throws CakeException If an attempt is made to add an invalid status code
+ * @throws \Exception If an attempt is made to add an invalid status code
  */
 	public function httpCodes($code = null) {
 		if (empty($code)) {
@@ -685,7 +686,7 @@ class CakeResponse {
 			$codes = array_keys($code);
 			$min = min($codes);
 			if (!is_int($min) || $min < 100 || max($codes) > 999) {
-				throw new CakeException(__d('cake_dev', 'Invalid status code'));
+				throw new \Exception(__d('cake_dev', 'Invalid status code'));
 			}
 			$this->_statusCodes = $code + $this->_statusCodes;
 			return true;
@@ -1157,10 +1158,10 @@ class CakeResponse {
  * the Last-Modified etag response header before calling this method. Otherwise
  * a comparison will not be possible.
  *
- * @param CakeRequest $request Request object
+ * @param Request $request Request object
  * @return bool whether the response was marked as not modified or not.
  */
-	public function checkNotModified(CakeRequest $request) {
+	public function checkNotModified(Request $request) {
 		$ifNoneMatchHeader = $request->header('If-None-Match');
 		$etags = array();
 		if (is_string($ifNoneMatchHeader)) {
@@ -1279,13 +1280,13 @@ class CakeResponse {
  * ### Whitelist of URIs
  * e.g `cors($request, array('https://www.cakephp.org', '*.google.com', 'https://myproject.github.io'));`
  *
- * @param CakeRequest $request Request object
+ * @param Request $request Request object
  * @param string|array $allowedDomains List of allowed domains, see method description for more details
  * @param string|array $allowedMethods List of HTTP verbs allowed
  * @param string|array $allowedHeaders List of HTTP headers allowed
  * @return void
  */
-	public function cors(CakeRequest $request, $allowedDomains, $allowedMethods = array(), $allowedHeaders = array()) {
+	public function cors(Request $request, $allowedDomains, $allowedMethods = array(), $allowedHeaders = array()) {
 		$origin = $request->header('Origin');
 		if (!$origin) {
 			return;
@@ -1361,7 +1362,7 @@ class CakeResponse {
 		$file = new File($path);
 		if (!$file->exists() || !$file->readable()) {
 			if (Configure::read('debug')) {
-				throw new NotFoundException(__d('cake_dev', 'The requested file %s was not found or not readable', $path));
+				throw new NotFoundException(__d('cake_dev', 'The requested file {0} was not found or not readable', $path));
 			}
 			throw new NotFoundException(__d('cake', 'The requested file was not found'));
 		}

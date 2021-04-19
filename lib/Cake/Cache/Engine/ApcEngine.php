@@ -15,6 +15,8 @@
  * @since         CakePHP(tm) v 1.2.0.4933
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Cache\Engine;
+
 
 /**
  * APC storage engine for cache

@@ -15,6 +15,8 @@
  * @since         CakePHP(tm) v 1.2.0.4933
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Cache\Engine;
+
 
 /**
  * Memcache storage engine for cache. Memcache has some limitations in the amount of
@@ -163,7 +165,7 @@ class MemcacheEngine extends CacheEngine {
 	public function increment($key, $offset = 1) {
 		if ($this->settings['compress']) {
 			throw new CacheException(
-				__d('cake_dev', 'Method %s not implemented for compressed cache in %s', 'increment()', __CLASS__)
+				__d('cake_dev', 'Method {0} not implemented for compressed cache in {1}', 'increment()', __CLASS__)
 			);
 		}
 		return $this->_Memcache->increment($key, $offset);
@@ -180,7 +182,7 @@ class MemcacheEngine extends CacheEngine {
 	public function decrement($key, $offset = 1) {
 		if ($this->settings['compress']) {
 			throw new CacheException(
-				__d('cake_dev', 'Method %s not implemented for compressed cache in %s', 'decrement()', __CLASS__)
+				__d('cake_dev', 'Method {0} not implemented for compressed cache in {1}', 'decrement()', __CLASS__)
 			);
 		}
 		return $this->_Memcache->decrement($key, $offset);

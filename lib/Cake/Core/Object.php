@@ -13,6 +13,7 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Core;
 
-App::uses('CakeObject', 'Core');
+
 class_alias('CakeObject', 'Object');

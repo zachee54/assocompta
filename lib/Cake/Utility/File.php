@@ -15,8 +15,9 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Utility;
 
-App::uses('Folder', 'Utility');
+
 
 /**
  * Convenience class for reading, writing and appending to files.

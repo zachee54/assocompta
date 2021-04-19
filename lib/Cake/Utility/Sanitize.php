@@ -17,8 +17,9 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Utility;
 
-App::uses('ConnectionManager', 'Model');
+
 
 /**
  * Data Sanitization.
@@ -69,7 +70,7 @@ class Sanitize {
 		if (is_numeric($string) || $string === null || is_bool($string)) {
 			return $string;
 		}
-		$db = ConnectionManager::getDataSource($connection);
+		$db = ConnectionManager::get($connection);
 		$string = $db->value($string, 'string');
 		$start = 1;
 		if ($string{0} === 'N') {

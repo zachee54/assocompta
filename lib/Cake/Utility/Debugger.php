@@ -17,9 +17,9 @@
  * @since         CakePHP(tm) v 1.2.4560
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Utility;
 
-App::uses('CakeLog', 'Log');
-App::uses('CakeText', 'Utility');
+
 
 /**
  * Provide custom logging and error handling.
@@ -190,7 +190,7 @@ class Debugger {
  */
 	public static function log($var, $level = LOG_DEBUG, $depth = 3) {
 		$source = static::trace(array('start' => 1)) . "\n";
-		CakeLog::write($level, "\n" . $source . static::exportVar($var, $depth));
+		Log::write($level, "\n" . $source . static::exportVar($var, $depth));
 	}
 
 /**
@@ -614,7 +614,7 @@ class Debugger {
  * @param string $format The format you want errors to be output as.
  *   Leave null to get the current format.
  * @return mixed Returns null when setting. Returns the current format when getting.
- * @throws CakeException when choosing a format that doesn't exist.
+ * @throws \Exception when choosing a format that doesn't exist.
  */
 	public static function outputAs($format = null) {
 		$self = Debugger::getInstance();
@@ -622,7 +622,7 @@ class Debugger {
 			return $self->_outputFormat;
 		}
 		if ($format !== false && !isset($self->_templates[$format])) {
-			throw new CakeException(__d('cake_dev', 'Invalid Debugger output format.'));
+			throw new \Exception(__d('cake_dev', 'Invalid Debugger output format.'));
 		}
 		$self->_outputFormat = $format;
 	}
@@ -839,11 +839,11 @@ class Debugger {
  */
 	public static function checkSecurityKeys() {
 		if (Configure::read('Security.salt') === 'DYhG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9mi') {
-			trigger_error(__d('cake_dev', 'Please change the value of %s in %s to a salt value specific to your application.', '\'Security.salt\'', CONFIG . 'core.php'), E_USER_NOTICE);
+			trigger_error(__d('cake_dev', 'Please change the value of {0} in {1} to a salt value specific to your application.', '\'Security.salt\'', CONFIG . 'core.php'), E_USER_NOTICE);
 		}
 
 		if (Configure::read('Security.cipherSeed') === '76859309657453542496749683645') {
-			trigger_error(__d('cake_dev', 'Please change the value of %s in %s to a numeric (digits only) seed value specific to your application.', '\'Security.cipherSeed\'', CONFIG . 'core.php'), E_USER_NOTICE);
+			trigger_error(__d('cake_dev', 'Please change the value of {0} in {1} to a numeric (digits only) seed value specific to your application.', '\'Security.cipherSeed\'', CONFIG . 'core.php'), E_USER_NOTICE);
 		}
 	}
 

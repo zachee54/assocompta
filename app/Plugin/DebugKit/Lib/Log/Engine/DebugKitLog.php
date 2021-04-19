@@ -12,9 +12,9 @@
  */
 
 /**
- * A CakeLog listener which saves having to munge files or other configured loggers.
+ * A Log listener which saves having to munge files or other configured loggers.
  */
-class DebugKitLog implements CakeLogInterface {
+class DebugKitLog implements LogInterface {
 
 /**
  * logs

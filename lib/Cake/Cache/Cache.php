@@ -13,9 +13,9 @@
  * @since         CakePHP(tm) v 1.2.0.4933
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Cache;
 
-App::uses('Inflector', 'Utility');
-App::uses('CacheEngine', 'Cache');
+
 
 /**
  * Cache provides a consistent interface to Caching in your application. It allows you
@@ -168,14 +168,13 @@ class Cache {
 
 		list($plugin, $class) = pluginSplit($config['engine'], true);
 		$cacheClass = $class . 'Engine';
-		App::uses($cacheClass, $plugin . 'Cache/Engine');
+		/* TODO: App::uses($cacheClass, $plugin . 'Cache/Engine'); */
 		if (!class_exists($cacheClass)) {
-			throw new CacheException(__d('cake_dev', 'Cache engine %s is not available.', $name));
+			throw new CacheException(__d('cake_dev', 'Cache engine {0} is not available.', $name));
 		}
 		$cacheClass = $class . 'Engine';
 		if (!is_subclass_of($cacheClass, 'CacheEngine')) {
-			throw new CacheException(__d('cake_dev', 'Cache engines must use %s as a base class.', 'CacheEngine'));
-		}
+			throw new CacheException(__d('cake_dev', 'Cache engines must		}
 		static::$_engines[$name] = new $cacheClass();
 		if (!static::$_engines[$name]->init($config)) {
 			$msg = __d(
@@ -318,8 +317,7 @@ class Cache {
 		static::set(null, $config);
 		if ($success === false && $value !== '') {
 			trigger_error(
-				__d('cake_dev',
-					"%s cache was unable to write '%s' to %s cache",
+				__d('cake_dev', "{0} cache was unable to write '{1}' to {2} cache",
 					$config,
 					$key,
 					static::$_engines[$config]->settings['engine']
@@ -540,7 +538,7 @@ class Cache {
 		if (isset(static::$_groups[$group])) {
 			return array($group => static::$_groups[$group]);
 		}
-		throw new CacheException(__d('cake_dev', 'Invalid cache group %s', $group));
+		throw new CacheException(__d('cake_dev', 'Invalid cache group {0}', $group));
 	}
 
 /**

@@ -13,14 +13,13 @@
  * @since         CakePHP(tm) v 1.0.0.2363
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Core;
 
-App::uses('Hash', 'Utility');
-App::uses('ConfigReaderInterface', 'Configure');
+
 
 /**
  * Compatibility with 2.1, which expects Configure to load Set.
  */
-App::uses('Set', 'Utility');
 
 /**
  * Configuration class. Used for managing runtime configuration information.
@@ -70,8 +69,7 @@ class Configure {
 			static::_appDefaults();
 
 			if (!include CONFIG . 'core.php') {
-				trigger_error(__d('cake_dev',
-						"Can't find application core file. Please create %s, and make sure it is readable by PHP.",
+				trigger_error(__d('cake_dev', "Can't find application core file. Please create {0}, and make sure it is readable by PHP.",
 						CONFIG . 'core.php'),
 					E_USER_ERROR
 				);
@@ -88,7 +86,6 @@ class Configure {
 				'level' => E_ALL & ~E_DEPRECATED,
 			);
 			if (PHP_SAPI === 'cli') {
-				App::uses('ConsoleErrorHandler', 'Console');
 				$console = new ConsoleErrorHandler();
 				$exception['handler'] = array($console, 'handleException');
 				$error['handler'] = array($console, 'handleError');
@@ -96,8 +93,7 @@ class Configure {
 			static::_setErrorHandlers($error, $exception);
 
 			if (!include CONFIG . 'bootstrap.php') {
-				trigger_error(__d('cake_dev',
-						"Can't find application bootstrap file. Please create %s, and make sure it is readable by PHP.",
+				trigger_error(__d('cake_dev', "Can't find application bootstrap file. Please create {0}, and make sure it is readable by PHP.",
 						CONFIG . 'bootstrap.php'),
 					E_USER_ERROR
 				);
@@ -371,10 +367,10 @@ class Configure {
 	public static function dump($key, $config = 'default', $keys = array()) {
 		$reader = static::_getReader($config);
 		if (!$reader) {
-			throw new ConfigureException(__d('cake_dev', 'There is no "%s" adapter.', $config));
+			throw new ConfigureException(__d('cake_dev', 'There is no "{0}" adapter.', $config));
 		}
 		if (!method_exists($reader, 'dump')) {
-			throw new ConfigureException(__d('cake_dev', 'The "%s" adapter, does not have a %s method.', $config, 'dump()'));
+			throw new ConfigureException(__d('cake_dev', 'The "{0}" adapter, does not have a {1} method.', $config, 'dump()'));
 		}
 		$values = static::$_values;
 		if (!empty($keys) && is_array($keys)) {
@@ -395,7 +391,6 @@ class Configure {
 			if ($config !== 'default') {
 				return false;
 			}
-			App::uses('PhpReader', 'Configure');
 			static::config($config, new PhpReader());
 		}
 		return static::$_readers[$config];

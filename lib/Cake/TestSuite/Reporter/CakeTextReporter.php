@@ -14,9 +14,9 @@
  * @since         CakePHP(tm) v 1.3
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite\Reporter;
 
-App::uses('CakeBaseReporter', 'TestSuite/Reporter');
-App::uses('TextCoverageReport', 'TestSuite/Coverage');
+
 
 /**
  * CakeTextReporter contains reporting features used for plain text based output

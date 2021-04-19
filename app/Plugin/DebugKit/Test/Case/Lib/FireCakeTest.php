@@ -16,15 +16,14 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  **/
 
-App::uses('FireCake', 'DebugKit.Lib');
-require_once CakePlugin::path('DebugKit') . 'Test' . DS . 'Case' . DS . 'TestFireCake.php';
+require_once Plugin::path('DebugKit') . 'Test' . DS . 'Case' . DS . 'TestFireCake.php';
 
 /**
  * Test Case For FireCake
  *
  * @since         DebugKit 0.1
  */
-class FireCakeTestCase extends CakeTestCase {
+class FireCakeTestCase extends TestCase {
 
 /**
  * setup test

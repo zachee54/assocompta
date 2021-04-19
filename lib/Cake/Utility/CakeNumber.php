@@ -1,6 +1,6 @@
 <?php
 /**
- * CakeNumber Utility.
+ * Number Utility.
  *
  * Methods to make numbers more readable.
  *
@@ -17,6 +17,8 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\Utility;
+
 
 /**
  * Number helper library.
@@ -26,11 +28,11 @@
  * @package       Cake.Utility
  * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/number.html
  */
-class CakeNumber {
+class Number {
 
 /**
  * Currencies supported by the helper. You can add additional currency formats
- * with CakeNumber::addFormat
+ * with Number::addFormat
  *
  * @var array
  */
@@ -79,7 +81,7 @@ class CakeNumber {
 	);
 
 /**
- * Default currency used by CakeNumber::currency()
+ * Default currency used by Number::currency()
  *
  * @var string
  */
@@ -114,15 +116,15 @@ class CakeNumber {
 	public static function toReadableSize($size) {
 		switch (true) {
 			case $size < 1024:
-				return __dn('cake', '%d Byte', '%d Bytes', $size, $size);
+				return __dn('cake', '{0} Byte', '%d Bytes', $size, $size);
 			case round($size / 1024) < 1024:
-				return __d('cake', '%s KB', static::precision($size / 1024, 0));
+				return __d('cake', '{0} KB', static::precision($size / 1024, 0));
 			case round($size / 1024 / 1024, 2) < 1024:
-				return __d('cake', '%s MB', static::precision($size / 1024 / 1024, 2));
+				return __d('cake', '{0} MB', static::precision($size / 1024 / 1024, 2));
 			case round($size / 1024 / 1024 / 1024, 2) < 1024:
-				return __d('cake', '%s GB', static::precision($size / 1024 / 1024 / 1024, 2));
+				return __d('cake', '{0} GB', static::precision($size / 1024 / 1024 / 1024, 2));
 			default:
-				return __d('cake', '%s TB', static::precision($size / 1024 / 1024 / 1024 / 1024, 2));
+				return __d('cake', '{0} TB', static::precision($size / 1024 / 1024 / 1024 / 1024, 2));
 		}
 	}
 
@@ -132,7 +134,7 @@ class CakeNumber {
  * @param string $size Size in human readable string like '5MB', '5M', '500B', '50kb' etc.
  * @param mixed $default Value to be returned when invalid size was used, for example 'Unknown type'
  * @return mixed Number of bytes as integer on success, `$default` on failure if not false
- * @throws CakeException On invalid Unit type.
+ * @throws \Exception On invalid Unit type.
  * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/number.html#NumberHelper::fromReadableSize
  */
 	public static function fromReadableSize($size, $default = false) {
@@ -160,7 +162,7 @@ class CakeNumber {
 		if ($default !== false) {
 			return $default;
 		}
-		throw new CakeException(__d('cake_dev', 'No unit type.'));
+		throw new \Exception(__d('cake_dev', 'No unit type.'));
 	}
 
 /**
@@ -386,8 +388,8 @@ class CakeNumber {
  *
  * ``` $number->currency($value, 'NOK'); ```
  *
- * Added formats are merged with the defaults defined in CakeNumber::$_currencyDefaults
- * See CakeNumber::currency() for more information on the various options and their function.
+ * Added formats are merged with the defaults defined in Number::$_currencyDefaults
+ * See Number::currency() for more information on the various options and their function.
  *
  * @param string $formatName The format name to be used in the future.
  * @param array $options The array of options for this format.

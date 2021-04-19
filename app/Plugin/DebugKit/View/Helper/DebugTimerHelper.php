@@ -12,9 +12,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('DebugTimer', 'DebugKit.Lib');
-App::uses('DebugMemory', 'DebugKit.Lib');
-App::uses('Helper', 'View');
 
 /**
  * Class DebugTimerHelper
@@ -57,7 +54,7 @@ class DebugTimerHelper extends Helper {
 		}
 		DebugTimer::start(
 			'render_' . basename($viewFile),
-			__d('debug_kit', 'Rendering %s',
+			__d('debug_kit', 'Rendering {0}',
 			Debugger::trimPath($viewFile))
 		);
 	}

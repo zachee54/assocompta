@@ -12,7 +12,8 @@
  * @since         2.8
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-App::uses("ConsoleOutput", "Console");
+namespace lib\Cake\TestSuite\Stub;
+
 
 /**
  * StubOutput makes testing shell commands/shell helpers easier.
@@ -20,8 +21,7 @@ App::uses("ConsoleOutput", "Console");
  * You can use this class by injecting it into a Helper instance:
  *
  * ```
- * App::uses("ConsoleOutputStub", "TestSuite/Stub");
- *
+ * *
  * $output = new ConsoleOutputStub();
  * $helper = new ProgressHelper($output);
  * ```

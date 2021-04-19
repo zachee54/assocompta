@@ -15,8 +15,9 @@
  * @since         CakePHP(tm) v 2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite;
 
-App::uses('Folder', 'Utility');
+
 
 /**
  * A class to contain test cases and run them with shared fixtures

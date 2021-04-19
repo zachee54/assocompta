@@ -16,14 +16,13 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('CakeLogInterface', 'Log');
 
 /**
  * TestPluginLog
  *
  * @package       Cake.Test.TestApp.Plugin.TestPlugin.Lib.Log.Engine
  */
-class TestPluginLog implements CakeLogInterface {
+class TestPluginLog implements LogInterface {
 
 	public function write($type, $message) {
 	}

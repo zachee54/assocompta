@@ -15,11 +15,9 @@
  * @since         CakePHP(tm) v 1.2.0.4116
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\I18n;
 
-App::uses('CakePlugin', 'Core');
-App::uses('L10n', 'I18n');
-App::uses('Multibyte', 'I18n');
-App::uses('CakeSession', 'Model/Datasource');
+
 
 /**
  * I18n handles translation of Text and time format strings.
@@ -190,7 +188,7 @@ class I18n {
  *    If null it checks for language in session followed by Config.language configuration variable.
  * @param string $context Context The context of the translation, e.g a verb or a noun.
  * @return string translated string.
- * @throws CakeException When '' is provided as a domain.
+ * @throws \Exception When '' is provided as a domain.
  */
 	public static function translate($singular, $plural = null, $domain = null, $category = self::LC_MESSAGES,
 		$count = null, $language = null, $context = null
@@ -209,8 +207,8 @@ class I18n {
 		}
 
 		if (empty($language)) {
-			if (CakeSession::started()) {
-				$language = CakeSession::read('Config.language');
+			if (Session::started()) {
+				$language = Session::read('Config.language');
 			}
 			if (empty($language)) {
 				$language = Configure::read('Config.language');
@@ -226,8 +224,7 @@ class I18n {
 			$domain = static::$defaultDomain;
 		}
 		if ($domain === '') {
-			throw new CakeException(__d('cake_dev', 'You cannot use "" as a domain.'));
-		}
+			throw new \Exception(__d('cake_dev', 'You cannot		}
 
 		$_this->domain = $domain . '_' . $_this->l10n->lang;
 
@@ -380,13 +377,13 @@ class I18n {
 		$core = true;
 		$merge = array();
 		$searchPaths = App::path('locales');
-		$plugins = CakePlugin::loaded();
+		$plugins = Plugin::loaded();
 
 		if (!empty($plugins)) {
 			foreach ($plugins as $plugin) {
 				$pluginDomain = Inflector::underscore($plugin);
 				if ($pluginDomain === $domain) {
-					$searchPaths[] = CakePlugin::path($plugin) . 'Locale' . DS;
+					$searchPaths[] = Plugin::path($plugin) . 'Locale' . DS;
 					if (!Configure::read('I18n.preferApp')) {
 						$searchPaths = array_reverse($searchPaths);
 					}

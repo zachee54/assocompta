@@ -14,8 +14,9 @@
  * @since         CakePHP(tm) v 1.2.0.4433
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+namespace lib\Cake\TestSuite\Reporter;
 
-App::uses('CakeBaseReporter', 'TestSuite/Reporter');
+
 
 /**
  * CakeHtmlReporter Reports Results of TestSuites and Test Cases
@@ -183,7 +184,6 @@ class CakeHtmlReporter extends CakeBaseReporter {
  * @return void
  */
 	public function paintCoverage(array $coverage) {
-		App::uses('HtmlCoverageReport', 'TestSuite/Coverage');
 
 		$reporter = new HtmlCoverageReport($coverage, $this);
 		echo $reporter->report();
@@ -289,10 +289,10 @@ class CakeHtmlReporter extends CakeBaseReporter {
 		}
 
 		echo "</pre></div>\n";
-		echo "<div class='msg'>" . __d('cake_dev', 'Test case: %s', $testName) . "</div>\n";
+		echo "<div class='msg'>" . __d('cake_dev', 'Test case: {0}', $testName) . "</div>\n";
 		if (strpos($className, "PHPUnit_") === false) {
 			list($show, $query) = $this->_getQueryLink();
-			echo "<div class='msg'><a href='" . $this->baseUrl() . $query . "&amp;filter=" . $test->getName() . "'>" . __d('cake_dev', 'Rerun only this test: %s', $testName) . "</a></div>\n";
+			echo "<div class='msg'><a href='" . $this->baseUrl() . $query . "&amp;filter=" . $test->getName() . "'>" . __d('cake_dev', 'Rerun only this test: {0}', $testName) . "</a></div>\n";
 		}
 		echo "<div class='msg'>" . __d('cake_dev', 'Stack trace:') . '<br />' . $trace . "</div>\n";
 		echo "</li>\n";
@@ -336,7 +336,7 @@ class CakeHtmlReporter extends CakeBaseReporter {
 		echo "<span>" . get_class($message) . "</span>";
 
 		echo "<div class='msg'>" . $this->_htmlEntities($message->getMessage()) . "</div>\n";
-		echo "<div class='msg'>" . __d('cake_dev', 'Test case: %s', $testName) . "</div>\n";
+		echo "<div class='msg'>" . __d('cake_dev', 'Test case: {0}', $testName) . "</div>\n";
 		echo "<div class='msg'>" . __d('cake_dev', 'Stack trace:') . '<br />' . $trace . "</div>\n";
 		echo "</li>\n";
 		$this->_buffer .= ob_get_clean();
@@ -409,7 +409,7 @@ class CakeHtmlReporter extends CakeBaseReporter {
 		if (!$this->_headerSent) {
 			$this->paintHeader();
 		}
-		$this->_buffer .= '<h2>' . __d('cake_dev', 'Running  %s', $suite->getName()) . '</h2>';
+		$this->_buffer .= '<h2>' . __d('cake_dev', 'Running  {0}', $suite->getName()) . '</h2>';
 	}
 
 /**
