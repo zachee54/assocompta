@@ -1,7 +1,9 @@
 <?php
-namespace app\Model;
+namespace app\Model\Table;
 
-class Ecriture extends AppModel {
+use Cake\ORM\Table;
+
+class EcrituresTable extends Table {
   
   public $virtualFields = array(
     'engagement' => "DATE_FORMAT(date_engagement, '%d/%m/%Y')",
