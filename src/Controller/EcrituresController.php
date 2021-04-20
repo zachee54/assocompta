@@ -54,19 +54,17 @@ class EcrituresController extends AppController {
    * @param string $fin   Le dernier jour du mois, au format AAAAMMJJ.
    */
   private function _setSoldesDebutFin($debut, $fin) {
-    $a_nouveau = $this->Ecriture->find('first', array(
-      'recursive' => -1,
-      'fields' => 'SUM(credit-debit) as solde',
-        'conditions' => array(
-        'date_bancaire <' => $debut)));
-    $this->set('a_nouveau', $a_nouveau[0]['solde']);
+    $query = $this->Ecritures->find();
+    $query->select(
+      ['solde' => $query->func()->sum('credit-debit')]);
     
-    $solde = $this->Ecriture->find('first', array(
-      'recursive' => -1,
-      'fields' => 'SUM(credit-debit) as solde',
-      'conditions' => array(
-        'date_bancaire <=' => $fin)));
-    $this->set('solde', $solde[0]['solde']);
+    $this->set('a_nouveau', $query
+      ->where(['date_bancaire <' => $debut])
+      ->first()->solde);
+    
+    $this->set('solde', $query
+      ->where(['date_bancaire <=' => $fin], [], true)
+      ->first()->solde);
   }
   
   /**
