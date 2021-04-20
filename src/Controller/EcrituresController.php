@@ -120,8 +120,8 @@ class EcrituresController extends AppController {
     }
     
     $this->_setMonths();
-    $this->set('postes', $this->Ecriture->Poste->find('list'));
-    $this->set('activites', $this->Ecriture->Activite->find('list'));
+    $this->set('postes', $this->Ecritures->Postes->find('list'));
+    $this->set('activites', $this->Ecritures->Activites->find('list'));
   }
   
   /**
