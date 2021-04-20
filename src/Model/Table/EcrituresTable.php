@@ -5,11 +5,14 @@ use Cake\ORM\Table;
 
 class EcrituresTable extends Table {
   
+  public function initialize(array $config) {
+    $this->belongsTo('Postes');
+    $this->belongsTo('Activites');
+  }
+  
   public $virtualFields = array(
     'engagement' => "DATE_FORMAT(date_engagement, '%d/%m/%Y')",
     'bancaire' => "DATE_FORMAT(date_bancaire, '%d/%m/%Y')");
-  
-  public $belongsTo = array('Poste', 'Activite');
   
   public $validate = array(
     'debit' => array(
