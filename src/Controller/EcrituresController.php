@@ -71,13 +71,20 @@ class EcrituresController extends AppController {
    * Met à disposition de la vue la liste des mois contenant des écritures.
    */
   private function _setMonths() {
-    $this->Ecriture->virtualFields['month'] = 'MONTH(date_bancaire)'; 
-    $this->Ecriture->virtualFields['year'] = 'YEAR(date_bancaire)'; 
+    $query = $this->Ecritures->find();
+    $month = $query->func()->month([
+      'date_bancaire' => 'identifier']);
+    $year = $query->func()->year([
+      'date_bancaire' => 'identifier']);
     
-    $this->set('months', $this->Ecriture->find('list', array(
-      'conditions' => array('date_bancaire IS NOT NULL'),
-      'fields' => array('month', 'month', 'year'),
-      'order' => array('date_bancaire' => 'DESC'))));
+    $this->set('months', $query
+      ->select([
+        'month' => $month,
+        'year' => $year])
+      ->distinct(['month', 'year'])
+      ->whereNotNull('date_bancaire')
+      ->order(['date_bancaire' => 'DESC'])
+      ->all());
   }
   
   /**
