@@ -34,16 +34,17 @@ class EcrituresController extends AppController {
     
 //     $this->_setMonths(); // Déjà dans la méthode edit
     
-    $this->set('ecritures', $this->Ecriture->find('all', array(
-      'conditions' => array(
+    $this->set('ecritures',
+      $this->Ecritures->find()
+      ->where([
         'date_bancaire >=' => $debut,
-        'date_bancaire <=' => $fin),
-      'order' => array('date_bancaire', 'created'))));
+        'date_bancaire <=' => $fin])
+      ->order(['date_bancaire', 'created']));
     
-    $this->set('enAttente', $this->Ecriture->find('all', array(
-      'conditions' => array(
-        'date_bancaire' => null),
-      'order' => array('created'))));
+    $this->set('enAttente',
+      $this->Ecritures->find()
+      ->where(['date_bancaire' => null])
+      ->order(['created']));
   }
   
   /**
