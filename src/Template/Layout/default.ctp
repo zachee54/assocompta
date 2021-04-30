@@ -9,7 +9,7 @@
     echo $this->fetch('css');
     echo $this->fetch('jquery');
   ?>
-  <link rel="icon" href="<?php echo $this->Html->url('/img/favicon.ico'); ?>"/>
+  <link rel="icon" href="<?php echo $this->Url->image('favicon.ico'); ?>"/>
 </head>
 <body>
   <header>
