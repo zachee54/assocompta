@@ -25,8 +25,7 @@ use Cake\Event\Event;
  *
  * @link https://book.cakephp.org/3/en/controllers.html#the-app-controller
  */
-class AppController extends Controller
-{
+class AppController extends Controller {
 
     /**
      * Initialization hook method.
@@ -37,8 +36,7 @@ class AppController extends Controller
      *
      * @return void
      */
-    public function initialize()
-    {
+    public function initialize() {
         parent::initialize();
 
         $this->loadComponent('RequestHandler', [
@@ -51,5 +49,27 @@ class AppController extends Controller
          * see https://book.cakephp.org/3/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+        
+        $this->loadComponent('Auth', [
+          'authenticate' => [
+            'Form' => [
+              'fields' => [
+                'username' => 'login',
+                'password' => 'mdp'],
+              'passwordHasher' => [
+                'className' => 'Simple',
+                'hashType' => 'sha256']]],
+          'loginRedirect' => [
+            'controller' => 'ecritures',
+            'action' => 'index'],
+          'authError' => false,
+          'authorize' => ['Controller']]);
+    }
+    
+    /**
+     * Limite les préfixes 'admin' aux profils administrateurs.
+     */
+    public function isAuthorized() {
+      return $this->Auth->user('admin') || ($this->request->prefix != 'admin');
     }
 }
