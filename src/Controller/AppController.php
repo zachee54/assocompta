@@ -72,4 +72,12 @@ class AppController extends Controller {
     public function isAuthorized() {
       return $this->Auth->user('admin') || ($this->request->prefix != 'admin');
     }
+    
+    /**
+     * Met le composant d'authentification à la disposition de la vue.
+     */
+    public function beforeRender(Event $event) {
+      $this->set('Auth', $this->Auth);
+      parent::beforeRender($event);
+    }
 }

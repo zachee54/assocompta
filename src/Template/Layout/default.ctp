@@ -15,7 +15,7 @@
   <header>
     <div>Centre de Formation et d'Entraide</div>
     <?php
-    if (AuthComponent::user()) {
+    if ($Auth->user()) {
       ?>
       <aside>
         <header><?php echo AuthComponent::user('nom'); ?></header>
@@ -74,7 +74,7 @@
         ?>
       </li>
       <?php
-      if (AuthComponent::user('admin')) {
+      if ($Auth->user('admin')) {
         ?>
         <li>
           <?php
