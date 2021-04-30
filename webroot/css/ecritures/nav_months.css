@@ -1,0 +1,20 @@
+.navMonths {
+  float: left;
+  padding: 8px;
+  color: maroon;
+  background-color: wheat;
+}
+
+.navMonths ul {
+  list-style: none;
+  padding: 0 8px 0 16px;
+}
+
+.navMonths li {
+  padding: 5px 0;
+}
+
+.navMonths a {
+  color: inherit;
+  display: block;
+}
