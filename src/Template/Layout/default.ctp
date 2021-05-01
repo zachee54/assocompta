@@ -18,11 +18,11 @@
     if ($Auth->user()) {
       ?>
       <aside>
-        <header><?php echo AuthComponent::user('nom'); ?></header>
+        <header><?php echo $Auth->user('nom'); ?></header>
         <nav>
           <ul>
             <?php
-            if (!AuthComponent::user('readonly')) {
+            if (!$Auth->user('readonly')) {
               ?>
               <li>
                 <?php

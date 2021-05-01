@@ -17,7 +17,7 @@ $this->element('ecritures/click2edit');
     // Sur cette page, afficher les flashs ici plutôt que dans le layout principal
     echo $this->Flash->render();
     
-    if (!AuthComponent::user('readonly')) {
+    if (!$Auth->user('readonly')) {
       ?>
       <article class="align_left">
         <fieldset>

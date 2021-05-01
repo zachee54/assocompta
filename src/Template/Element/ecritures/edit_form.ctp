@@ -3,7 +3,7 @@ $this->Html->css(
   array('ecritures/edit', 'button'),
   array('inline' => false));
 
-$readonly = AuthComponent::user('readonly');
+$readonly = $Auth->user('readonly');
 
 echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
 ?>
@@ -21,7 +21,7 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
         'type' => 'DATE',
         'label' => 'Date banque&nbsp;:'));
       
-      if (AuthComponent::user('admin')) {
+      if ($Auth->user('admin')) {
         echo $this->Form->input('rattachement', array(
           'label' => 'Rattachement&nbsp;:'));
       }

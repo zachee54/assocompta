@@ -57,7 +57,7 @@ class AppController extends Controller {
                 'username' => 'login',
                 'password' => 'mdp'],
               'passwordHasher' => [
-                'className' => 'Simple',
+                'className' => 'Weak',
                 'hashType' => 'sha256']]],
           'loginRedirect' => [
             'controller' => 'ecritures',

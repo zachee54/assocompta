@@ -8,7 +8,9 @@ class UsersController extends AppController {
    */
   public function login() {
     if ($this->request->isPost() || $this->_allowLoginInGet()) {
-      if ($this->Auth->login()) {
+      $user = $this->Auth->identify();
+      if ($user) {
+        $this->Auth->setUser($user);
         $this->redirect($this->Auth->redirectUrl());
       } else {
         $this->Flash->error('Identifiant ou mot de passe invalide');
