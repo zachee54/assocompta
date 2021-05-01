@@ -11,11 +11,13 @@ $this->Html->css(
     echo $this->Form->input('login', array(
       'div' => false,
       'autofocus' => true,
-      'label' => 'Identifiant&nbsp;:'));
+      'label' => 'Identifiant&nbsp;:',
+      'escape' => false));
     
     echo $this->Form->input('mdp', array(
       'div' => false,
       'label' => 'Mot de passe&nbsp;:',
+      'escape' => false,
       'type' => 'password'));
   
     echo $this->Form->submit('Se connecter', array(
