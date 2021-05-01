@@ -1,7 +1,7 @@
 <?php
 $this->Html->css(
-  array('users/login', 'button'),
-  array('block' => true));
+  ['users/login', 'button'],
+  ['block' => true]);
 
 ?>
 <section id="UserLogin">
@@ -19,8 +19,8 @@ $this->Html->css(
       ['escape' => false]);
     echo $this->Form->password('mdp');
   
-    echo $this->Form->submit('Se connecter', array(
-      'class' => 'button'));
+    echo $this->Form->submit('Se connecter',
+      ['class' => 'button']);
     
   echo $this->Form->end();
   ?>
