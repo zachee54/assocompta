@@ -7,18 +7,17 @@ $this->Html->css(
 <section id="UserLogin">
   <?php
   echo $this->Form->create();
-  
-    echo $this->Form->input('login', array(
-      'div' => false,
-      'autofocus' => true,
-      'label' => 'Identifiant&nbsp;:',
-      'escape' => false));
     
-    echo $this->Form->input('mdp', array(
-      'div' => false,
-      'label' => 'Mot de passe&nbsp;:',
-      'escape' => false,
-      'type' => 'password'));
+    echo $this->Form->label('login',
+      ['Identifiant&nbsp;:'],
+      ['escape' => false]);
+    echo $this->Form->text('login',
+      ['autofocus' => true]);
+    
+    echo $this->Form->label('mdp',
+      ['Mot de passe&nbsp;:'],
+      ['escape' => false]);
+    echo $this->Form->password('mdp');
   
     echo $this->Form->submit('Se connecter', array(
       'class' => 'button'));
