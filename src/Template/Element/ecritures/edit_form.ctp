@@ -1,7 +1,7 @@
 <?php
 $this->Html->css(
   array('ecritures/edit', 'button'),
-  array('inline' => false));
+  array('block' => true));
 
 $readonly = $Auth->user('readonly');
 
