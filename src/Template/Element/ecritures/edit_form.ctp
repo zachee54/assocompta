@@ -10,16 +10,17 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
   <article>
     <div>
       <?php
-      echo $this->Form->input('date_engagement', array(
-        'type' => 'DATE',
-        'default' => date_format(
+      echo $this->element('date_input', [
+        'field' => 'date_engagement',
+        'label' => 'Date',
+        'options' => [
+          'default' => date_format(
             date_modify(date_create(), 'first day of -1 month'),
-            'Y-m-d'),
-        'label' => 'Date'));
+            'Y-m-d')]]);
       
-      echo $this->Form->input('date_bancaire', array(
-        'type' => 'DATE',
-        'label' => 'Date banque'));
+      echo $this->element('date_input', [
+        'field' => 'date_bancaire',
+        'label' => 'Date banque']);
       
       if ($Auth->user('admin')) {
         echo $this->Form->input('rattachement', array(
