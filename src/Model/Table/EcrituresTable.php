@@ -10,10 +10,6 @@ class EcrituresTable extends Table {
     $this->belongsTo('Activites');
   }
   
-  public $virtualFields = array(
-    'engagement' => "DATE_FORMAT(date_engagement, '%d/%m/%Y')",
-    'bancaire' => "DATE_FORMAT(date_bancaire, '%d/%m/%Y')");
-  
   public $validate = array(
     'debit' => array(
       'rule' => 'amountsNotEmpty',
