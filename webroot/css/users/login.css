@@ -1,0 +1,53 @@
+#UserLogin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#UserLogin form {
+  margin: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  grid-row-gap: 5px;
+  grid-column-gap: 5px;
+}
+
+#UserLogin form label {
+  color: brown;
+}
+
+#UserLogin form > label {
+  grid-column-start: 1;
+}
+
+#UserLogin form input[type=text], #UserLogin form input[type=password] {
+  padding: 4px;
+  border-radius: 8px;
+}
+
+#UserLogin form input::placeholder {
+  color: gray;
+  font-style: italic;
+}
+
+#UserLogin form .input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#UserLogin form .checkbox {
+  grid-column: 1 / 3;
+}
+
+#UserLogin form .submit {
+  margin: 10px 0;
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+#UserLogin form .submit a {
+  background-color: gray;
+  font-size: 13px;
+}

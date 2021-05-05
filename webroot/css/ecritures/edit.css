@@ -1,0 +1,62 @@
+/* Uniquement le formulaire dans la page dédiée (sélecteur #) */
+#EcritureEditForm article {
+  margin: 20px;
+}
+
+/* Les formulaires insérés en page dédiée ou non */
+.EcritureEditForm {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.EcritureEditForm article > div {
+  display: flex;
+  justify-content: stretch;
+}
+
+.EcritureEditForm .input {
+  flex-grow: 1;
+  margin: 2px;
+  padding: 5px;
+  border: solid 1px gray;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background-color: #fff0b1;
+}
+
+.EcritureEditForm .input label {
+  font-size: xx-small;
+}
+
+#EcritureDescription, #EcriturePersonne {
+  width: 200px;
+}
+
+#EcriturePiece {
+  max-width: 50px;
+}
+
+.EcritureEditForm .numberInputs {
+  justify-content: center;
+} 
+
+.EcritureEditForm .number input {
+  width: 80px;
+  text-align: right;
+}
+
+.EcritureEditForm .submit {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.EcritureEditForm .submit .cancelButton {
+  background-color: gray;
+}
+
+#deleteButton {
+  background-color: brown;
+}

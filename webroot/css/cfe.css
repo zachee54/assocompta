@@ -1,0 +1,114 @@
+body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 11px;
+  margin: 0;
+}
+
+body > header {
+  min-height: 50px;
+  padding: 10px;
+  font-size: xx-large;
+  font-weight: bold;
+  font-family: Candara, Calibri, Verdana, sans-serif;
+  color: brown;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+  background-color: cornsilk;
+}
+
+body > header aside {
+  text-align: right;
+  font-size: large;
+  color: darkblue;
+}
+
+body > header aside ul {
+  font-size: x-small;
+  list-style-type: none;
+  margin: 0;
+}
+
+body > header aside a {
+  color: inherit;
+}
+
+body > header aside a:hover {
+  text-decoration: underline;
+}
+
+body > nav:first-of-type {
+  font-weight: bold;
+  background-color: brown;
+}
+body > nav:first-of-type ul {
+  margin: 0;
+  min-height: 35px;
+  display: flex;
+  list-style: none;
+}
+body > nav:first-of-type li {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  color: cornsilk;
+  transition: 400ms;
+}
+body > nav:first-of-type a {
+  min-width: 100px;
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: cornsilk;
+  transition: 400ms;
+}
+body > nav:first-of-type li:hover {
+  background-color: cornsilk;
+}
+body > nav:first-of-type li:hover a {
+  color: brown;
+}
+
+body > footer {
+  background-color: white;
+  font-size: xx-small;
+}
+
+body > footer a {
+  color: brown;
+}
+
+a {
+  text-decoration: none;
+}
+
+input[type="DATE"] {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.message {
+  margin: 20px auto 0 auto;
+  max-width: 400px;
+  border: solid 2px;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: larger;
+  font-weight: bold;
+  background-color: white;
+}
+
+.success {
+  border-color: green;
+  color: green;
+}
+
+.error {
+  border-color: #e80000;
+  color: #e80000;
+}

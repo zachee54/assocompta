@@ -1,0 +1,72 @@
+.align_left {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.ecritures {
+  margin: 20px;
+  border-collapse: separate;
+  border-spacing: 0px 3px;
+}
+.ecritures th, .ecritures td {
+  border: solid black;
+  border-width: 1px 1px 1px 0;
+  padding: 2px 5px;
+}
+.ecritures td:first-child, .ecritures th:first-child {
+  border-width: 1px 1px 1px 1px;
+  border-radius: 3px 0 0 3px;
+}
+.ecritures td:last-child, .ecritures th:last-child {
+  border-radius: 0 3px 3px 0;
+}
+
+.ecritures th {
+  text-align: center;
+}
+.ecritures td, #EcritureEditForm .input {
+  background-color: #fff0b1;
+}
+
+/* Débits et crédits */
+.ecritures td:nth-last-child(-n+2), #EcritureEditForm .number {
+  text-align: right;
+  background-color: #c5d8f9;
+}
+
+/* Lignes de soldes */
+.solde td:first-child {
+  text-align: right;
+  font-style: italic;
+  background-color: #fff7d9;
+}
+.solde td {
+  font-weight: bold;
+}
+
+.months {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.months a {
+  margin: 10px 0;
+  padding: 5px;
+  font-weight: bold;
+  color: white;
+  border-radius: 5px;
+  background-color: brown;
+}
+
+#content fieldset {
+  margin: 20px;
+  border-radius: 10px;
+  border-color: coral;
+  background-color: wheat;
+}
+
+#content legend {
+  font-weight: bold;
+  background-color: wheat;
+}

@@ -1,0 +1,49 @@
+#years ul {
+  display: flex;
+  list-style-type: none;
+}
+
+#years span, #years a {
+  display: block;
+  min-width: 100px;
+  padding: 2px;
+}
+
+#years span {
+  background-color: bisque;
+  color: brown;
+}
+
+#years span, #years a, #toggleAttached span, #toggleAttached a {
+  min-width: 100px;
+  margin: 0 10px;
+  border-radius: 8px / 50%;
+  text-align: center;
+}
+
+#toggleAttached a, #years a {
+  background-color: #e6e6e6;
+  color: gray;
+}
+
+#toggleAttached span, #toggleAttached a {
+  padding: 2px 10px;
+}
+
+#toggleAttached span {
+  background-color: #b9e3e3;
+}
+
+#toggleAttached ul {
+  display: flex;
+  list-style-type: none;
+}
+
+.pvtUi {
+  padding: 0 20px;
+  background-color: inherit;
+}
+
+.pvtTable .pvtVal, .pvtTable .pvtTotal {
+  white-space: nowrap;
+}
