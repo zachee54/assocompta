@@ -3,16 +3,23 @@ namespace App\Controller;
 
 class UsersController extends AppController {
   
+  public function beforeFilter(\Cake\Event\EventInterface $event) {
+    parent::beforeFilter($event);
+    
+    $this->Authentication->allowUnauthenticated(['login']);
+  }
+  
   /**
    * Page de connexion.
    */
   public function login() {
-    if ($this->request->isPost() || $this->_allowLoginInGet()) {
-      if ($this->Auth->login()) {
-        $this->redirect($this->Auth->redirectUrl());
-      } else {
-        $this->Flash->error('Identifiant ou mot de passe invalide');
-      }
+    $result = $this->Authentication->getResult();
+    if ($result->isValid()) {
+      $target = $this->Authentication->getLoginRedirect() ?? '/';
+      return $this->redirect($target);
+    }
+    if ($this->request->is('post') && !$result->isValid()) {
+      $this->Flash->error('Identifiant ou mot de passe invalide');
     }
   }
   
@@ -34,7 +41,8 @@ class UsersController extends AppController {
    * Page de déconnexion.
    */
   public function logout() {
-    $this->redirect($this->Auth->logout());
+    $this->Authentication->logout();
+    return $this->redirect(['action' => 'login']);
   }
   
   /**
