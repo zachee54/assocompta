@@ -1,4 +1,6 @@
 <?php
+namespace App\Controller;
+
 class EcrituresController extends AppController {
   
   public function index($year = null, $month = null) {
