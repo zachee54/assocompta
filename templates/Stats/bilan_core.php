@@ -100,7 +100,7 @@ $this->append('scriptBottom');
     
     function displayEcritures(e, value, filters, pivotData) {
       $.post(
-        '<?php echo $this->Html->url(array(
+        '<?= echo $this->Urlè>build(array(
           'action' => 'bilan_detail',
           $year, $this->fetch('ajuste')));
         ?>',

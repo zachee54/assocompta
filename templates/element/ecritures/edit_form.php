@@ -73,7 +73,7 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
         if (!$readonly) {
           echo $this->Form->submit('Supprimer', array(
             'id' => 'deleteButton',
-            'formaction' => $this->Html->url(array(
+            'formaction' => $this->Url->build(array(
               'action' => 'delete',
               $this->data['Ecriture']['id'])),
             'formmethod' => 'post',
