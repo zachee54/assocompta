@@ -14,13 +14,15 @@ $this->Html->css('ecritures/nav_months', array('block' => true));
           ?>
           <li>
             <?php
-            echo $this->Html->link(
-              strftime('%B', mktime(0, 0, 0, $navMonth, 10)),
-                array(
-                  'controller' => 'ecritures',
-                  'action' => 'index',
-                  $navYear,
-                  $navMonth));
+            $date = mktime(0, 0, 0, $navMonth, 10);
+            // Cf. http://userguide.icu-project.org/formatparse/datetime
+            $formattedDate = $this->Time->format($date, 'LLLL');
+            
+            echo $this->Html->link($formattedDate, [
+              'controller' => 'ecritures',
+              'action' => 'index',
+              $navYear,
+              $navMonth]);
             ?>
           </li>
           <?php
