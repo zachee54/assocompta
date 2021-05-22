@@ -15,14 +15,14 @@
   <header>
     <div>Centre de Formation et d'Entraide</div>
     <?php
-    if (AuthComponent::user()) {
+    if ($this->Identity->isLoggedIn()) {
       ?>
       <aside>
-        <header><?php echo AuthComponent::user('nom'); ?></header>
+        <header><?php echo $this->Identity->get('nom'); ?></header>
         <nav>
           <ul>
             <?php
-            if (!AuthComponent::user('readonly')) {
+            if (!$this->Identity->get('readonly')) {
               ?>
               <li>
                 <?php
@@ -74,7 +74,7 @@
         ?>
       </li>
       <?php
-      if (AuthComponent::user('admin')) {
+      if ($this->Identity->get('admin')) {
         ?>
         <li>
           <?php
