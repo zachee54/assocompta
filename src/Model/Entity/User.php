@@ -1,4 +1,7 @@
 <?php
+namespace App\Model\Entity;
+
+use Cake\ORM\Entity;
 use Authentication\PasswordHasher\LegacyPasswordHasher;
 
 class User extends Entity {
