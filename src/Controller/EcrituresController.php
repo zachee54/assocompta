@@ -8,7 +8,8 @@ class EcrituresController extends AppController {
     // Inclure le traitement du formulaire d'ajout d'une écriture
     $this->edit();
     // Ne pas réutiliser les données de l'écriture ajoutée, s'il y en a une
-    $this->request->data = null;
+    // TODO remplacer par la réinitialisation d'une entité
+    // $this->request->data = null;
     
     // Année et mois par défaut : les plus récents saisis
     if (!$year) {
