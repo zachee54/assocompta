@@ -79,14 +79,38 @@ class EcrituresController extends AppController {
     $year = $query->func()->year([
       'date_bancaire' => 'identifier']);
     
-    $this->set('months', $query
+    $yearsMonths = $query
       ->select([
         'month' => $month,
         'year' => $year])
       ->distinct(['month', 'year'])
       ->whereNotNull('date_bancaire')
       ->order(['date_bancaire' => 'DESC'])
-      ->all());
+      ->all();
+      
+    $this->set('months', $this->_groupMonthsByYear($yearsMonths));
+  }
+  
+  /**
+   * Réorganise une liste d'années et mois en tableau associatif à deux niveaux
+   * contenant les années puis les numéros des mois.
+   * 
+   * @param array $yearsMonths
+   *                ResultSet contenant les champs 'year' et 'month'.
+   * 
+   * @return array  Un tableau à double entrée contenant les années et les
+   *                numéros des mois
+   */
+  private function _groupMonthsByYear($yearsMonths) {
+    $monthsByYear = [];
+    foreach ($yearsMonths as $yearMonth) {
+      $year = $yearMonth->year;
+      if (!array_key_exists($year, $monthsByYear)) {
+        $monthsByYear[$year] = [];
+      }
+      $monthsByYear[$year][] = $yearMonth->month;
+    }
+    return $monthsByYear;
   }
   
   /**
