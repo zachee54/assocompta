@@ -43,7 +43,7 @@ class EcrituresController extends AppController {
     
     $this->set('enAttente',
       $this->Ecritures->find()
-      ->where(['date_bancaire' => null])
+      ->whereNull('date_bancaire')
       ->order(['created']));
   }
   
