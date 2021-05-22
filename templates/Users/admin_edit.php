@@ -10,19 +10,19 @@ $this->Html->css(
     'inputDefaults' => array(
       'div' => false)));
     
-    echo $this->Form->input('nom', array(
+    echo $this->Form->control('nom', array(
       'label' => 'Nom&nbsp;:'));
     
-    echo $this->Form->input('login', array(
+    echo $this->Form->control('login', array(
       'label' => 'Login&nbsp;:'));
     
-    echo $this->Form->input('mdp', array(
+    echo $this->Form->control('mdp', array(
       'label' => 'Mot de passe&nbsp;:',
       'type' => 'password',
       'placeholder' => "garder l'existant",
       'required' => false));
     
-    echo $this->Form->input('admin', array(
+    echo $this->Form->control('admin', array(
       'div' => true,
       'label' => 'Administrateur'));
     

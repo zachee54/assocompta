@@ -12,13 +12,13 @@ $this->Html->css(
         'div' => false,
         'type' => 'password')));
     
-    echo $this->Form->input('old_password', array(
+    echo $this->Form->control('old_password', array(
       'label' => 'Mot de passe actuel&nbsp;:'));
     
-    echo $this->Form->input('new_password', array(
+    echo $this->Form->control('new_password', array(
       'label' => 'Nouveau mot de passe&nbsp;:'));
     
-    echo $this->Form->input('password_confirm', array(
+    echo $this->Form->control('password_confirm', array(
       'label' => 'Confirmez le mot de passe&nbsp;:'));
     
     echo $this->Form->submit('Valider', array(

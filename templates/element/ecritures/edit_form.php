@@ -10,48 +10,48 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
   <article>
     <div>
       <?php
-      echo $this->Form->input('date_engagement', array(
+      echo $this->Form->control('date_engagement', array(
         'type' => 'DATE',
         'default' => date_format(
             date_modify(date_create(), 'first day of -1 month'),
             'Y-m-d'),
         'label' => 'Date&nbsp;:'));
       
-      echo $this->Form->input('date_bancaire', array(
+      echo $this->Form->control('date_bancaire', array(
         'type' => 'DATE',
         'label' => 'Date banque&nbsp;:'));
       
       if ($this->Identity->get('admin')) {
-        echo $this->Form->input('rattachement', array(
+        echo $this->Form->control('rattachement', array(
           'label' => 'Rattachement&nbsp;:'));
       }
       
-      echo $this->Form->input('poste_id', array(
+      echo $this->Form->control('poste_id', array(
         'default' => 8,
         'label' => 'Poste&nbsp;:'));
       
-      echo $this->Form->input('activite_id', array(
+      echo $this->Form->control('activite_id', array(
         'default' => 2,
         'label' => 'Activité&nbsp;:'));
       ?>
     </div>
     <div>
       <?php
-      echo $this->Form->input('description', array(
+      echo $this->Form->control('description', array(
         'label' => 'Description&nbsp;:'));
       
-      echo $this->Form->input('personne', array(
+      echo $this->Form->control('personne', array(
         'label' => 'Personne&nbsp;:'));
       
-      echo $this->Form->input('piece', array(
+      echo $this->Form->control('piece', array(
         'class' => 'piece',
         'label' => 'N°&nbsp;pièce&nbsp;:'));
       
-      echo $this->Form->input('debit', array(
+      echo $this->Form->control('debit', array(
         'required' => false,
         'label' => 'Débit&nbsp;:'));
       
-      echo $this->Form->input('credit', array(
+      echo $this->Form->control('credit', array(
         'required' => false,
         'label' => 'Crédit&nbsp;:'));
       
