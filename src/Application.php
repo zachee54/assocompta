@@ -172,8 +172,8 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
       ]);
 
       $fields = [
-          IdentifierInterface::CREDENTIAL_USERNAME => 'email',
-          IdentifierInterface::CREDENTIAL_PASSWORD => 'password'
+          IdentifierInterface::CREDENTIAL_USERNAME => 'login',
+          IdentifierInterface::CREDENTIAL_PASSWORD => 'mdp'
       ];
       // Load the authenticators. Session should be first.
       $service->loadAuthenticator('Authentication.Session');
