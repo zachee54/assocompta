@@ -167,8 +167,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                   'plugin' => null,
                   'controller' => 'Users',
                   'action' => 'login',
-          ]),
-          'queryParam' => 'redirect',
+          ])
       ]);
 
       $fields = [
