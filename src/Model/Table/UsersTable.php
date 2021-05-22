@@ -1,5 +1,9 @@
 <?php
-class User extends AppModel {
+namespace App\Model\Table;
+
+use Cake\ORM\Table;
+
+class UsersTable extends Table {
   public $validate = array(
     'nom' => array(
       'rule' => 'notBlank',
