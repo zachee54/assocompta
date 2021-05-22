@@ -1,7 +1,7 @@
 <?php
 $this->Html->css(
   array('stats/pivot.min', 'stats/bilan', 'ecritures/index'),
-  array('inline' => false));
+  array('block' => true));
 
 $this->element('ecritures/click2edit');
 
@@ -39,7 +39,7 @@ $this->element('ecritures/click2edit');
 $this->element('jquery');
 $this->element('jquery-ui');
 
-$scriptBottom = array('inline' => 'scriptBottom');
+$scriptBottom = array('block' => 'scriptBottom');
 echo $this->Html->script('pivottable/pivot.min', $scriptBottom);
 echo $this->Html->script('pivottable/pivot.fr.min', $scriptBottom);
 echo $this->Html->script('plotly-basic-latest.min', $scriptBottom);

@@ -1,7 +1,7 @@
 <?php
 echo $this->Html->css(
   array('users/index', 'button'),
-  array('inline' => false));
+  array('block' => true));
 
 ?>
 <section id="usersIndex">

@@ -1,7 +1,7 @@
 <?php
 $this->Html->css(
   array('ecritures/index', 'ecritures/common', 'button'),
-  array('inline' => false));
+  array('block' => true));
 
 $this->element('ecritures/click2edit');
 

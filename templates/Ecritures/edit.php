@@ -1,5 +1,5 @@
 <?php
-$this->Html->css('ecritures/common', array('inline' => false));
+$this->Html->css('ecritures/common', array('block' => true));
 ?>
 <div id="content">
   <?php

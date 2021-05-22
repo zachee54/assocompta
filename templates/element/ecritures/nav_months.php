@@ -1,5 +1,5 @@
 <?php
-$this->Html->css('ecritures/nav_months', array('inline' => false));
+$this->Html->css('ecritures/nav_months', array('block' => true));
 ?>
 <nav class="navMonths">
   Aller au mois de&nbsp;:

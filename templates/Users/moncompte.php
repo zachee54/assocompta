@@ -1,7 +1,7 @@
 <?php
 $this->Html->css(
   array('users/login', 'button'),
-  array('inline' => false));
+  array('block' => true));
 
 ?>
 <!-- Utiliser la même mise en forme que le formulaire de connexion -->

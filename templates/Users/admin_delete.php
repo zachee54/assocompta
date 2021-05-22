@@ -1,7 +1,7 @@
 <?php
 $this->Html->css(
   array('users/delete', 'button'),
-  array('inline' => false));
+  array('block' => true));
 
 ?>
 <section id="UserDelete">
