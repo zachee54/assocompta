@@ -1,7 +1,3 @@
-<?php
-$this->element('currency');
-
-?>
 <table class="ecritures">
   <thead>
     <tr>
