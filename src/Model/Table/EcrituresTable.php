@@ -5,7 +5,7 @@ use Cake\ORM\Table;
 
 class EcrituresTable extends Table {
   
-  public function initialize(array $config) {
+  public function initialize(array $config): void {
     $this->belongsTo('Postes');
     $this->belongsTo('Activites');
   }
