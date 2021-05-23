@@ -92,7 +92,10 @@ class UsersController extends AppController {
     if (!$this->request->isPost()) {
       return;
     }
-    if ($this->Auth->user('readonly')) {
+    
+    $identity = $this->Authentication->getIdentity();
+    
+    if ($identity->readonly) {
       $this->Flash->error(
         'Votre profil ne vous permet pas de modifier le mot de passe');
       return;
@@ -105,7 +108,7 @@ class UsersController extends AppController {
     }
     
     $oldHash = $this->_hashPassword($data['old_password']);
-    $userId = $this->Auth->user('id');
+    $userId = $identity->id;
     $password = $this->User->field('mdp', array('id' => $userId));
     if ($oldHash != $password) {
       $this->Flash->error('Votre mot de passe est erroné');
