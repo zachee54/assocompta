@@ -29,7 +29,7 @@
                 echo $this->Html->link(
                   'Changer mon mot de passe',
                   array(
-                    'admin' => false,
+                    'prefix' => false,
                     'controller' => 'users',
                     'action' => 'moncompte'));
                 ?>
@@ -43,7 +43,7 @@
               echo $this->Html->link(
                 'Déconnexion',
                 array(
-                  'admin' => false,
+                  'prefix' => false,
                   'controller' => 'users',
                   'action' => 'logout'));
               ?>
@@ -59,18 +59,18 @@
     <ul>
       <li>
         <?php
-        echo $this->Html->link('Opérations', array(
-          'admin' => false,
+        echo $this->Html->link('Opérations', [
+          'prefix' => false,
           'controller' => 'ecritures',
-          'action' => 'index'));
+          'action' => 'index']);
         ?>
       </li>
       <li>
         <?php
-        echo $this->Html->link('Bilan', array(
-          'admin' => false,
+        echo $this->Html->link('Bilan', [
+          'prefix' => false,
           'controller' => 'stats',
-          'action' => 'bilan'));
+          'action' => 'bilan']);
         ?>
       </li>
       <?php
@@ -78,10 +78,10 @@
         ?>
         <li>
           <?php
-          echo $this->Html->link('Administration', array(
-            'admin' => true,
+          echo $this->Html->link('Administration', [
+            'prefix' => 'Admin',
             'controller' => 'users',
-            'action' => 'index'));
+            'action' => 'index']);
           ?>
         </li>
         <?php
