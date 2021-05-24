@@ -25,23 +25,24 @@ echo $this->Html->css(
     <tbody>
     <?php
     foreach ($users as $user) {
-      $userData = $user['User'];
       ?>
       <tr>
-        <td><?php echo $userData['nom']; ?></td>
-        <td><?php echo $userData['login']; ?></td>
-        <td><?php if ($userData['admin']) echo 'X'; ?></td>
+        <td><?= $user->nom ?></td>
+        <td><?= $user->login ?></td>
+        <td><?php if ($user->admin) echo 'X'; ?></td>
         <td>
           <?php
-          echo $this->Html->link('Modifier', array(
+          echo $this->Html->link('Modifier', [
             'action' => 'edit',
-            $userData['id']));
+            $user->id ]);
           
           echo '&nbsp;';
           
-          echo $this->Html->link('Supprimer', array(
-            'action' => 'delete',
-            $userData['id']));
+          echo $this->Form->postLink('Supprimer',
+            [ 'action' => 'delete',
+              $user->id],
+            [ 'method' => 'delete',
+              'confirm' => "Êtes-vous sûr de vouloir supprimer $user->nom ?"]);
           ?>
         </td>
       </tr>

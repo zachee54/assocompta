@@ -1,30 +1,27 @@
 <?php
 $this->Html->css(
-  array('users/login', 'button'),
-  array('block' => true));
+  ['users/login', 'button'],
+  ['block' => true] );
 
 ?>
 <section id="UserLogin">
   <?php
-  echo $this->Form->create(null, array(
-    'inputDefaults' => array(
-      'div' => false)));
+  echo $this->Form->create($user);
     
-    echo $this->Form->control('nom', array(
-      'label' => 'Nom&nbsp;:'));
+    echo $this->Form->label('nom', 'Nom');
+    echo $this->Form->text('nom');
     
-    echo $this->Form->control('login', array(
-      'label' => 'Login&nbsp;:'));
+    echo $this->Form->label('login', 'Login');
+    echo $this->Form->text('login');
     
-    echo $this->Form->control('mdp', array(
-      'label' => 'Mot de passe&nbsp;:',
-      'type' => 'password',
+    echo $this->Form->label('mdp', 'Mot de passe');
+    echo $this->Form->password('mdp', [
       'placeholder' => "garder l'existant",
-      'required' => false));
+      'required' => false ]);
     
-    echo $this->Form->control('admin', array(
-      'div' => true,
-      'label' => 'Administrateur'));
+    echo $this->Form->control('admin', [
+      'label' => 'Administrateur',
+      'type' => 'checkbox' ]);
     
     echo $this->Form->submit('Valider', array(
       'class' => 'button',

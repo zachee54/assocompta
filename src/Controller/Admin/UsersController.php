@@ -2,6 +2,7 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Model\Entity\User;
 use Authentication\Identifier\IdentifierInterface;
 
 class UsersController extends AppController {
@@ -17,41 +18,54 @@ class UsersController extends AppController {
    * Modification d'un utilisateur par l'administrateur.
    */
   public function edit($id = null) {
-    if ($this->request->is(array('post', 'put'))) {
-      $data = $this->request->data['User'];
+    if ($this->request->is(['post', 'put'])) {
+      $data = $this->request->getData();
       
+      // Ne pas sauvegarder le mot de passe si non saisi
       if (empty($data['mdp'])) {
         unset($data['mdp']);
-      } else {
-        $data['mdp'] = $this->_hashPassword($data['mdp']);
       }
       
-      if (isset($data['admin']) && !$data['admin']) {
+      // Exiger au moins un administrateur
+      if (($id !== null) && empty($data['admin'])) {
         if (!$this->_hasOtherAdmin($id)) {
           $this->Flash->error("L'application doit avoir au moins un administrateur");
           return;
         }
       }
       
-      $this->User->id = $id;
-      if ($this->User->save($data)) {
+      // Sauvegarde
+      $user = new User($data);
+      $user->id = $id;
+      if ($this->Users->save($user)) {
         $this->Flash->success('Les modifications ont été sauvegardées');
         $this->redirect(array('action' => 'index'));
       } else {
         $this->Flash->error("Erreur pendant l'enregistrement");
       }
+      
+    } else if ($id === null) {
+      
+      // Ajouter un utilisateur
+      $user = $this->Users->newEmptyEntity();
+      
+    } else {
+      
+      // Modifier un utilisateur
+      $user = $this->Users->find()
+        ->select(['nom', 'login', 'admin'])
+        ->where(['id' => $id])
+        ->first();
     }
-    
-    $this->request->data = $this->User->findById($id, array(
-      'nom', 'login', 'admin'));
+    $this->set('user', $user);
   }
   
   /**
    * Suppression d'un utilisateur.
    */
   public function delete($id) {
-    $user = $this->User->findById($id);
-    $name = $user['User']['nom'];
+    $user = $this->Users->get($id);
+    $name = $user->nom;
     $this->set('username', $name);
     
     if (!$this->_hasOtherAdmin($id)) {
@@ -60,7 +74,8 @@ class UsersController extends AppController {
     }
     
     if ($this->request->isDelete()) {
-      if (($id != $this->Auth->user('id')) && $this->User->delete($id)) {
+      $identity = $this->Authentication->getIdentity();
+      if (($id != $identity->id) && $this->Users->delete($user)) {
         $this->Flash->success("L'utilisateur $name a été supprimé");
         $this->redirect(array('action' => 'index'));
       } else {
@@ -78,9 +93,10 @@ class UsersController extends AppController {
    *              identifiant que $id.
    */
   private function _hasOtherAdmin($id) {
-    return $this->User->find('count', array(
-      'conditions' => array(
+    return $this->Users->find()
+      ->where([
         'admin' => true,
-        'id !=' => $id)));
+        'id !=' => $id])
+      ->count();
   }
 }
