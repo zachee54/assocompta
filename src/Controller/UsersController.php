@@ -26,20 +26,6 @@ class UsersController extends AppController {
   }
   
   /**
-   * Copie les identifiants de login en GET comme s'ils avaient été passés en
-   * POST dans la requête, s'ils existent.
-   * 
-   * @return  true si l'identifiant avait été passé en GET.
-   */
-  private function _allowLoginInGet() {
-    if (isset($this->request->query['data']['User']['login'])) {
-      $this->request->data = $this->request->query['data'];
-      return true;
-    }
-    return false;
-  }
-  
-  /**
    * Page de déconnexion.
    */
   public function logout() {

@@ -6,7 +6,8 @@ $this->Html->css(
 ?>
 <section id="UserLogin">
   <?php
-  echo $this->Form->create();
+  echo $this->Form->create(null, [
+    'valueSources' => ['query'] ]);
     
     echo $this->Form->label('login', 'Identifiant');
     echo $this->Form->text('login', [
