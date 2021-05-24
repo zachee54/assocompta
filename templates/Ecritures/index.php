@@ -35,8 +35,9 @@ $this->element('ecritures/click2edit');
     ?>
     
     <h1>
-      <div>Relevé bancaire de <?php
-        echo strftime('%B %Y', date_timestamp_get($debut));
+      <div>Relevé bancaire de <?=
+        // Cf. http://userguide.icu-project.org/formatparse/datetime
+        $this->Time->format($debut, 'MMMM yyyy');
       ?></div>
     </h1>
     
