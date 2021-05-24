@@ -15,45 +15,45 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
         'default' => date_format(
             date_modify(date_create(), 'first day of -1 month'),
             'Y-m-d'),
-        'label' => 'Date&nbsp;:'));
+        'label' => 'Date'));
       
       echo $this->Form->control('date_bancaire', array(
         'type' => 'DATE',
-        'label' => 'Date banque&nbsp;:'));
+        'label' => 'Date banque'));
       
       if ($this->Identity->get('admin')) {
         echo $this->Form->control('rattachement', array(
-          'label' => 'Rattachement&nbsp;:'));
+          'label' => 'Rattachement'));
       }
       
       echo $this->Form->control('poste_id', array(
         'default' => 8,
-        'label' => 'Poste&nbsp;:'));
+        'label' => 'Poste'));
       
       echo $this->Form->control('activite_id', array(
         'default' => 2,
-        'label' => 'Activité&nbsp;:'));
+        'label' => 'Activité'));
       ?>
     </div>
     <div>
       <?php
       echo $this->Form->control('description', array(
-        'label' => 'Description&nbsp;:'));
+        'label' => 'Description'));
       
       echo $this->Form->control('personne', array(
-        'label' => 'Personne&nbsp;:'));
+        'label' => 'Personne'));
       
       echo $this->Form->control('piece', array(
         'class' => 'piece',
-        'label' => 'N°&nbsp;pièce&nbsp;:'));
+        'label' => 'N° pièce'));
       
       echo $this->Form->control('debit', array(
         'required' => false,
-        'label' => 'Débit&nbsp;:'));
+        'label' => 'Débit'));
       
       echo $this->Form->control('credit', array(
         'required' => false,
-        'label' => 'Crédit&nbsp;:'));
+        'label' => 'Crédit'));
       
       ?>
     </div>
