@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use Authentication\Identifier\IdentifierInterface;
+
 class UsersController extends AppController {
   
   public function beforeFilter(\Cake\Event\EventInterface $event) {
@@ -100,38 +102,46 @@ class UsersController extends AppController {
         'Votre profil ne vous permet pas de modifier le mot de passe');
       return;
     }
-    $data = $this->request->data;
+    $data = $this->request->getData();
     
     if ($data['new_password'] != $data['password_confirm']) {
       $this->Flash->error('Les nouveaux mots de passe ne correspondent pas');
       return;
     }
     
-    $oldHash = $this->_hashPassword($data['old_password']);
-    $userId = $identity->id;
-    $password = $this->User->field('mdp', array('id' => $userId));
-    if ($oldHash != $password) {
-      $this->Flash->error('Votre mot de passe est erroné');
-      return;
-    }
-    
-    $this->User->id = $userId;
-    $hash = $this->_hashPassword($data['new_password']);
-    if ($this->User->saveField('mdp', $hash)) {
-      $this->Flash->success('Votre mot de passe a été modifié');
-      $this->redirect('/');
-    } else {
-      $this->Flash->error('Erreur pendant la mise à jour du mot de passe');
+    if ($this->_recheckActualPassword($data['old_password'])) {
+      $user = $this->Users->newEntity([
+        'id' => $identity->id,
+        'mdp' => $data['new_password'] ]);
+      $user->isNew(false);
+      
+      if ($this->Users->save($user)) {
+        $this->Flash->success('Votre mot de passe a été modifié');
+        $this->redirect('/');
+      } else {
+        $this->Flash->error('Erreur pendant la mise à jour du mot de passe');
+      }
     }
   }
   
   /**
-   * Hachage du mot de passe pour modification.
+   * Vérifie le mot de passe actuel.
    */
-  private function _hashPassword($password) {
-    $authenticates = $this->Auth->constructAuthenticate();
-    $hasher = $authenticates[0]->passwordHasher();
-    return $hasher->hash($password);
+  private function _recheckActualPassword($password) {
+    $login = $this->Authentication->getIdentity()->login;
+    
+    $authService = $this->Authentication->getAuthenticationService();
+    $identifiers = $authService->identifiers();
+    
+    if (!$identifiers->identify([
+        IdentifierInterface::CREDENTIAL_USERNAME => $login,
+        IdentifierInterface::CREDENTIAL_PASSWORD => $password])) {
+      
+      $this->Flash->error('Votre mot de passe est erroné');
+      return false;
+    }
+    
+    return true;
   }
   
   /**
