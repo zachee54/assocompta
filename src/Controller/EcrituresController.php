@@ -34,6 +34,7 @@ class EcrituresController extends AppController {
     
     $this->set('ecritures',
       $this->Ecritures->find()
+      ->contain(['Postes', 'Activites'])
       ->where([
         'date_bancaire >=' => $debut,
         'date_bancaire <=' => $fin])
@@ -41,6 +42,7 @@ class EcrituresController extends AppController {
     
     $this->set('enAttente',
       $this->Ecritures->find()
+      ->contain(['Postes', 'Activites'])
       ->whereNull('date_bancaire')
       ->order(['created']));
   }

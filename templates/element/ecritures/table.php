@@ -28,31 +28,31 @@
     
     foreach ($ecritures as $ecriture) {
     ?>
-    <tr ref="<?php echo $ecriture['Ecriture']['id']; ?>">
-      <td><?php echo $ecriture['Ecriture']['engagement']; ?></td>
+    <tr ref="<?= $ecriture->id ?>">
+      <td><?= $ecriture->date_engagement ?></td>
       <?php
       if (empty($no_bancaire)) {
         ?>
-        <td><?php echo $ecriture['Ecriture']['bancaire']; ?></td>
+        <td><?= $ecriture->date_bancaire ?></td>
         <?php
       }
       ?>
-      <td><?php echo $ecriture['Poste']['name']; ?></td>
-      <td><?php echo $ecriture['Activite']['name']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['description']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['personne']; ?></td>
-      <td><?php echo $ecriture['Ecriture']['piece']; ?></td>
+      <td><?= $ecriture->poste->name ?></td>
+      <td><?= $ecriture->activite->name ?></td>
+      <td><?= $ecriture->description ?></td>
+      <td><?= $ecriture->personne ?></td>
+      <td><?= $ecriture->piece ?></td>
       <td>
         <?php
-        if ($ecriture['Ecriture']['debit'] != 0) {
-          echo $this->Number->currency($ecriture['Ecriture']['debit']);
+        if ($ecriture->debit != 0) {
+          echo $this->Number->currency($ecriture->debit);
         }
         ?>
       </td>
       <td>
         <?php
-        if ($ecriture['Ecriture']['credit'] != 0) {
-          echo $this->Number->currency($ecriture['Ecriture']['credit']);
+        if ($ecriture->credit != 0) {
+          echo $this->Number->currency($ecriture->credit);
         }
         ?>
       </td>
