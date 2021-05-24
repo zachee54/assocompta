@@ -13,12 +13,9 @@ class EcrituresController extends AppController {
     
     // Année et mois par défaut : les plus récents saisis
     if (!$year) {
-      $query = $this->Ecritures->find();
-      $max = $query->func()->max('date_bancaire');
-      $max_date = date_create($query
-        ->select(['max_date' => $max])
-        ->first()->max_date);
-      
+      $query = $this->Ecritures->find()
+        ->select(['max_date' => 'MAX(date_bancaire)']);
+      $max_date = date_create($query->first()->max_date);
       $month = date_format($max_date, 'm');
       $year = date_format($max_date, 'Y');
     }
