@@ -35,9 +35,12 @@ $this->element('ecritures/click2edit');
     ?>
     
     <h1>
-      <div>Relevé bancaire de <?=
+      <div>Relevé bancaire <?php
         // Cf. http://userguide.icu-project.org/formatparse/datetime
-        $this->Time->format($debut, 'MMMM yyyy');
+        $monthName = $this->Time->format($debut, 'MMMM yyyy');
+        
+        echo in_array(substr($monthName, 0, 1), ['a', 'o']) ? "d'" : "de ";
+        echo $monthName;
       ?></div>
     </h1>
     
