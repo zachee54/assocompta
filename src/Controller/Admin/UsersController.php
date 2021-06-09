@@ -18,6 +18,15 @@ class UsersController extends AppController {
    * Modification d'un utilisateur par l'administrateur.
    */
   public function edit($id = null) {
+    if ($id === null) {
+      $user = $this->Users->newEmptyEntity();
+    } else {
+      $user = $this->Users->find()
+        ->select(['id', 'nom', 'login', 'admin'])
+        ->where(['id' => $id])
+        ->first();
+    }
+    
     if ($this->request->is(['post', 'put'])) {
       $data = $this->request->getData();
       
@@ -35,8 +44,7 @@ class UsersController extends AppController {
       }
       
       // Sauvegarde
-      $user = new User($data);
-      $user->id = $id;
+      $this->Users->patchEntity($user, $data);
       if ($this->Users->save($user)) {
         $this->Flash->success('Les modifications ont été sauvegardées');
         $this->redirect(array('action' => 'index'));
@@ -48,14 +56,6 @@ class UsersController extends AppController {
       
       // Ajouter un utilisateur
       $user = $this->Users->newEmptyEntity();
-      
-    } else {
-      
-      // Modifier un utilisateur
-      $user = $this->Users->find()
-        ->select(['nom', 'login', 'admin'])
-        ->where(['id' => $id])
-        ->first();
     }
     $this->set('user', $user);
   }
