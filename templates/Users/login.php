@@ -10,11 +10,13 @@ $this->Html->css(
     'valueSources' => ['query'] ]);
     
     echo $this->Form->label('login', 'Identifiant');
-    echo $this->Form->text('login', [
+    echo $this->Form->control('login', [
+      'label' => false,
       'autofocus' => true]);
     
     echo $this->Form->label('mdp', 'Mot de passe');
-    echo $this->Form->password('mdp', [
+    echo $this->Form->control('mdp', [
+      'label' => false,
       'type' => 'password']);
   
     echo $this->Form->submit('Se connecter', array(

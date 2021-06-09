@@ -9,14 +9,18 @@ $this->Html->css(
   echo $this->Form->create($user);
     
     echo $this->Form->label('nom', 'Nom');
-    echo $this->Form->text('nom');
+    echo $this->Form->control('nom', [
+      'label' => false]);
     
     echo $this->Form->label('login', 'Login');
-    echo $this->Form->text('login');
+    echo $this->Form->control('login', [
+      'label' => false]);
     
     echo $this->Form->label('mdp', 'Mot de passe');
-    echo $this->Form->password('mdp', [
-      'placeholder' => "garder l'existant",
+    echo $this->Form->control('mdp', [
+      'type' => 'password',
+      'label' => false,
+      'placeholder' => ($user->isNew() ? '' : "garder l'existant"),
       'required' => false ]);
     
     echo $this->Form->control('admin', [

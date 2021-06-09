@@ -21,9 +21,20 @@
   grid-column-start: 1;
 }
 
+#UserLogin form .text, #UserLogin form .password {
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+}
+
 #UserLogin form input[type=text], #UserLogin form input[type=password] {
   padding: 4px;
   border-radius: 8px;
+}
+
+#UserLogin form .error-message {
+  font-size: smaller;
+  font-style: italic;
 }
 
 #UserLogin form input::placeholder {
@@ -31,7 +42,7 @@
   font-style: italic;
 }
 
-#UserLogin form .input {
+#UserLogin form .input.checkbox {
   display: flex;
   justify-content: center;
   align-items: center;
