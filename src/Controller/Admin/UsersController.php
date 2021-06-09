@@ -35,14 +35,6 @@ class UsersController extends AppController {
         unset($data['mdp']);
       }
       
-      // Exiger au moins un administrateur
-      if (($id !== null) && empty($data['admin'])) {
-        if (!$this->_hasOtherAdmin($id)) {
-          $this->Flash->error("L'application doit avoir au moins un administrateur");
-          return;
-        }
-      }
-      
       // Sauvegarde
       $this->Users->patchEntity($user, $data);
       if ($this->Users->save($user)) {
@@ -66,12 +58,6 @@ class UsersController extends AppController {
   public function delete($id) {
     $user = $this->Users->get($id);
     $name = $user->nom;
-    $this->set('username', $name);
-    
-    if (!$this->_hasOtherAdmin($id)) {
-      $this->Flash->error('Vous ne pouvez pas supprimer le dernier administrateur');
-      $this->redirect(array('action' => 'index'));
-    }
     
     if ($this->request->isDelete()) {
       $identity = $this->Authentication->getIdentity();
@@ -82,21 +68,5 @@ class UsersController extends AppController {
         $this->Flash->error("Erreur pendant la suppression de l'utilisateur");
       }
     }
-  }
-  
-  /**
-   * Vérification de l'existence d'un administrateur, autre que l'utilisateur
-   * spécifié.
-   * 
-   * @param $id:  Identifiant d'un utilisateur.
-   * @return      true s'il existe un administrateur portant un autre
-   *              identifiant que $id.
-   */
-  private function _hasOtherAdmin($id) {
-    return $this->Users->find()
-      ->where([
-        'admin' => true,
-        'id !=' => $id])
-      ->count();
   }
 }
