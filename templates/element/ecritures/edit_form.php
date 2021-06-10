@@ -5,7 +5,7 @@ $this->Html->css(
 
 $readonly = $this->Identity->get('readonly');
 
-echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
+echo $this->Form->create($ecriture, array('class' => 'EcritureEditForm'));
 ?>
   <article>
     <div>
@@ -48,11 +48,11 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
         'label' => 'N° pièce'));
       
       echo $this->Form->control('debit', array(
-        'required' => false,
+        'default' => '',
         'label' => 'Débit'));
       
       echo $this->Form->control('credit', array(
-        'required' => false,
+        'default' => '',
         'label' => 'Crédit'));
       
       ?>
@@ -75,7 +75,7 @@ echo $this->Form->create(null, array('class' => 'EcritureEditForm'));
             'id' => 'deleteButton',
             'formaction' => $this->Url->build(array(
               'action' => 'delete',
-              $this->data['Ecriture']['id'])),
+              $ecriture->id)),
             'formmethod' => 'post',
             'class' => 'button',
             'div' => false));

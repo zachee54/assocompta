@@ -3,6 +3,13 @@ namespace App\Controller;
 
 class EcrituresController extends AppController {
   
+  /**
+   * Affiche la liste des écritures d'un mois, la liste des écritures en attente
+   * et un formulaire de saisie d'une nouvelle écriture.
+   * 
+   * @param $year int   L'année à afficher.
+   * @param $month int  Le numéro du mois à afficher.
+   */
   public function index($year = null, $month = null) {
     
     // Inclure le traitement du formulaire d'ajout d'une écriture
@@ -118,68 +125,55 @@ class EcrituresController extends AppController {
    * @param int $id L'identifiant de l'écriture.
    */
   public function edit($id = null) {
-    if ($this->request->is(array('put', 'post')) && $this->_checkReadOnly()) {
-      $this->Ecriture->id = $id;  // id peut être null
-      $saved = $this->Ecriture->save($this->request->data);
-      if ($saved) {
-        $this->Flash->success("L'écriture a été sauvegardée");
-        $yearMonth = $this->_getMonth();
-        $this->redirect(array(
-          'action' => 'index',
-          $yearMonth['year'],
-          $yearMonth['month']));
-      } else {
-        $this->Flash->error('Erreur pendant la sauvegarde');
-        
-        // Réinsérer l'id dans les données. Il est utilisé pour le bouton Supprimer
-        if ($id !== null) {
-          $this->request->data['Ecriture']['id'] = $id;
-        }
-      }
-      
-    } else if ($id !== null) {
-      $this->request->data = $this->Ecriture->findById($id);
-      
-      $this->_nullIfZero('debit');
-      $this->_nullIfZero('credit');
+    if ($id === null) {
+      $ecriture = $this->Ecritures->newEmptyEntity();
+    } else {
+      $ecriture = $this->Ecritures->get($id);
     }
     
+    if ($this->request->is(array('put', 'post')) && $this->_checkReadOnly()) {
+      $data = $this->request->getData();
+      $this->Ecritures->patchEntity($ecriture, $data);
+      
+      if ($this->Ecritures->save($ecriture)) {
+        $this->Flash->success("L'écriture a été sauvegardée");
+        $yearMonth = $this->_getYearMonth($ecriture);
+        $this->redirect([
+          'action' => 'index',
+          $yearMonth['year'],
+          $yearMonth['month'] ]);
+      } else {
+        $this->Flash->error('Erreur pendant la sauvegarde');
+      }
+    }
+    
+    $this->set('ecriture', $ecriture);
     $this->_setMonths();
     $this->set('postes', $this->Ecritures->Postes->find('list'));
     $this->set('activites', $this->Ecritures->Activites->find('list'));
   }
   
   /**
-   * Renvoie le mois de la date bancaire de l'écriture (écriture dans
-   * $this->request->data).
+   * Renvoie le mois de la date bancaire de l'écriture.
+   * 
+   * @param $ecriture Ecriture 
+   *                L'écriture à examiner.
    * 
    * @return array  Un tableau contenant les clés 'year' et 'month' avec valeurs
    *                numériques, ou avec des chaînes vides si la date bancaire
    *                n'est pas fournie.
    */
-  private function _getMonth() {
-    if (empty($this->request->data['Ecriture']['date_bancaire'])) {
-      return array(
+  private function _getYearMonth($ecriture) {
+    $dateBancaire = $ecriture->date_bancaire;
+    if (!$dateBancaire) {
+      return [
         'year' => '',
-        'month' => '');
+        'month' => ''];
     }
     
-    $date = date_create($this->request->data['Ecriture']['date_bancaire']);
-    return array(
-      'year' => date_format($date, 'Y'),    // Année sur 4 chiffres
-      'month' => date_format($date, 'n'));  // Mois sur 1 ou 2 chiffres
-  }
-  
-  /**
-   * Supprime un champ de la requête s'il est égal à zéro (y compris la chaîne
-   * '0.00').
-   * 
-   * @param string $ecritureField Le nom d'un champ du modèle Ecriture.
-   */
-  private function _nullIfZero($ecritureField) {
-    if ($this->request->data['Ecriture'][$ecritureField] == 0) {
-      unset($this->request->data['Ecriture'][$ecritureField]);
-    }
+    return [
+      'year' => $dateBancaire->format('Y'),    // Année sur 4 chiffres
+      'month' => $dateBancaire->format('n')];  // Mois sur 1 ou 2 chiffres
   }
   
   /**
@@ -202,7 +196,8 @@ class EcrituresController extends AppController {
    * Vérifie que l'utilisateur a les droits en écriture.
    */
   private function _checkReadOnly() {
-    if ($this->Auth->user('readonly')) {
+    $user = $this->Authentication->getIdentity();
+    if ($user->readonly) {
       $this->Flash->error(
         'Votre profil ne vous permet de modifier les données');
       return false;
