@@ -183,7 +183,7 @@ class EcrituresController extends AppController {
    */
   public function delete($id) {
     if ($id && $this->request->is('put', 'post') && $this->_checkReadOnly()) {
-      if ($this->Ecriture->delete($id)) {
+      if ($this->Ecritures->deleteAll(['id' => $id])) {
         $this->Flash->success("L'écriture a été supprimée");
       } else {
         $this->Flash->error("Erreur lors de la suppression de l'écriture");
