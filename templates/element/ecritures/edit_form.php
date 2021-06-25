@@ -60,9 +60,8 @@ echo $this->Form->create($ecriture, array('class' => 'EcritureEditForm'));
     <div class="submit">
       <?php
       if (!$readonly) {
-        echo $this->Form->submit('Valider', array(
-          'class' => 'button',
-          'div' => false));
+        echo $this->Form->button('Valider', [
+          'class' => 'button']);
       }
       
       if (!empty($showCancel)) {
@@ -71,14 +70,13 @@ echo $this->Form->create($ecriture, array('class' => 'EcritureEditForm'));
           array('class' => 'button cancelButton'));
         
         if (!$readonly) {
-          echo $this->Form->submit('Supprimer', array(
+          echo $this->Form->button('Supprimer', [
             'id' => 'deleteButton',
             'formaction' => $this->Url->build(array(
               'action' => 'delete',
               $ecriture->id)),
             'formmethod' => 'post',
-            'class' => 'button',
-            'div' => false));
+            'class' => 'button']);
           
           echo $this->element('jquery');
 
