@@ -66,7 +66,7 @@ echo $this->Form->create($ecriture, array('class' => 'EcritureEditForm'));
       
       if (!empty($showCancel)) {
         echo $this->Html->link('Annuler',
-          $this->request->referer(),
+          $this->request->referer() ?? '/',
           array('class' => 'button cancelButton'));
         
         if (!$readonly) {
