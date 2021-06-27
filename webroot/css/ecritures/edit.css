@@ -22,7 +22,7 @@
   border: solid 1px gray;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: stretch;
   background-color: #fff0b1;
 }
 
@@ -38,13 +38,17 @@
   max-width: 50px;
 }
 
-.EcritureEditForm .numberInputs {
-  justify-content: center;
+.EcritureEditForm .number {
+  flex-grow: 0;
 } 
 
 .EcritureEditForm .number input {
   width: 80px;
   text-align: right;
+}
+
+.EcritureEditForm #piece {
+  width: 80px;
 }
 
 .EcritureEditForm .submit {
