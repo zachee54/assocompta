@@ -49,6 +49,7 @@ echo $this->Form->create($ecriture, array('class' => 'EcritureEditForm'));
       
       echo $this->Form->control('debit', array(
         'default' => '',
+        'required' => false,
         'label' => 'Débit'));
       
       echo $this->Form->control('credit', array(
