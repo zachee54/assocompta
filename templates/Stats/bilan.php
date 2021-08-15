@@ -7,10 +7,8 @@ $this->extend('bilan_core');
     <span>Opérations de l'exercice</span>
   </li>
   <li>
-    <?php
-    echo $this->Html->link(
+    <?= $this->Html->link(
       "Opérations rattachées à l'exercice",
-      array('action' => 'bilan_ajuste', $year));
-    ?>
+      ['action' => 'bilan_ajuste', $year]) ?>
   </li>
 </ul>

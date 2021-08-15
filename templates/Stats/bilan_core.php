@@ -1,4 +1,6 @@
 <?php
+use App\Controller\StatsController;
+
 $this->Html->css(
   array('stats/pivot.min', 'stats/bilan', 'ecritures/index'),
   array('block' => true));
@@ -10,7 +12,7 @@ $this->element('ecritures/click2edit');
   <ul>
     <?php
     foreach ($years as $value) {
-      $exercice = $value[0]['years'];
+      $exercice = $value->year;
       ?>
       <li>
         <?php
@@ -57,7 +59,7 @@ $this->append('scriptBottom');
   $(function() {
     
     $('#bilan').pivotUI(
-      <?php echo json_encode($ecritures); ?>,
+      <?= json_encode($ecritures) ?>,
       {
         rows: ['Sens', 'Poste'],
         cols: ['Activité'],
@@ -85,12 +87,12 @@ $this->append('scriptBottom');
           'Sens': $.pivotUtilities.sortAs([
             'Recettes',
             'Dépenses',
-            '<?php echo StatsController::ATTACHED; ?>',
-            '<?php echo StatsController::DETACHED; ?>']),
+            '<?= StatsController::ATTACHED ?>',
+            '<?= StatsController::DETACHED ?>']),
           'Activite': $.pivotUtilities.sortAs(
-            [<?php echo implode(',', array_map('quote_array', $activites)); ?>]),
+            [<?= implode(',', array_map('quote_array', $activites)) ?>]),
           'Poste': $.pivotUtilities.sortAs(
-            [<?php echo implode(',', array_map('quote_array', $postes)); ?>])
+            [<?= implode(',', array_map('quote_array', $postes)) ?>])
         },
         showUI: false
       },
@@ -100,16 +102,14 @@ $this->append('scriptBottom');
     
     function displayEcritures(e, value, filters, pivotData) {
       $.post(
-        '<?= echo $this->Urlè>build(array(
+        '<?= $this->Url->build([
           'action' => 'bilan_detail',
-          $year, $this->fetch('ajuste')));
+          $year, $this->fetch('ajuste')]);
         ?>',
         filters,
         function(data, textStatus, jqXHR) {
           $('#detail').html(data);
-          <?php
-          echo $this->element('ecritures/click2edit_script');
-          ?>
+          <?= $this->element('ecritures/click2edit_script') ?>
         }
       );
     }
