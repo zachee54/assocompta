@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use Cake\I18n\Date;
+
 class StatsController extends AppController {
   
   /**
@@ -8,7 +10,7 @@ class StatsController extends AppController {
    * Le principe est celui d'un exercice clôturé au 30/09, donc les
    * dates d'octobre à décembre renvoient l'année N+1.
    */
-  const EXERCICE = 'YEAR(ADDDATE(Ecriture.date_bancaire, INTERVAL 3 MONTH))';
+  const EXERCICE = 'YEAR(ADDDATE(date_bancaire, INTERVAL 3 MONTH))';
   
   /** Libellé des opérations à ajouter pour affichage utilisateur. */
   const ATTACHED = 'À ajouter';
@@ -16,7 +18,9 @@ class StatsController extends AppController {
   /** Libellé des opérations à enlever pour affichage utilisateur. */
   const DETACHED = 'À enlever';
   
-  public $uses = array('Ecriture');
+  public function initialize(): void {
+    $this->loadModel('Ecritures');
+  }
   
   /**
    * Affiche un bilan de l'exercice par postes et par activités.
@@ -34,7 +38,7 @@ class StatsController extends AppController {
    * 
    * @param $year:  Année de clôture de l'exercice à afficher.
    */
-  public function bilan_ajuste($year=null) {
+  public function bilanAjuste($year=null) {
     $this->_buildBilan($year, true);
   }
   
@@ -47,70 +51,77 @@ class StatsController extends AppController {
    */
   private function _buildBilan($year, $ajuste=false) {
     if (!$year) {
-      $year = date_format(date_create(), 'Y');
+      $year = (new Date())->year;
     }
     
-    $findOptions = array(
-      'fields' => array(
-        'SUM(Ecriture.credit - Ecriture.debit) AS montant',
-        $this::EXERCICE.' AS exercice',
-        'Ecriture.rattachement',
-        'Poste.name',
-        "IF (Poste.recettes, 'Recettes', 'Dépenses') AS sens",
-        'Activite.name'),
-      'group' => array(
-        'exercice',
-        'Poste.name',
-        'Poste.recettes',
-        'Activite.name'),
-      'conditions' => array(
-        $this::EXERCICE." = $year"));
+    $query = $this->_getBaseQuery();
     
-    // Écritures normales
-    $ecritures = $this->Ecriture->find('all', $findOptions);
+    // Écritures de l'exercice
     $ecritures = array_map(
-      array('StatsController', '_flatten'),
-      $ecritures);
+      [$this, '_flatten'],
+      $query
+        ->cleanCopy()
+        ->where([$this::EXERCICE." = $year"])
+        ->toArray());
     
     if ($ajuste) {
+      
       // Écritures à attacher
-      $attachedEcritures = $this->Ecriture->find('all',
-        array_merge($findOptions, array(
-          'conditions' => array(
-            'Ecriture.rattachement' => $year,
-            'Ecriture.rattachement != '.$this::EXERCICE))));
       $ecritures = array_merge($ecritures, array_map(
-        array('StatsController', '_flattenAttached'),
-        $attachedEcritures));
+        [$this, '_flattenAttached'],
+        $query
+          ->cleanCopy()
+          ->where([
+            'rattachement' => $year,
+            'rattachement != '.$this::EXERCICE])
+          ->toArray()));
       
       // Écritures à détacher
-      $detachedEcritures = $this->Ecriture->find('all',
-        array_merge($findOptions, array(
-          'conditions' => array(
-            $this::EXERCICE." = $year",
-            'Ecriture.rattachement != '.$this::EXERCICE))));
       $ecritures = array_merge($ecritures, array_map(
-        array('StatsController', '_flattenDetached'),
-        $detachedEcritures));
+        [$this, '_flattenDetached'],
+        $query
+          ->cleanCopy()
+          ->where([
+            $this::EXERCICE." = $year",
+            'rattachement != '.$this::EXERCICE])
+          ->toArray()));
     }
     
     $this->set('ecritures', $ecritures);
     
-    $this->set('activites', $this->Ecriture->Activite->find('list',
-      array('order' => 'id')));
-    $this->set('postes', $this->Ecriture->Poste->find('list',
-      array('order' => 'id')));
-    $this->set('years', $this->Ecriture->find('all', array(
-      'fields' => array('DISTINCT '.$this::EXERCICE.' AS years'),
-      'conditions' => array('date_bancaire IS NOT NULL'),
-      'order' => 'years DESC')));
+    $this->set('activites', $this->Ecritures->Activites->find('list',
+      ['order' => 'id'])
+      ->toArray());
+    $this->set('postes', $this->Ecritures->Postes->find('list',
+      ['order' => 'id'])
+      ->toArray());
+    $this->set('years', $this->Ecritures->find()
+      ->select(['year' => $this::EXERCICE])
+      ->distinct()
+      ->whereNotNull('date_bancaire')
+      ->order(['year' => 'DESC'])
+      ->all());
     $this->set('year', $year);
   }
   
-  private function _getAttachedEcrituresConditions($year) {
-    return array(
-      'Ecriture.rattachement' => $year,
-      'Ecriture.rattachement != '.$this::EXERCICE);
+  /**
+   * Crée une requête de base pour récupérer les écritures à afficher au bilan.
+   */
+  private function _getBaseQuery() {
+    return $this->Ecritures->find()
+      ->contain(['Postes', 'Activites'])
+      ->select([
+        'montant' => 'SUM(credit - debit)',
+        'exercice' => $this::EXERCICE,
+        'rattachement',
+        'Postes.name',
+        'sens' => "IF (Postes.recettes, 'Recettes', 'Dépenses')",
+        'Activites.name'])
+      ->group([
+        'exercice',
+        'Postes.name',
+        'Postes.recettes',
+        'Activites.name']);
   }
   
   /**
@@ -132,8 +143,6 @@ class StatsController extends AppController {
   /**
    * Renvoie l'écriture sous la forme d'un tableau dont les clés sont
    * user-friendly.
-   * Le sens (recettes/dépenses) est modifié pour que les écritures
-   * apparaissent à part, comme provenant d'un exercice différent.
    * Le poste est supprimé, ce qui permet que ces écritures seront
    * toutes affichées sur la même ligne, tous postes confondus.
    */
@@ -149,12 +158,12 @@ class StatsController extends AppController {
    * user-friendly.
    */
   private static function _flatten($ecriture) {
-    return array(
-      'Exercice' => $ecriture['0']['exercice'],
-      'Poste' => $ecriture['Poste']['name'],
-      'Sens' => $ecriture['0']['sens'],
-      'Activité' => $ecriture['Activite']['name'],
-      'Montant' => $ecriture['0']['montant']);
+    return [
+      'Exercice' => $ecriture->exercice,
+      'Poste' => $ecriture->poste->name,
+      'Sens' => $ecriture->sens,
+      'Activité' => $ecriture->activite->name,
+      'Montant' => $ecriture->montant ];
   }
   
   /**
