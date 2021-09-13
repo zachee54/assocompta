@@ -101,6 +101,8 @@ $this->append('scriptBottom');
     );
     
     function displayEcritures(e, value, filters, pivotData) {
+      filters['_csrfToken'] = '<?= $this->request->getAttribute('csrfToken') ?>';
+      
       $.post(
         '<?= $this->Url->build([
           'action' => 'bilan_detail',
