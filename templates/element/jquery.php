@@ -1,11 +1,3 @@
 <?php
-
-$this->start('jquery');
-?>
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous">
-</script>
-<?php
-$this->end();
+echo $this->Html->script('jquery-3.6.0.min.js',
+  ['block' => 'scriptBottom']);
