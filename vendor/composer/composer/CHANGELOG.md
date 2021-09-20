@@ -1,3 +1,120 @@
+### [2.1.8] 2021-09-15
+
+  * Fixed regression in 2.1.7 when parsing classmaps in files containing invalid Unicode (#10102)
+
+### [2.1.7] 2021-09-14
+
+  * Added many type annotations internally, which may have an effect on CI/static analysis for people using Composer as a dependency. This work will continue in following releases
+  * Fixed regression in 2.1.6 when parsing classmaps with empty heredocs (#10067)
+  * Fixed regression in 2.1.6 where list command was not showing plugin commands (#10075)
+  * Fixed issue handling package updates where the package type changed (#10076)
+  * Fixed docker being detected as WSL when run inside WSL (#10094)
+
+### [2.1.6] 2021-08-19
+
+  * Updated internal PHAR signatures to be SHA512 instead of SHA1
+  * Fixed uncaught exception handler regression (#10022)
+  * Fixed more PHP 8.1 deprecation warnings (#10036, #10038, #10061)
+  * Fixed corrupted zips in the cache from blocking installs until a cache clear, the bad archives are now deleted automatically on first failure (#10028)
+  * Fixed URL sanitizer handling of new github tokens (#10048)
+  * Fixed issue finding classes with very long heredocs in classmap autoload (#10050)
+  * Fixed proc_open being required for simple installs from zip, as well as diagnose (#9253)
+  * Fixed path repository bug causing symlinks to be left behind after a package is uninstalled (#10023)
+  * Fixed issue in 7-zip support on windows with certain archives (#10058)
+  * Fixed bootstrapping process to avoid loading the composer.json and plugins until necessary, speeding things up slightly (#10064)
+  * Fixed lib-openssl detection on FreeBSD (#10046)
+  * Fixed support for `ircs://` protocol for support.irc composer.json entries
+
+### [2.1.5] 2021-07-23
+
+  * Fixed `create-project` creating a `php:` directory in the directory it was executed in (#10020, #10021)
+  * Fixed curl downloader to respect default_socket_timeout if it is bigger than our default 300s (#10018)
+
+### [2.1.4] 2021-07-22
+
+  * Fixed PHP 8.1 deprecation warnings (#10008)
+  * Fixed support for working within UNC/WSL paths on Windows (#9993)
+  * Fixed 7-zip support to also be looked up on Linux/macOS as 7z or 7zz (#9951)
+  * Fixed repositories' `only`/`exclude` properties to avoid matching names as sub-strings of full package names (#10001)
+  * Fixed open_basedir regression from #9855
+  * Fixed schema errors being reported incorrectly in some conditions (#9986)
+  * Fixed `archive` command not working with async archive extraction
+  * Fixed `init` command being able to generate an invalid composer.json (#9986)
+
+### [2.1.3] 2021-06-09
+
+  * Add "symlink" option for "bin-compat" config to force symlinking even on WSL/Windows (#9959)
+  * Fixed source binaries not being made executable when symlinks cannot be used (#9961)
+  * Fixed more deletion edge cases (#9955, #9956)
+  * Fixed `dump-autoload` command not dispatching scripts anymore, regressed in 2.1.2 (#9954)
+
+### [2.1.2] 2021-06-07
+
+  * Added `--dev` to `dump-autoload` command to allow force-dumping dev autoload rules even if dev requirements are not present (#9946)
+  * Fixed `--no-scripts` disabling events for plugins too instead of only disabling script handlers, using `--no-plugins` is the way to disable plugins (#9942)
+  * Fixed handling of deletions during package installs on some filesystems (#9945, #9947)
+  * Fixed undefined array access when using "@php <absolute path>" in a script handler (#9943)
+  * Fixed usage of InstalledVersions when loaded from composer/composer installed as a dependency and runtime Composer is v1 (#9937)
+
+### [2.1.1] 2021-06-04
+
+  * Fixed regression in autoload generation when --no-scripts is used (#9935)
+  * Fixed `outdated` color legend to have the right color in the right place (#9939)
+  * Fixed PCRE bug causing a previously valid pattern to fail to match (#9941)
+  * Fixed JsonFile::validateSchema regression when used as a library to validate custom schema files (#9938)
+
+### [2.1.0] 2021-06-03
+
+  * Fixed PHP 8.1 deprecation warning (#9932)
+  * Fixed env var handling when variables_order includes E and symfony/console 3.3.15+ is in use (#9930)
+
+### [2.1.0-RC1] 2021-06-02
+
+  * Bumped `composer-runtime-api` and `composer-plugin-api` to `2.1.0`
+  * UX Change: The default install method for packages is now always dist/zip, even for dev packages, added `--prefer-install=auto` if you want the old behavior (#9603)
+  * UX Change: Packages from `path` repositories which are symlinked in the vendor dir will always be updated in partial updates to avoid mistakes when the original composer.json changes but the symlinked package is not explicitly updated (#9765)
+  * Added `reinstall` command that takes one or more package names, including wildcard (`*`) support, and removes then reinstalls them in the exact same version they had (#9915)
+  * Added support for parallel package installs on Windows via [7-Zip](https://www.7-zip.org/) if it is installed (#9875)
+  * Added detection of invalid composer.lock files that do not fullfil the composer.json requirements to `validate` command (#9899)
+  * Added `InstalledVersions::getInstalledPackagesByType(string $type)` to retrieve installed plugins for example, [read more](https://getcomposer.org/doc/07-runtime.md#knowing-which-packages-of-a-given-type-are-installed) (#9699)
+  * Added `InstalledVersions::getInstalledPath(string $packageName)` to retrieve the install path of a given package, [read more](https://getcomposer.org/doc/07-runtime.md#knowing-the-path-in-which-a-package-is-installed) (#9699)
+  * Added flag to `InstalledVersions::isInstalled()` to allow excluding dev requirements from that check (#9682)
+  * Added support for PHP 8.1 enums in autoloader / classmap generation (#9670)
+  * Added support for using `@php binary-name foo` in scripts to refer to a binary without using its full path, but forcing to use the same PHP version as Composer used (#9726)
+  * Added `--format=json` support to the `fund` command (#9678)
+  * Added `--format=json` support to the `search` command (#9747)
+  * Added `COMPOSER_DEV_MODE` env var definition within the run-script command for compatibility (#9793)
+  * Added async uninstall of packages (#9618)
+  * Added color legend to `outdated` and `show --latest` commands (#9716)
+  * Added `secure-svn-domains` config option to mark secure svn:// hostnames and suppress warnings without disabling secure-http (#9872)
+  * Added `gitlab-protocol` config option to allow forcing `git` or `http` URLs for all gitlab repos loaded inline, instead of the default of git for private and http for public (#9401)
+  * Added generation of autoload rules in `init` command (#9829)
+  * Added source/dist validation in `validate` command
+  * Added automatic detection of WSL when generating binaries and use `bin-compat:full` implicitly (#9855)
+  * Added automatic detection of the --no-dev state for `dump-autoload` based on the last install run (#9714)
+  * Added warning/prompt to `require` command if requiring a package that already exists in require-dev or vice versa (#9542)
+  * Added information about package conflicts in the `why`/`why-not` commands (#9693)
+  * Removed version argument from `why` command as it was not needed (#9729)
+  * Fixed `why-not` command to always require a specific version as it is useless without (#9729)
+  * Fixed cache dir on macOS to follow OS guidelines, it is now in ~/Library/Caches/composer (#9898)
+  * Fixed composer.json JSON schema to avoid having name/description required by default (#9912)
+  * Fixed support for running inside WSL paths from a Windows PHP/Composer (#9861)
+  * Fixed InstalledVersions to include the original doc blocks when installed from a Composer phar file
+  * Fixed `require` command to use `*` as constraint for extensions bundled with PHP instead of duplicating the PHP constraint (#9483)
+  * Fixed `search` output to be aligned and avoid wrapped long lines to be more readable (#9455)
+  * Error output improvements for many cases (#9876, #9837, #9928, and some smaller improvements)
+
+### [2.0.14] 2021-05-21
+
+  * Updated composer/xdebug-handler to 2.0 which adds supports for Xdebug 3
+  * Fixed handling of inline-update-constraints with references or stability flags (#9847)
+  * Fixed async processes erroring in an unclear way when they failed to start (#9808)
+  * Fixed support for the upcoming Symfony 6.0 release when Composer is installed as a library (#9896)
+  * Fixed progress output missing newlines on PowerShell, and disable progress output by default when CI env var is present (#9621)
+  * Fixed support for Vagrant/VirtualBox filesystem slowness when installing binaries from packages (#9627)
+  * Fixed type annotations for the InstalledVersions class
+  * Deprecated InstalledVersions::getRawData in favor of InstalledVersions::getAllRawData (#9816)
+
 ### [2.0.13] 2021-04-27
 
   * Security: Fixed command injection vulnerability in HgDriver/HgDownloader and hardened other VCS drivers and downloaders (GHSA-h5h8-pc6h-jvvx / CVE-2021-29472)
@@ -1143,6 +1260,17 @@
 
   * Initial release
 
+[2.1.8]: https://github.com/composer/composer/compare/2.1.7...2.1.8
+[2.1.7]: https://github.com/composer/composer/compare/2.1.6...2.1.7
+[2.1.6]: https://github.com/composer/composer/compare/2.1.5...2.1.6
+[2.1.5]: https://github.com/composer/composer/compare/2.1.4...2.1.5
+[2.1.4]: https://github.com/composer/composer/compare/2.1.3...2.1.4
+[2.1.3]: https://github.com/composer/composer/compare/2.1.2...2.1.3
+[2.1.2]: https://github.com/composer/composer/compare/2.1.1...2.1.2
+[2.1.1]: https://github.com/composer/composer/compare/2.1.0...2.1.1
+[2.1.0]: https://github.com/composer/composer/compare/2.1.0-RC1...2.1.0
+[2.1.0-RC1]: https://github.com/composer/composer/compare/2.0.14...2.1.0-RC1
+[2.0.14]: https://github.com/composer/composer/compare/2.0.13...2.0.14
 [2.0.13]: https://github.com/composer/composer/compare/2.0.12...2.0.13
 [2.0.12]: https://github.com/composer/composer/compare/2.0.11...2.0.12
 [2.0.11]: https://github.com/composer/composer/compare/2.0.10...2.0.11

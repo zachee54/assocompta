@@ -37,6 +37,8 @@ use Composer\EventDispatcher\EventDispatcher;
 use Composer\Autoload\AutoloadGenerator;
 use Composer\Package\Version\VersionParser;
 use Composer\Downloader\TransportException;
+use Composer\Json\JsonValidationException;
+use Composer\Repository\InstalledRepositoryInterface;
 use Seld\JsonLint\JsonParser;
 
 /**
@@ -121,6 +123,15 @@ class Factory
         }
 
         $userDir = self::getUserDir();
+        if (PHP_OS === 'Darwin') {
+            // Migrate existing cache dir in old location if present
+            if (is_dir($home . '/cache') && !is_dir($userDir . '/Library/Caches/composer')) {
+                Silencer::call('rename', $home . '/cache', $userDir . '/Library/Caches/composer');
+            }
+
+            return $userDir . '/Library/Caches/composer';
+        }
+
         if ($home === $userDir . '/.composer' && is_dir($home . '/cache')) {
             return $home . '/cache';
         }
@@ -295,11 +306,17 @@ class Factory
                 } else {
                     $message = 'Composer could not find the config file: '.$localConfig;
                 }
-                $instructions = $fullLoad ? 'To initialize a project, please create a composer.json file as described in the https://getcomposer.org/ "Getting Started" section' : '';
+                $instructions = $fullLoad ? 'To initialize a project, please create a composer.json file. See https://getcomposer.org/basic-usage' : '';
                 throw new \InvalidArgumentException($message.PHP_EOL.$instructions);
             }
 
-            $file->validateSchema(JsonFile::LAX_SCHEMA);
+            try {
+                $file->validateSchema(JsonFile::LAX_SCHEMA);
+            } catch (JsonValidationException $e) {
+                $errors = ' - ' . implode(PHP_EOL . ' - ', $e->getErrors());
+                $message = $e->getMessage() . ':' . PHP_EOL . $errors;
+                throw new JsonValidationException($message);
+            }
             $jsonParser = new JsonParser;
             try {
                 $jsonParser->parse(file_get_contents($localConfig), JsonParser::DETECT_KEY_CONFLICTS);
@@ -369,7 +386,7 @@ class Factory
         $composer->setPackage($package);
 
         // load local repository
-        $this->addLocalRepository($io, $rm, $vendorDir, $package);
+        $this->addLocalRepository($io, $rm, $vendorDir, $package, $process);
 
         // initialize installation manager
         $im = $this->createInstallationManager($loop, $io, $dispatcher);
@@ -418,9 +435,7 @@ class Factory
 
             // once everything is initialized we can
             // purge packages from local repos if they have been deleted on the filesystem
-            if ($rm->getLocalRepository()) {
-                $this->purgePackages($rm->getLocalRepository(), $im);
-            }
+            $this->purgePackages($rm->getLocalRepository(), $im);
         }
 
         return $composer;
@@ -442,9 +457,14 @@ class Factory
      * @param Repository\RepositoryManager $rm
      * @param string                       $vendorDir
      */
-    protected function addLocalRepository(IOInterface $io, RepositoryManager $rm, $vendorDir, RootPackageInterface $rootPackage)
+    protected function addLocalRepository(IOInterface $io, RepositoryManager $rm, $vendorDir, RootPackageInterface $rootPackage, ProcessExecutor $process = null)
     {
-        $rm->setLocalRepository(new Repository\InstalledFilesystemRepository(new JsonFile($vendorDir.'/composer/installed.json', null, $io), true, $rootPackage));
+        $fs = null;
+        if ($process) {
+            $fs = new Filesystem($process);
+        }
+
+        $rm->setLocalRepository(new Repository\InstalledFilesystemRepository(new JsonFile($vendorDir.'/composer/installed.json', null, $io), true, $rootPackage, $fs));
     }
 
     /**
@@ -564,10 +584,10 @@ class Factory
     }
 
     /**
-     * @param WritableRepositoryInterface   $repo repository to purge packages from
+     * @param InstalledRepositoryInterface   $repo repository to purge packages from
      * @param Installer\InstallationManager $im   manager to check whether packages are still installed
      */
-    protected function purgePackages(WritableRepositoryInterface $repo, Installer\InstallationManager $im)
+    protected function purgePackages(InstalledRepositoryInterface $repo, Installer\InstallationManager $im)
     {
         foreach ($repo->getPackages() as $package) {
             if (!$im->isPackageInstalled($repo, $package)) {
@@ -611,7 +631,7 @@ class Factory
         if (isset($_SERVER['argv']) && in_array('disable-tls', $_SERVER['argv']) && (in_array('conf', $_SERVER['argv']) || in_array('config', $_SERVER['argv']))) {
             $warned = true;
             $disableTls = !extension_loaded('openssl');
-        } elseif ($config && $config->get('disable-tls') === true) {
+        } elseif ($config->get('disable-tls') === true) {
             if (!$warned) {
                 $io->writeError('<warning>You are running Composer with SSL/TLS protection disabled.</warning>');
             }
@@ -623,10 +643,10 @@ class Factory
         }
         $httpDownloaderOptions = array();
         if ($disableTls === false) {
-            if ($config && $config->get('cafile')) {
+            if ($config->get('cafile')) {
                 $httpDownloaderOptions['ssl']['cafile'] = $config->get('cafile');
             }
-            if ($config && $config->get('capath')) {
+            if ($config->get('capath')) {
                 $httpDownloaderOptions['ssl']['capath'] = $config->get('capath');
             }
             $httpDownloaderOptions = array_replace_recursive($httpDownloaderOptions, $options);

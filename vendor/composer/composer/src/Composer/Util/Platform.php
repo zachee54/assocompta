@@ -21,6 +21,34 @@ class Platform
 {
     /** @var ?bool */
     private static $isVirtualBoxGuest = null;
+    /** @var ?bool */
+    private static $isWindowsSubsystemForLinux = null;
+
+    /**
+     * putenv() equivalent but updates the runtime global variables too
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return void
+     */
+    public static function putEnv($name, $value)
+    {
+        $value = (string) $value;
+        putenv($name . '=' . $value);
+        $_SERVER[$name] = $_ENV[$name] = $value;
+    }
+
+    /**
+     * putenv('X') equivalent but updates the runtime global variables too
+     *
+     * @param  string $name
+     * @return void
+     */
+    public static function clearEnv($name)
+    {
+        putenv($name);
+        unset($_SERVER[$name], $_ENV[$name]);
+    }
 
     /**
      * Parses tildes and environment variables in paths.
@@ -68,6 +96,32 @@ class Platform
     }
 
     /**
+     * @return bool Whether the host machine is running on the Windows Subsystem for Linux (WSL)
+     */
+    public static function isWindowsSubsystemForLinux()
+    {
+        if (null === self::$isWindowsSubsystemForLinux) {
+            self::$isWindowsSubsystemForLinux = false;
+
+            // while WSL will be hosted within windows, WSL itself cannot be windows based itself.
+            if (self::isWindows()) {
+                return self::$isWindowsSubsystemForLinux = false;
+            }
+
+            if (
+                !ini_get('open_basedir')
+                && is_readable('/proc/version')
+                && false !== stripos(Silencer::call('file_get_contents', '/proc/version'), 'microsoft')
+                && !file_exists('/.dockerenv') // docker running inside WSL should not be seen as WSL
+            ) {
+                return self::$isWindowsSubsystemForLinux = true;
+            }
+        }
+
+        return self::$isWindowsSubsystemForLinux;
+    }
+
+    /**
      * @return bool Whether the host machine is running a Windows OS
      */
     public static function isWindows()
@@ -93,6 +147,10 @@ class Platform
         return \strlen($str);
     }
 
+    /**
+     * @param  ?resource $fd Open file descriptor or null to default to STDOUT
+     * @return bool
+     */
     public static function isTty($fd = null)
     {
         if ($fd === null) {
@@ -121,6 +179,9 @@ class Platform
         return $stat ? 0020000 === ($stat['mode'] & 0170000) : false;
     }
 
+    /**
+     * @return void
+     */
     public static function workaroundFilesystemIssues()
     {
         if (self::isVirtualBoxGuest()) {

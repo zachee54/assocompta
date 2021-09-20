@@ -17,13 +17,11 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Package\CompletePackage;
 use Composer\Package\Package;
-use Composer\Package\RootPackage;
 use Composer\Package\Version\VersionParser;
 use Composer\Repository\RepositoryInterface;
 use Composer\Repository\InstalledRepository;
 use Composer\Repository\RootPackageRepository;
 use Composer\Package\PackageInterface;
-use Composer\Package\RootPackageInterface;
 use Composer\Package\Link;
 use Composer\Semver\Constraint\Constraint;
 use Composer\Plugin\Capability\Capability;
@@ -41,7 +39,7 @@ class PluginManager
     protected $composer;
     /** @var IOInterface */
     protected $io;
-    /** @var Composer */
+    /** @var ?Composer */
     protected $globalComposer;
     /** @var VersionParser */
     protected $versionParser;
@@ -84,9 +82,7 @@ class PluginManager
 
         $repo = $this->composer->getRepositoryManager()->getLocalRepository();
         $globalRepo = $this->globalComposer ? $this->globalComposer->getRepositoryManager()->getLocalRepository() : null;
-        if ($repo) {
-            $this->loadRepository($repo, false);
-        }
+        $this->loadRepository($repo, false);
         if ($globalRepo) {
             $this->loadRepository($globalRepo, true);
         }
@@ -261,6 +257,7 @@ class PluginManager
         }
 
         if ($oldInstallerPlugin) {
+            /** @var \Composer\Installer\InstallerInterface $installer */
             $installer = $this->registeredPlugins[$package->getName()];
             unset($this->registeredPlugins[$package->getName()]);
             $this->composer->getInstallationManager()->removeInstaller($installer);
@@ -471,17 +468,22 @@ class PluginManager
             array_key_exists($capability, $capabilities)
             && (empty($capabilities[$capability]) || !is_string($capabilities[$capability]) || !trim($capabilities[$capability]))
         ) {
-            throw new \UnexpectedValueException('Plugin '.get_class($plugin).' provided invalid capability class name(s), got '.var_export($capabilities[$capability], 1));
+            throw new \UnexpectedValueException('Plugin '.get_class($plugin).' provided invalid capability class name(s), got '.var_export($capabilities[$capability], true));
         }
+
+        return null;
     }
 
     /**
-     * @param  PluginInterface $plugin
-     * @param  string          $capabilityClassName The fully qualified name of the API interface which the plugin may provide
-     *                                              an implementation of.
-     * @param  array           $ctorArgs            Arguments passed to Capability's constructor.
-     *                                              Keeping it an array will allow future values to be passed w\o changing the signature.
+     * @template CapabilityClass of Capability
+     * @param  PluginInterface               $plugin
+     * @param  class-string<CapabilityClass> $capabilityClassName The fully qualified name of the API interface which the plugin may provide
+     *                                                            an implementation of.
+     * @param  array                         $ctorArgs            Arguments passed to Capability's constructor.
+     *                                                            Keeping it an array will allow future values to be passed w\o changing the signature.
      * @return null|Capability
+     * @phpstan-param class-string<CapabilityClass> $capabilityClassName
+     * @phpstan-return null|CapabilityClass
      */
     public function getPluginCapability(PluginInterface $plugin, $capabilityClassName, array $ctorArgs = array())
     {
@@ -502,14 +504,17 @@ class PluginManager
 
             return $capabilityObj;
         }
+
+        return null;
     }
 
     /**
-     * @param  string       $capabilityClassName The fully qualified name of the API interface which the plugin may provide
-     *                                           an implementation of.
-     * @param  array        $ctorArgs            Arguments passed to Capability's constructor.
-     *                                           Keeping it an array will allow future values to be passed w\o changing the signature.
-     * @return Capability[]
+     * @template CapabilityClass of Capability
+     * @param  class-string<CapabilityClass> $capabilityClassName The fully qualified name of the API interface which the plugin may provide
+     *                                                            an implementation of.
+     * @param  array                         $ctorArgs            Arguments passed to Capability's constructor.
+     *                                                            Keeping it an array will allow future values to be passed w\o changing the signature.
+     * @return CapabilityClass[]
      */
     public function getPluginCapabilities($capabilityClassName, array $ctorArgs = array())
     {

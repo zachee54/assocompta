@@ -21,8 +21,11 @@ use Composer\Downloader\TransportException;
  */
 class AuthHelper
 {
+    /** @var IOInterface */
     protected $io;
+    /** @var Config */
     protected $config;
+    /** @var array<string, string> Map of origins to message displayed */
     private $displayedOriginAuthentications = array();
 
     public function __construct(IOInterface $io, Config $config)
@@ -75,6 +78,7 @@ class AuthHelper
      * @param  string[]    $headers
      * @return array|null  containing retry (bool) and storeAuth (string|bool) keys, if retry is true the request should be
      *                                retried, if storeAuth is true then on a successful retry the authentication should be persisted to auth.json
+     * @phpstan-return ?array{retry: bool, storeAuth: string|bool}
      */
     public function promptAuthIfNeeded($url, $origin, $statusCode, $reason = null, $headers = array())
     {
@@ -154,7 +158,7 @@ class AuthHelper
         } else {
             // 404s are only handled for github
             if ($statusCode === 404) {
-                return;
+                return null;
             }
 
             // fail if the console is not interactive
@@ -210,7 +214,7 @@ class AuthHelper
                 if ($auth['password'] === 'oauth2') {
                     $headers[] = 'Authorization: Bearer '.$auth['username'];
                     $authenticationDisplayMessage = 'Using GitLab OAuth token authentication';
-                } elseif ($auth['password'] === 'private-token' || $auth['password'] === 'gitlab-ci-token') {
+                } else {
                     $headers[] = 'PRIVATE-TOKEN: '.$auth['username'];
                     $authenticationDisplayMessage = 'Using GitLab private token authentication';
                 }

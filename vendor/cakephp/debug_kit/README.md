@@ -1,5 +1,5 @@
 # CakePHP DebugKit
-[![Build Status](https://secure.travis-ci.org/cakephp/debug_kit.png?branch=master)](http://travis-ci.org/cakephp/debug_kit)
+![Build Status](https://github.com/cakephp/debug_kit/actions/workflows/ci.yml/badge.svg?branch=master)
 [![Coverage Status](https://img.shields.io/codecov/c/github/cakephp/debug_kit.svg?style=flat-square)](https://codecov.io/github/cakephp/debug_kit)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
 [![Total Downloads](https://img.shields.io/packagist/dt/cakephp/cakephp.svg?style=flat-square)](https://packagist.org/packages/cakephp/debug_kit)
@@ -33,6 +33,18 @@ php composer.phar require --dev cakephp/debug_kit:"^4.0"
 $this->addPlugin('DebugKit');
 ```
 * Set `'debug' => true,` in `config/app.php`.
+
+## Is DebugKit not working?
+
+If you don't see a CakePHP icon on the bottom right of your page DebugKit is not be
+working correctly. Some common problems are:
+ 
+1. Your PHP environment doesn't have SQLite installed. Check your application
+   logs to confirm if this happening. You can either configure DebugKit to use
+   a different database, or install the PDO SQLite 3 extension.
+2. Your hostname needs to be added to the `DebugKit.safeTld`. If your local
+   domain isn't a known development environment name, DebugKit will disable
+   itself to protect a potentially non-development environment.
 
 ## Reporting Issues
 

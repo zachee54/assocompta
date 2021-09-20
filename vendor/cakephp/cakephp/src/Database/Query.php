@@ -328,13 +328,13 @@ class Query implements ExpressionInterface, IteratorAggregate
      * });
      * ```
      *
-     * @param callable $visitor A function or callable to be executed for each part
+     * @param callable $callback A function or callable to be executed for each part
      * @return $this
      */
-    public function traverse($visitor)
+    public function traverse($callback)
     {
         foreach ($this->_parts as $name => $part) {
-            $visitor($part, $name);
+            $callback($part, $name);
         }
 
         return $this;
@@ -1200,7 +1200,9 @@ class Query implements ExpressionInterface, IteratorAggregate
      * `ORDER BY title DESC, author_id ASC`
      *
      * ```
-     * $query->order(['title' => 'DESC NULLS FIRST'])->order('author_id');
+     * $query
+     *     ->order(['title' => $query->newExpr('DESC NULLS FIRST')])
+     *     ->order('author_id');
      * ```
      *
      * Will generate:

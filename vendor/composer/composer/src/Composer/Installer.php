@@ -50,13 +50,13 @@ use Composer\Package\RootPackageInterface;
 use Composer\Repository\InstalledArrayRepository;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Repository\InstalledRepository;
-use Composer\Repository\FilterRepository;
 use Composer\Repository\RootPackageRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryInterface;
 use Composer\Repository\RepositoryManager;
 use Composer\Repository\LockArrayRepository;
 use Composer\Script\ScriptEvents;
+use Composer\Util\Platform;
 
 /**
  * @author Jordi Boggiano <j.boggiano@seld.be>
@@ -136,13 +136,14 @@ class Installer
     protected $writeLock;
     protected $executeOperations = true;
 
+    /** @var bool */
+    protected $updateMirrors = false;
     /**
      * Array of package names/globs flagged for update
      *
      * @var array|null
      */
-    protected $updateMirrors = false;
-    protected $updateAllowList;
+    protected $updateAllowList = null;
     protected $updateAllowTransitiveDependencies = Request::UPDATE_ONLY_LISTED;
 
     /**
@@ -151,7 +152,7 @@ class Installer
     protected $suggestedPackagesReporter;
 
     /**
-     * @var RepositoryInterface
+     * @var ?RepositoryInterface
      */
     protected $additionalFixedRepository;
 
@@ -179,6 +180,7 @@ class Installer
         $this->installationManager = $installationManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->autoloadGenerator = $autoloadGenerator;
+        $this->suggestedPackagesReporter = new SuggestedPackagesReporter($this->io);
 
         $this->writeLock = $config->get('lock');
     }
@@ -206,7 +208,7 @@ class Installer
 
         // Force update if there is no lock file present
         if (!$this->update && !$this->locker->isLocked()) {
-            $this->io->writeError('<warning>No lock file found. Updating dependencies instead of installing from lock file. Use composer update over composer install if you do not have a lock file.</warning>');
+            $this->io->writeError('<warning>No composer.lock file present. Updating dependencies to latest instead of installing from lock file. See https://getcomposer.org/install for more information.</warning>');
             $this->update = true;
         }
 
@@ -224,8 +226,7 @@ class Installer
         }
 
         if ($this->runScripts) {
-            $_SERVER['COMPOSER_DEV_MODE'] = $this->devMode ? '1' : '0';
-            putenv('COMPOSER_DEV_MODE='.$_SERVER['COMPOSER_DEV_MODE']);
+            Platform::putEnv('COMPOSER_DEV_MODE', $this->devMode ? '1' : '0');
 
             // dispatch pre event
             // should we treat this more strictly as running an update and then running an install, triggering events multiple times?
@@ -237,10 +238,6 @@ class Installer
         $this->downloadManager->setPreferDist($this->preferDist);
 
         $localRepo = $this->repositoryManager->getLocalRepository();
-
-        if (!$this->suggestedPackagesReporter) {
-            $this->suggestedPackagesReporter = new SuggestedPackagesReporter($this->io);
-        }
 
         try {
             if ($this->update) {
@@ -302,7 +299,6 @@ class Installer
                 $this->io->writeError('<info>Generating autoload files</info>');
             }
 
-            $this->autoloadGenerator->setDevMode($this->devMode);
             $this->autoloadGenerator->setClassMapAuthoritative($this->classMapAuthoritative);
             $this->autoloadGenerator->setApcu($this->apcuAutoloader, $this->apcuAutoloaderPrefix);
             $this->autoloadGenerator->setRunScripts($this->runScripts);
@@ -929,7 +925,8 @@ class Installer
         foreach ($packages as $key => $package) {
             if ($package instanceof AliasPackage) {
                 $alias = (string) $package->getAliasOf();
-                $packages[$key] = new AliasPackage($packages[$alias], $package->getVersion(), $package->getPrettyVersion());
+                $className = get_class($package);
+                $packages[$key] = new $className($packages[$alias], $package->getVersion(), $package->getPrettyVersion());
             }
         }
         $rm->setLocalRepository(
@@ -1131,6 +1128,7 @@ class Installer
      *
      * @param  bool      $runScripts
      * @return Installer
+     * @deprecated Use setRunScripts(false) on the EventDispatcher instance being injected instead
      */
     public function setRunScripts($runScripts = true)
     {

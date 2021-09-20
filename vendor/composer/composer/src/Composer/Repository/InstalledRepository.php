@@ -114,7 +114,7 @@ class InstalledRepository extends CompositeRepository
                 foreach ($package->getReplaces() as $link) {
                     foreach ($needles as $needle) {
                         if ($link->getSource() === $needle) {
-                            if ($constraint === null || ($link->getConstraint()->matches($constraint) === !$invert)) {
+                            if ($constraint === null || ($link->getConstraint()->matches($constraint) === true)) {
                                 // already displayed this node's dependencies, cutting short
                                 if (in_array($link->getTarget(), $packagesInTree)) {
                                     $results[] = array($package, $link, false);
@@ -156,6 +156,18 @@ class InstalledRepository extends CompositeRepository
             // When inverting, we need to check for conflicts of the needles against installed packages
             if ($invert && in_array($package->getName(), $needles)) {
                 foreach ($package->getConflicts() as $link) {
+                    foreach ($this->findPackages($link->getTarget()) as $pkg) {
+                        $version = new Constraint('=', $pkg->getVersion());
+                        if ($link->getConstraint()->matches($version) === $invert) {
+                            $results[] = array($package, $link, false);
+                        }
+                    }
+                }
+            }
+
+            // List conflicts against X as they may explain why the current version was selected, or explain why it is rejected if the conflict matched when inverting
+            foreach ($package->getConflicts() as $link) {
+                if (in_array($link->getTarget(), $needles)) {
                     foreach ($this->findPackages($link->getTarget()) as $pkg) {
                         $version = new Constraint('=', $pkg->getVersion());
                         if ($link->getConstraint()->matches($version) === $invert) {
@@ -209,7 +221,7 @@ class InstalledRepository extends CompositeRepository
                                 }
 
                                 $results[] = array($package, $link, false);
-                                $results[] = array($rootPackage, new Link($rootPackage->getName(), $link->getTarget(), new MatchAllConstraint, 'does not require', 'but ' . $pkg->getPrettyVersion() . ' is installed'), false);
+                                $results[] = array($rootPackage, new Link($rootPackage->getName(), $link->getTarget(), new MatchAllConstraint, Link::TYPE_DOES_NOT_REQUIRE, 'but ' . $pkg->getPrettyVersion() . ' is installed'), false);
                             } else {
                                 // no root so let's just print whatever we found
                                 $results[] = array($package, $link, false);

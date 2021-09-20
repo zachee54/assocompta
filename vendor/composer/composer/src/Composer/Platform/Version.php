@@ -26,7 +26,7 @@ class Version
     {
         $isFips = false;
 
-        if (!preg_match('/^(?<version>[0-9.]+)(?<patch>[a-z]{0,2})?(?<suffix>(?:-?(?:dev|pre|alpha|beta|rc|fips)[\d]*)*)?$/', $opensslVersion, $matches)) {
+        if (!preg_match('/^(?<version>[0-9.]+)(?<patch>[a-z]{0,2})?(?<suffix>(?:-?(?:dev|pre|alpha|beta|rc|fips)[\d]*)*)?(?<garbage>-\w+)?$/', $opensslVersion, $matches)) {
             return null;
         }
 
@@ -97,7 +97,7 @@ class Version
         return sprintf(
             '%d.%d.%d',
             $versionId / ($base * $base),
-            ($versionId / $base) % $base,
+            (int) ($versionId / $base) % $base,
             $versionId % $base
         );
     }

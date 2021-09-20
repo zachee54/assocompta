@@ -87,12 +87,12 @@ trait QueryTrait
      * Set the default Table object that will be used by this query
      * and form the `FROM` clause.
      *
-     * @param \Cake\Datasource\RepositoryInterface|\Cake\ORM\Table $table The default table object to use
+     * @param \Cake\Datasource\RepositoryInterface|\Cake\ORM\Table $repository The default table object to use
      * @return $this
      */
-    public function repository(RepositoryInterface $table)
+    public function repository(RepositoryInterface $repository)
     {
-        $this->_repository = $table;
+        $this->_repository = $repository;
 
         return $this;
     }
@@ -534,6 +534,7 @@ trait QueryTrait
      * @see \Cake\Datasource\QueryInterface::applyOptions() to read about the options that will
      * be processed by this class and not returned by this function
      * @return array
+     * @see applyOptions()
      */
     public function getOptions(): array
     {

@@ -16,12 +16,15 @@ use Composer\Package\BasePackage;
 use Composer\Package\Loader\ArrayLoader;
 use Composer\Package\PackageInterface;
 use Composer\Package\AliasPackage;
+use Composer\Package\CompletePackage;
+use Composer\Package\CompleteAliasPackage;
 use Composer\Package\Version\VersionParser;
 use Composer\Package\Version\StabilityFilter;
 use Composer\Json\JsonFile;
 use Composer\Cache;
 use Composer\Config;
 use Composer\IO\IOInterface;
+use Composer\Plugin\PostFileDownloadEvent;
 use Composer\Semver\CompilingMatcher;
 use Composer\Util\HttpDownloader;
 use Composer\Util\Loop;
@@ -41,42 +44,72 @@ use Composer\Util\Url;
  */
 class ComposerRepository extends ArrayRepository implements ConfigurableRepositoryInterface
 {
+    /**
+     * @var mixed[]
+     * @phpstan-var array{url: string, options?: mixed[], type?: 'composer', allow_ssl_downgrade?: bool}
+     */
     private $repoConfig;
+    /** @var mixed[] */
     private $options;
+    /** @var string */
     private $url;
+    /** @var string */
     private $baseUrl;
+    /** @var IOInterface */
     private $io;
+    /** @var HttpDownloader */
     private $httpDownloader;
+    /** @var Loop */
     private $loop;
+    /** @var Cache */
     protected $cache;
-    protected $notifyUrl;
-    protected $searchUrl;
-    /** @var string|null a URL containing %package% which can be queried to get providers of a given name */
-    protected $providersApiUrl;
+    /** @var ?string */
+    protected $notifyUrl = null;
+    /** @var ?string */
+    protected $searchUrl = null;
+    /** @var ?string a URL containing %package% which can be queried to get providers of a given name */
+    protected $providersApiUrl = null;
+    /** @var bool */
     protected $hasProviders = false;
-    protected $providersUrl;
-    protected $listUrl;
+    /** @var ?string */
+    protected $providersUrl = null;
+    /** @var ?string */
+    protected $listUrl = null;
     /** @var bool Indicates whether a comprehensive list of packages this repository might provide is expressed in the repository root. **/
     protected $hasAvailablePackageList = false;
-    protected $availablePackages;
-    protected $availablePackagePatterns;
-    protected $lazyProvidersUrl;
+    /** @var ?array<string> */
+    protected $availablePackages = null;
+    /** @var ?array<string> */
+    protected $availablePackagePatterns = null;
+    /** @var ?string */
+    protected $lazyProvidersUrl = null;
+    /** @var ?array<string, array{sha256: string}> */
     protected $providerListing;
+    /** @var ArrayLoader */
     protected $loader;
+    /** @var bool */
     private $allowSslDowngrade = false;
+    /** @var ?EventDispatcher */
     private $eventDispatcher;
+    /** @var ?array<string, array{url: string, preferred: bool}> */
     private $sourceMirrors;
+    /** @var ?array<string, array{url: string, preferred: bool}> */
     private $distMirrors;
+    /** @var bool */
     private $degradedMode = false;
+    /** @var mixed[]|true */
     private $rootData;
-    private $hasPartialPackages;
-    private $partialPackagesByName;
+    /** @var bool */
+    private $hasPartialPackages = false;
+    /** @var ?array<string, PackageInterface> */
+    private $partialPackagesByName = null;
 
     /**
      * TODO v3 should make this private once we can drop PHP 5.3 support
      * @private
      * @var array list of package names which are fresh and can be loaded from the cache directly in case loadPackage is called several times
      *            useful for v2 metadata repositories with lazy providers
+     * @phpstan-var array<string, true>
      */
     public $freshMetadataUrls = array();
 
@@ -85,11 +118,13 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
      * @private
      * @var array list of package names which returned a 404 and should not be re-fetched in case loadPackage is called several times
      *            useful for v2 metadata repositories with lazy providers
+     * @phpstan-var array<string, true>
      */
     public $packagesNotFoundCache = array();
     /**
      * TODO v3 should make this private once we can drop PHP 5.3 support
      * @private
+     * @var VersionParser
      */
     public $versionParser;
 
@@ -167,7 +202,7 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
             }
 
             if ($this->hasAvailablePackageList && !$this->lazyProvidersRepoContains($name)) {
-                return;
+                return null;
             }
 
             $packages = $this->loadAsyncPackages(array($name => $constraint));
@@ -182,7 +217,7 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
                 }
             }
 
-            return;
+            return null;
         }
 
         return parent::findPackage($name, $constraint);
@@ -428,7 +463,7 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
             foreach ($search['results'] as $result) {
                 // do not show virtual packages in results as they are not directly useful from a composer perspective
                 if (empty($result['virtual'])) {
-                    $results[] = $result;
+                    $results[] = array('name' => $result['name'], 'description' => $result['description']);
                 }
             }
 
@@ -441,7 +476,7 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
 
             foreach ($this->getPackageNames() as $name) {
                 if (preg_match($regex, $name)) {
-                    $results[] = array('name' => $name);
+                    $results[] = array('name' => $name, 'description' => '');
                 }
             }
 
@@ -563,22 +598,20 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
             }
 
             $packages = null;
-            if ($cacheKey) {
-                if (!$useLastModifiedCheck && $hash && $this->cache->sha256($cacheKey) === $hash) {
-                    $packages = json_decode($this->cache->read($cacheKey), true);
-                    $packagesSource = 'cached file ('.$cacheKey.' originating from '.Url::sanitize($url).')';
-                } elseif ($useLastModifiedCheck) {
-                    if ($contents = $this->cache->read($cacheKey)) {
-                        $contents = json_decode($contents, true);
-                        // we already loaded some packages from this file, so assume it is fresh and avoid fetching it again
-                        if (isset($alreadyLoaded[$name])) {
-                            $packages = $contents;
-                            $packagesSource = 'cached file ('.$cacheKey.' originating from '.Url::sanitize($url).')';
-                        } elseif (isset($contents['last-modified'])) {
-                            $response = $this->fetchFileIfLastModified($url, $cacheKey, $contents['last-modified']);
-                            $packages = true === $response ? $contents : $response;
-                            $packagesSource = true === $response ? 'cached file ('.$cacheKey.' originating from '.Url::sanitize($url).')' : 'downloaded file ('.Url::sanitize($url).')';
-                        }
+            if (!$useLastModifiedCheck && $hash && $this->cache->sha256($cacheKey) === $hash) {
+                $packages = json_decode($this->cache->read($cacheKey), true);
+                $packagesSource = 'cached file ('.$cacheKey.' originating from '.Url::sanitize($url).')';
+            } elseif ($useLastModifiedCheck) {
+                if ($contents = $this->cache->read($cacheKey)) {
+                    $contents = json_decode($contents, true);
+                    // we already loaded some packages from this file, so assume it is fresh and avoid fetching it again
+                    if (isset($alreadyLoaded[$name])) {
+                        $packages = $contents;
+                        $packagesSource = 'cached file ('.$cacheKey.' originating from '.Url::sanitize($url).')';
+                    } elseif (isset($contents['last-modified'])) {
+                        $response = $this->fetchFileIfLastModified($url, $cacheKey, $contents['last-modified']);
+                        $packages = true === $response ? $contents : $response;
+                        $packagesSource = true === $response ? 'cached file ('.$cacheKey.' originating from '.Url::sanitize($url).')' : 'downloaded file ('.Url::sanitize($url).')';
                     }
                 }
             }
@@ -1039,6 +1072,7 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
      * TODO v3 should make this private once we can drop PHP 5.3 support
      *
      * @private
+     * @return list<CompletePackage|CompleteAliasPackage>
      */
     public function createPackages(array $packages, $source = null)
     {
@@ -1053,7 +1087,7 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
                 }
             }
 
-            $packageInstances = $this->loader->loadPackages($packages, 'Composer\Package\CompletePackage');
+            $packageInstances = $this->loader->loadPackages($packages);
 
             foreach ($packageInstances as $package) {
                 if (isset($this->sourceMirrors[$package->getSourceType()])) {
@@ -1084,13 +1118,16 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
         $retries = 3;
         while ($retries--) {
             try {
+                $options = $this->options;
                 if ($this->eventDispatcher) {
-                    $preFileDownloadEvent = new PreFileDownloadEvent(PluginEvents::PRE_FILE_DOWNLOAD, $this->httpDownloader, $filename, 'metadata');
+                    $preFileDownloadEvent = new PreFileDownloadEvent(PluginEvents::PRE_FILE_DOWNLOAD, $this->httpDownloader, $filename, 'metadata', array('repository' => $this));
+                    $preFileDownloadEvent->setTransportOptions($this->options);
                     $this->eventDispatcher->dispatch($preFileDownloadEvent->getName(), $preFileDownloadEvent);
                     $filename = $preFileDownloadEvent->getProcessedUrl();
+                    $options = $preFileDownloadEvent->getTransportOptions();
                 }
 
-                $response = $this->httpDownloader->get($filename, $this->options);
+                $response = $this->httpDownloader->get($filename, $options);
                 $json = $response->getBody();
                 if ($sha256 && $sha256 !== hash('sha256', $json)) {
                     // undo downgrade before trying again if http seems to be hijacked or modifying content somehow
@@ -1108,6 +1145,11 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
 
                     // TODO use scarier wording once we know for sure it doesn't do false positives anymore
                     throw new RepositorySecurityException('The contents of '.$filename.' do not match its signature. This could indicate a man-in-the-middle attack or e.g. antivirus software corrupting files. Try running composer again and report this if you think it is a mistake.');
+                }
+
+                if ($this->eventDispatcher) {
+                    $postFileDownloadEvent = new PostFileDownloadEvent(PluginEvents::POST_FILE_DOWNLOAD, null, $sha256, $filename, 'metadata', array('response' => $response, 'repository' => $this));
+                    $this->eventDispatcher->dispatch($postFileDownloadEvent->getName(), $postFileDownloadEvent);
                 }
 
                 $data = $response->decodeJson();
@@ -1171,13 +1213,15 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
         $retries = 3;
         while ($retries--) {
             try {
+                $options = $this->options;
                 if ($this->eventDispatcher) {
-                    $preFileDownloadEvent = new PreFileDownloadEvent(PluginEvents::PRE_FILE_DOWNLOAD, $this->httpDownloader, $filename, 'metadata');
+                    $preFileDownloadEvent = new PreFileDownloadEvent(PluginEvents::PRE_FILE_DOWNLOAD, $this->httpDownloader, $filename, 'metadata', array('repository' => $this));
+                    $preFileDownloadEvent->setTransportOptions($this->options);
                     $this->eventDispatcher->dispatch($preFileDownloadEvent->getName(), $preFileDownloadEvent);
                     $filename = $preFileDownloadEvent->getProcessedUrl();
+                    $options = $preFileDownloadEvent->getTransportOptions();
                 }
 
-                $options = $this->options;
                 if (isset($options['http']['header'])) {
                     $options['http']['header'] = (array) $options['http']['header'];
                 }
@@ -1186,6 +1230,11 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
                 $json = $response->getBody();
                 if ($json === '' && $response->getStatusCode() === 304) {
                     return true;
+                }
+
+                if ($this->eventDispatcher) {
+                    $postFileDownloadEvent = new PostFileDownloadEvent(PluginEvents::POST_FILE_DOWNLOAD, null, null, $filename, 'metadata', array('response' => $response, 'repository' => $this));
+                    $this->eventDispatcher->dispatch($postFileDownloadEvent->getName(), $postFileDownloadEvent);
                 }
 
                 $data = $response->decodeJson();
@@ -1240,13 +1289,15 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
         }
 
         $httpDownloader = $this->httpDownloader;
+        $options = $this->options;
         if ($this->eventDispatcher) {
-            $preFileDownloadEvent = new PreFileDownloadEvent(PluginEvents::PRE_FILE_DOWNLOAD, $this->httpDownloader, $filename, 'metadata');
+            $preFileDownloadEvent = new PreFileDownloadEvent(PluginEvents::PRE_FILE_DOWNLOAD, $this->httpDownloader, $filename, 'metadata', array('repository' => $this));
+            $preFileDownloadEvent->setTransportOptions($this->options);
             $this->eventDispatcher->dispatch($preFileDownloadEvent->getName(), $preFileDownloadEvent);
             $filename = $preFileDownloadEvent->getProcessedUrl();
+            $options = $preFileDownloadEvent->getTransportOptions();
         }
 
-        $options = $this->options;
         if ($lastModifiedTime) {
             if (isset($options['http']['header'])) {
                 $options['http']['header'] = (array) $options['http']['header'];
@@ -1258,9 +1309,10 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
         $url = $this->url;
         $cache = $this->cache;
         $degradedMode = &$this->degradedMode;
+        $eventDispatcher = $this->eventDispatcher;
         $repo = $this;
 
-        $accept = function ($response) use ($io, $url, $filename, $cache, $cacheKey, $repo) {
+        $accept = function ($response) use ($io, $url, $filename, $cache, $cacheKey, $eventDispatcher, $repo) {
             // package not found is acceptable for a v2 protocol repository
             if ($response->getStatusCode() === 404) {
                 $repo->packagesNotFoundCache[$filename] = true;
@@ -1273,6 +1325,11 @@ class ComposerRepository extends ArrayRepository implements ConfigurableReposito
                 $repo->freshMetadataUrls[$filename] = true;
 
                 return true;
+            }
+
+            if ($eventDispatcher) {
+                $postFileDownloadEvent = new PostFileDownloadEvent(PluginEvents::POST_FILE_DOWNLOAD, null, null, $filename, 'metadata', array('response' => $response, 'repository' => $repo));
+                $eventDispatcher->dispatch($postFileDownloadEvent->getName(), $postFileDownloadEvent);
             }
 
             $data = $response->decodeJson();

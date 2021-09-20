@@ -16,6 +16,7 @@ namespace DebugKit;
 use Cake\Core\Configure;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Core\Plugin as CorePlugin;
+use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Event\EventManager;
 use Cake\Http\ServerRequest;
 use Cake\Log\Log;
@@ -229,19 +230,23 @@ class ToolbarService
      */
     public function saveData(ServerRequest $request, ResponseInterface $response)
     {
-        $ignorePathsPattern = $this->getConfig('ignorePathsPattern');
         $path = $request->getUri()->getPath();
-        $statusCode = $response->getStatusCode();
+        $dashboardUrl = '/debug-kit';
+        if (strpos($path, 'debug_kit') !== false || strpos($path, 'debug-kit') !== false) {
+            if (!($path === $dashboardUrl || $path === $dashboardUrl . '/')) {
+                // internal debug-kit request
+                return false;
+            }
+            // debug-kit dashboard, save request and show toolbar
+        }
 
+        $ignorePathsPattern = $this->getConfig('ignorePathsPattern');
+        $statusCode = $response->getStatusCode();
         if (
-            strpos($path, 'debug_kit') !== false ||
-            strpos($path, 'debug-kit') !== false ||
-            (
-                $ignorePathsPattern &&
-                $statusCode >= 200 &&
-                $statusCode <= 299 &&
-                preg_match($ignorePathsPattern, $path)
-            )
+            $ignorePathsPattern &&
+            $statusCode >= 200 &&
+            $statusCode <= 299 &&
+            preg_match($ignorePathsPattern, $path)
         ) {
             return false;
         }
@@ -254,9 +259,19 @@ class ToolbarService
             'requested_at' => $request->getEnv('REQUEST_TIME'),
             'panels' => [],
         ];
-        /** @var \DebugKit\Model\Table\RequestsTable $requests */
-        $requests = $this->getTableLocator()->get('DebugKit.Requests');
-        $requests->gc();
+        try {
+            /** @var \DebugKit\Model\Table\RequestsTable $requests */
+            $requests = $this->getTableLocator()->get('DebugKit.Requests');
+            $requests->gc();
+        } catch (MissingDatasourceConfigException $e) {
+            Log::warning(
+                'Unable to save request. Check your debug_kit datasource connection ' .
+                'or ensure that PDO SQLite extension is enabled.'
+            );
+            Log::warning($e->getMessage());
+
+            return false;
+        }
 
         $row = $requests->newEntity($data);
         $row->setNew(true);
@@ -283,7 +298,7 @@ class ToolbarService
             return $requests->save($row);
         } catch (PDOException $e) {
             Log::warning('Unable to save request. This is probably due to concurrent requests.');
-            Log::warning((string)$e);
+            Log::warning($e->getMessage());
         }
 
         return false;

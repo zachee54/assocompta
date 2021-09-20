@@ -24,9 +24,13 @@ use Composer\IO\IOInterface;
  */
 class HgDriver extends VcsDriver
 {
+    /** @var array<string, string> Map of tag name to identifier */
     protected $tags;
+    /** @var array<string, string> Map of branch name to identifier */
     protected $branches;
+    /** @var string */
     protected $rootIdentifier;
+    /** @var string */
     protected $repoDir;
 
     /**
@@ -125,7 +129,7 @@ class HgDriver extends VcsDriver
         $this->process->execute($resource, $content, $this->repoDir);
 
         if (!trim($content)) {
-            return;
+            return null;
         }
 
         return $content;

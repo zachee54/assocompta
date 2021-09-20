@@ -23,10 +23,12 @@ use Composer\Util\Perforce;
  */
 class PerforceDriver extends VcsDriver
 {
+    /** @var string */
     protected $depot;
+    /** @var string */
     protected $branch;
-    /** @var Perforce */
-    protected $perforce;
+    /** @var ?Perforce */
+    protected $perforce = null;
 
     /**
      * {@inheritDoc}
@@ -147,7 +149,7 @@ class PerforceDriver extends VcsDriver
      */
     public function getContents($url)
     {
-        return false;
+        throw new \BadMethodCallException('Not implemented/used in PerforceDriver');
     }
 
     /**
