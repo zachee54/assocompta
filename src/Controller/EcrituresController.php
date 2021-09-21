@@ -14,9 +14,6 @@ class EcrituresController extends AppController {
     
     // Inclure le traitement du formulaire d'ajout d'une écriture
     $this->edit();
-    // Ne pas réutiliser les données de l'écriture ajoutée, s'il y en a une
-    // TODO remplacer par la réinitialisation d'une entité
-    // $this->request->data = null;
     
     // Année et mois par défaut : les plus récents saisis
     if (!$year) {
@@ -138,6 +135,7 @@ class EcrituresController extends AppController {
       if ($this->Ecritures->save($ecriture)) {
         $this->Flash->success("L'écriture a été sauvegardée");
         $yearMonth = $this->_getYearMonth($ecriture);
+        $ecriture = $this->Ecritures->newEmptyEntity();
         $this->redirect([
           'action' => 'index',
           $yearMonth['year'],
