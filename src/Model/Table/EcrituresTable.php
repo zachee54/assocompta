@@ -19,7 +19,11 @@ class EcrituresTable extends Table {
             return !empty($data['debit']) || !empty($data['credit']);
           },
         'message' => 'Indiquez un montant en débit ou en crédit'])
+        
       ->notEmptyDate('date_engagement', 'La date est obligatoire')
+      ->date('date_engagement', ['ymd'], 'Date incorrecte')
+      
+      ->allowEmptyDate('date_bancaire')
       ->date('date_bancaire', ['ymd'], 'Date incorrecte');
     
     return $validator;
