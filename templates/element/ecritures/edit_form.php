@@ -23,7 +23,10 @@ echo $this->Form->create($ecriture, array('class' => 'EcritureEditForm'));
       
       if ($this->Identity->get('admin')) {
         echo $this->Form->control('rattachement', array(
-          'label' => 'Rattachement'));
+          'label' => 'Rattachement (facultatif)',
+          'type' => 'select',
+          'options' => $rattachement,
+          'empty' => true));
       }
       
       echo $this->Form->control('poste_id', array(
