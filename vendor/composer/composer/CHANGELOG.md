@@ -1,3 +1,13 @@
+### [2.1.9] 2021-10-05
+
+  * Security: Fixed command injection vulnerability on Windows (GHSA-frqg-7g38-6gcf / CVE-2021-41116)
+  * Fixed classmap parsing with a new class parser which does not rely on regexes anymore (#10107)
+  * Fixed inline git credentials showing up in output in some conditions (#10115)
+  * Fixed support for running updates while offline as long as the cache contains enough information (#10116)
+  * Fixed `show --all foo/bar` which as of 2.0.0 was not showing all versions anymore but only the installed one (#10095)
+  * Fixed VCS repos ignoring some versions silently when the API rate limit is reached (#10132)
+  * Fixed CA bundle to remove the expired Let's Encrypt root CA
+
 ### [2.1.8] 2021-09-15
 
   * Fixed regression in 2.1.7 when parsing classmaps in files containing invalid Unicode (#10102)
@@ -319,6 +329,10 @@
   * Fixed package ordering when autoloading and especially when loading plugins, to make sure dependencies are loaded before their dependents
   * Fixed suggest output being very spammy, it now is only one line long and shows more rarely
   * Fixed conflict rules like e.g. >=5 from matching dev-master, as it is not normalized to 9999999-dev internally anymore
+
+### [1.10.23] 2021-10-05
+
+  * Security: Fixed command injection vulnerability on Windows (GHSA-frqg-7g38-6gcf / CVE-2021-41116)
 
 ### [1.10.22] 2021-04-27
 
@@ -1260,6 +1274,7 @@
 
   * Initial release
 
+[2.1.9]: https://github.com/composer/composer/compare/2.1.8...2.1.9
 [2.1.8]: https://github.com/composer/composer/compare/2.1.7...2.1.8
 [2.1.7]: https://github.com/composer/composer/compare/2.1.6...2.1.7
 [2.1.6]: https://github.com/composer/composer/compare/2.1.5...2.1.6
@@ -1290,6 +1305,7 @@
 [2.0.0-alpha3]: https://github.com/composer/composer/compare/2.0.0-alpha2...2.0.0-alpha3
 [2.0.0-alpha2]: https://github.com/composer/composer/compare/2.0.0-alpha1...2.0.0-alpha2
 [2.0.0-alpha1]: https://github.com/composer/composer/compare/1.10.7...2.0.0-alpha1
+[1.10.23]: https://github.com/composer/composer/compare/1.10.22...1.10.23
 [1.10.22]: https://github.com/composer/composer/compare/1.10.21...1.10.22
 [1.10.21]: https://github.com/composer/composer/compare/1.10.20...1.10.21
 [1.10.20]: https://github.com/composer/composer/compare/1.10.19...1.10.20
