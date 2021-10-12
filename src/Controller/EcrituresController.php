@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use Cake\I18n\FrozenDate;
+
 class EcrituresController extends AppController {
   
   /**
@@ -149,6 +151,7 @@ class EcrituresController extends AppController {
     $this->_setMonths();
     $this->set('postes', $this->Ecritures->Postes->find('list'));
     $this->set('activites', $this->Ecritures->Activites->find('list'));
+    $this->set('rattachement', $this->_buildRattachementOptions($ecriture));
   }
   
   /**
@@ -172,6 +175,41 @@ class EcrituresController extends AppController {
     return [
       'year' => $dateBancaire->format('Y'),    // Année sur 4 chiffres
       'month' => $dateBancaire->format('n')];  // Mois sur 1 ou 2 chiffres
+  }
+  
+  /**
+   * Renvoie des options de rattachement appropriées pour l'édition de
+   * l'écriture spécifiée.
+   * Les rattachements proposés sont affichés sous la forme "N-1/N".
+   * 
+   * Les dates de référence sont la date actuelle, la date de l'écriture, la
+   * date d'encaissement et la date de rattachement actuelle. Les rattachements
+   * proposés s'étendent de 1 an avant à 1 an après les dates de référence.
+   * 
+   * @param $ecriture Une entité Ecriture.
+   * @return  array   Des options pour un input select.
+   */ 
+  private function _buildRattachementOptions($ecriture) {
+    $refDates = [new FrozenDate()];
+    if ($ecriture->date_engagement) {
+      $refDates[] = $ecriture->date_engagement;
+    }
+    if ($ecriture->date_bancaire) {
+      $refDates[] = $ecriture->date_bancaire;
+    }
+    if ($ecriture->rattachement) {
+      $refDates[] = FrozenDate::create($ecriture->rattachement, 1, 1, 0, 0, 0);
+    }
+    
+    // Garder une année de marge avant et après
+    $max = max($refDates)->year + 1;
+    $min = min($refDates)->year - 1;
+    
+    $result = [];
+    for ($year = $max; $year >= $min; $year--) {  // Ordre chronologique inverse
+      $result[$year] = ($year-1)."/".$year;
+    }
+    return $result;
   }
   
   /**
