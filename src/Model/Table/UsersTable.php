@@ -12,7 +12,7 @@ class UsersTable extends Table {
       ->requirePresence('nom', 'create')
       ->requirePresence('login', 'create')
       ->requirePresence('mdp', 'create',  'Un mot de passe est nécessaire')
-      ->notEmpty('login')
+      ->notEmptyString('login')
       ->alphaNumeric('login', 'Caractères spéciaux interdits');
     
     return $validator;
