@@ -103,3 +103,16 @@ echo $this->Form->create($ecriture, array('class' => 'EcritureEditForm'));
   <?php
   
 echo $this->Form->end();
+
+// La saisie d'une date d'écriture se reporte automatiquement en date banque
+$this->append('scriptBottom');
+  ?>
+  <script type="text/javascript">
+    $(function() {
+      $('#date-engagement').change(function(event) {
+        $('#date-bancaire').val(this.value);
+      });
+    });
+  </script>
+  <?php
+$this->end();
