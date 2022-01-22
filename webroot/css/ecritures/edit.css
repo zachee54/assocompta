@@ -1,8 +1,3 @@
-/* Uniquement le formulaire dans la page dédiée (sélecteur #) */
-#EcritureEditForm article {
-  margin: 20px;
-}
-
 /* Les formulaires insérés en page dédiée ou non */
 .EcritureEditForm {
   display: flex;
@@ -28,14 +23,6 @@
 
 .EcritureEditForm .input label {
   font-size: xx-small;
-}
-
-#EcritureDescription, #EcriturePersonne {
-  width: 200px;
-}
-
-#EcriturePiece {
-  max-width: 50px;
 }
 
 .EcritureEditForm .number {
