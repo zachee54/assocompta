@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'JsonException' => $vendorDir . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
     'Mobile_Detect' => $vendorDir . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
     'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
@@ -390,7 +391,7 @@ return array(
     'PharIo\\Manifest\\Manifest' => $vendorDir . '/phar-io/manifest/src/values/Manifest.php',
     'PharIo\\Manifest\\ManifestDocument' => $vendorDir . '/phar-io/manifest/src/xml/ManifestDocument.php',
     'PharIo\\Manifest\\ManifestDocumentException' => $vendorDir . '/phar-io/manifest/src/exceptions/ManifestDocumentException.php',
-    'PharIo\\Manifest\\ManifestDocumentLoadingException' => $vendorDir . '/phar-io/manifest/src/exceptions/ManifestDocumentLoadingException.php',
+    'PharIo\\Manifest\\ManifestDocumentLoadingException' => $vendorDir . '/phar-io/manifest/src/xml/ManifestDocumentLoadingException.php',
     'PharIo\\Manifest\\ManifestDocumentMapper' => $vendorDir . '/phar-io/manifest/src/ManifestDocumentMapper.php',
     'PharIo\\Manifest\\ManifestDocumentMapperException' => $vendorDir . '/phar-io/manifest/src/exceptions/ManifestDocumentMapperException.php',
     'PharIo\\Manifest\\ManifestElement' => $vendorDir . '/phar-io/manifest/src/xml/ManifestElement.php',
@@ -611,10 +612,8 @@ return array(
     'SebastianBergmann\\Timer\\Timer' => $vendorDir . '/phpunit/php-timer/src/Timer.php',
     'SebastianBergmann\\Type\\CallableType' => $vendorDir . '/sebastian/type/src/CallableType.php',
     'SebastianBergmann\\Type\\Exception' => $vendorDir . '/sebastian/type/src/exception/Exception.php',
-    'SebastianBergmann\\Type\\FalseType' => $vendorDir . '/sebastian/type/src/FalseType.php',
     'SebastianBergmann\\Type\\GenericObjectType' => $vendorDir . '/sebastian/type/src/GenericObjectType.php',
     'SebastianBergmann\\Type\\IterableType' => $vendorDir . '/sebastian/type/src/IterableType.php',
-    'SebastianBergmann\\Type\\LogicException' => $vendorDir . '/sebastian/type/src/exception/LogicException.php',
     'SebastianBergmann\\Type\\MixedType' => $vendorDir . '/sebastian/type/src/MixedType.php',
     'SebastianBergmann\\Type\\NullType' => $vendorDir . '/sebastian/type/src/NullType.php',
     'SebastianBergmann\\Type\\ObjectType' => $vendorDir . '/sebastian/type/src/ObjectType.php',

@@ -15,6 +15,7 @@ namespace Composer\Util;
 use Composer\Config;
 use Composer\IO\IOInterface;
 use Composer\Downloader\TransportException;
+use Composer\Pcre\Preg;
 
 /**
  * @author Jordi Boggiano <j.boggiano@seld.be>
@@ -37,6 +38,8 @@ class AuthHelper
     /**
      * @param string      $origin
      * @param string|bool $storeAuth
+     *
+     * @return void
      */
     public function storeAuth($origin, $storeAuth)
     {
@@ -89,6 +92,20 @@ class AuthHelper
             $message = "\n";
 
             $rateLimited = $gitHubUtil->isRateLimited($headers);
+            $requiresSso = $gitHubUtil->requiresSso($headers);
+
+            if ($requiresSso) {
+                $ssoUrl = $gitHubUtil->getSsoUrl($headers);
+                $message = 'GitHub API token requires SSO authorization. Authorize this token at ' . $ssoUrl . "\n";
+                $this->io->writeError($message);
+                if (!$this->io->isInteractive()) {
+                    throw new TransportException('Could not authenticate against ' . $origin, 403);
+                }
+                $this->io->ask('After authorizing your token, confirm that you would like to retry the request');
+
+                return array('retry' => true, 'storeAuth' => $storeAuth);
+            }
+
             if ($rateLimited) {
                 $rateLimit = $gitHubUtil->getRateLimit($headers);
                 if ($this->io->hasAuthentication($origin)) {
@@ -120,8 +137,11 @@ class AuthHelper
             $message = "\n".'Could not fetch '.$url.', enter your ' . $origin . ' credentials ' .($statusCode === 401 ? 'to access private repos' : 'to go over the API rate limit');
             $gitLabUtil = new GitLab($this->io, $this->config, null);
 
-            if ($this->io->hasAuthentication($origin) && ($auth = $this->io->getAuthentication($origin)) && in_array($auth['password'], array('gitlab-ci-token', 'private-token', 'oauth2'), true)) {
-                throw new TransportException("Invalid credentials for '" . $url . "', aborting.", $statusCode);
+            if ($this->io->hasAuthentication($origin)) {
+                $auth = $this->io->getAuthentication($origin);
+                if (in_array($auth['password'], array('gitlab-ci-token', 'private-token', 'oauth2'), true)) {
+                    throw new TransportException("Invalid credentials for '" . $url . "', aborting.", $statusCode);
+                }
             }
 
             if (!$gitLabUtil->authorizeOAuth($origin)
@@ -189,10 +209,11 @@ class AuthHelper
     }
 
     /**
-     * @param  array  $headers
-     * @param  string $origin
-     * @param  string $url
-     * @return array  updated headers array
+     * @param string[] $headers
+     * @param string   $origin
+     * @param string   $url
+     *
+     * @return string[] updated headers array
      */
     public function addAuthenticationHeader(array $headers, $origin, $url)
     {
@@ -203,7 +224,7 @@ class AuthHelper
                 $headers[] = 'Authorization: Bearer '.$auth['username'];
             } elseif ('github.com' === $origin && 'x-oauth-basic' === $auth['password']) {
                 // only add the access_token if it is actually a github API URL
-                if (preg_match('{^https?://api\.github\.com/}', $url)) {
+                if (Preg::isMatch('{^https?://api\.github\.com/}', $url)) {
                     $headers[] = 'Authorization: token '.$auth['username'];
                     $authenticationDisplayMessage = 'Using GitHub token authentication';
                 }

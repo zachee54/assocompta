@@ -16,6 +16,7 @@ use Composer\IO\IOInterface;
 use Composer\Config;
 use Composer\Factory;
 use Composer\Downloader\TransportException;
+use Composer\Pcre\Preg;
 
 /**
  * @author Roshan Gautam <roshan.gautam@hotmail.com>
@@ -57,7 +58,7 @@ class GitLab
     public function authorizeOAuth($originUrl)
     {
         // before composer 1.9, origin URLs had no port number in them
-        $bcOriginUrl = preg_replace('{:\d+}', '', $originUrl);
+        $bcOriginUrl = Preg::replace('{:\d+}', '', $originUrl);
 
         if (!in_array($originUrl, $this->config->get('gitlab-domains'), true) && !in_array($bcOriginUrl, $this->config->get('gitlab-domains'), true)) {
             return false;
@@ -160,6 +161,14 @@ class GitLab
         throw new \RuntimeException('Invalid GitLab credentials 5 times in a row, aborting.');
     }
 
+    /**
+     * @param string $scheme
+     * @param string $originUrl
+     *
+     * @return array{access_token: non-empty-string, token_type: non-empty-string, expires_in: positive-int}
+     *
+     * @see https://docs.gitlab.com/ee/api/oauth2.html#resource-owner-password-credentials-flow
+     */
     private function createToken($scheme, $originUrl)
     {
         $username = $this->io->ask('Username: ');
