@@ -39,7 +39,7 @@ class EcrituresController extends AppController {
     $this->set('ecritures', $query
       ->contain(['Postes', 'Activites'])
       ->where(
-        $query->newExpr()->between(
+        $query->expr()->between(
           'date_bancaire',
           $date->firstOfMonth(),
           $date->endOfMonth() ))
@@ -73,7 +73,7 @@ class EcrituresController extends AppController {
     return $query
       ->select(['solde' => $query->func()->sum('credit-debit')])
       ->where(
-        $query->newExpr()->lte('date_bancaire', $date) )
+        $query->expr()->lte('date_bancaire', $date) )
       ->first()
       ->solde;
   }
