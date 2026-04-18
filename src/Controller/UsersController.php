@@ -17,12 +17,29 @@ class UsersController extends AppController {
   public function login() {
     $result = $this->Authentication->getResult();
     if ($result->isValid()) {
+      $service = $this->Authentication->getAuthenticationService();
+      $provider = $service->getIdentificationProvider();
+      if ($provider->needsPasswordRehash()) {
+        $this->_rehashPassword();
+      }
+      
       $target = $this->Authentication->getLoginRedirect() ?? '/';
       return $this->redirect($target);
     }
     if ($this->request->is('post') && !$result->isValid()) {
       $this->Flash->error('Identifiant ou mot de passe invalide');
     }
+  }
+  
+  /**
+   * Met à jour le hachage du mot de passe de l'utilisateur qui vient de se
+   * connecter.
+   */
+  private function _rehashPassword() {
+    $id = $this->Authentication->getIdentity()->getIdentifier();
+    $user = $this->Users->get($id);
+    $user->mdp = $this->request->getData('mdp');
+    $this->Users->save($user);
   }
   
   /**

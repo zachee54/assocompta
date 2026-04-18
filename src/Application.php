@@ -190,8 +190,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
       $service->loadIdentifier('Authentication.Password', [
         'fields' => $fields,
         'passwordHasher' => [
-          'className' => 'Authentication.Legacy',
-          'hashType' => 'sha256']]);
+          'className' => 'Authentication.Fallback',
+          'hashers' => [
+            'Authentication.Default',
+            [ 'className' => 'Authentication.Legacy',
+              'hashType' => 'sha256' ]]]]);
 
       return $service;
   }
