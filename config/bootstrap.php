@@ -30,13 +30,12 @@ require __DIR__ . '/paths.php';
  * - Setting the default application paths.
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
-
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Datasource\ConnectionManager;
-use Cake\Error\ConsoleErrorHandler;
-use Cake\Error\ErrorHandler;
+use Cake\Error\ErrorTrap;
+use Cake\Error\ExceptionTrap;
 use Cake\Http\ServerRequest;
 use Cake\Log\Log;
 use Cake\Mailer\Mailer;
@@ -124,7 +123,8 @@ $isCli = PHP_SAPI === 'cli';
 if ($isCli) {
     (new ConsoleErrorHandler(Configure::read('Error')))->register();
 } else {
-    (new ErrorHandler(Configure::read('Error')))->register();
+    (new ErrorTrap(Configure::read('Error')))->register();
+    (new ExceptionTrap(Configure::read('Error')))->register();
 }
 
 /*
