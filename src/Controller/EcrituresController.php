@@ -18,32 +18,31 @@ class EcrituresController extends AppController {
     $this->edit();
     
     // Année et mois par défaut : les plus récents saisis
-    if (!$year) {
-      $query = $this->Ecritures->find()
-        ->select(['max_date' => 'MAX(date_bancaire)']);
-      $max_date = date_create($query->first()->max_date);
-      $month = date_format($max_date, 'm');
-      $year = date_format($max_date, 'Y');
+    if (!$year || !$month) {
+      $latest = $this->Ecritures->find()
+        ->select('date_bancaire')
+        ->orderDesc('date_bancaire')
+        ->first();
+      $date = $latest->date_bancaire;
+      $month = $date->month;
+      $year = $date->year;
+      
+    } else {
+      $date = new FrozenDate("$year-$month-1");
     }
     
-    $debut = sprintf('%04u%02u01', $year, $month);
-    $fin = sprintf('%04u%02u%02u', $year, $month, cal_days_in_month(CAL_GREGORIAN, $month, $year));
+    $this->set('date', $date);
     
-    $this->set('year', $year);
-    $this->set('month', $month);
-    $this->set('debut', date_create($debut));
-    $this->set('fin', date_create($fin));
+    $this->_setSoldesDebutFin($date);
     
-    $this->_setSoldesDebutFin($debut, $fin);
-    
-//     $this->_setMonths(); // Déjà dans la méthode edit
-    
-    $this->set('ecritures',
-      $this->Ecritures->find()
+    $query = $this->Ecritures->find();
+    $this->set('ecritures', $query
       ->contain(['Postes', 'Activites'])
-      ->where([
-        'date_bancaire >=' => $debut,
-        'date_bancaire <=' => $fin])
+      ->where(
+        $query->newExpr()->between(
+          'date_bancaire',
+          $date->firstOfMonth(),
+          $date->endOfMonth() ))
       ->order(['date_bancaire', 'created']));
     
     $this->set('enAttente',
@@ -57,21 +56,26 @@ class EcrituresController extends AppController {
    * Met à disposition de la vue les soldes bancaires de début et de fin du
    * mois.
    * 
-   * @param string $debut Le premier jour du mois, au format AAAAMMJJ.
-   * @param string $fin   Le dernier jour du mois, au format AAAAMMJJ.
+   * @param $date Une date du mois.
    */
-  private function _setSoldesDebutFin($debut, $fin) {
+  private function _setSoldesDebutFin($date) {
+    $this->set('a_nouveau', $this->_getSoldeAt($date->firstOfMonth()));
+    $this->set('solde', $this->_getSoldeAt($date->endOfMonth()));
+  }
+  
+  /**
+   * Renvoie le solde à la date spécifiée.
+   * 
+   * @param $date La date.
+   */
+  private function _getSoldeAt($date) {
     $query = $this->Ecritures->find();
-    $query->select(
-      ['solde' => $query->func()->sum('credit-debit')]);
-    
-    $this->set('a_nouveau', $query
-      ->where(['date_bancaire <' => $debut])
-      ->first()->solde);
-    
-    $this->set('solde', $query
-      ->where(['date_bancaire <=' => $fin], [], true)
-      ->first()->solde);
+    return $query
+      ->select(['solde' => $query->func()->sum('credit-debit')])
+      ->where(
+        $query->newExpr()->lte('date_bancaire', $date) )
+      ->first()
+      ->solde;
   }
   
   /**

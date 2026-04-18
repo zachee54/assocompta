@@ -29,15 +29,15 @@ $this->element('ecritures/click2edit');
     }
     
     $browse_months = $this->element('ecritures/browse_months', array(
-      'year' => $year,
-      'month' => $month));
+      'year' => $date->year,
+      'month' => $date->month));
     echo $browse_months;
     ?>
     
     <h1>
       <div>Relevé bancaire <?php
         // Cf. http://userguide.icu-project.org/formatparse/datetime
-        $monthName = $this->Time->format($debut, 'MMMM yyyy');
+        $monthName = $this->Time->format($date, 'MMMM yyyy');
         
         echo in_array(substr($monthName, 0, 1), ['a', 'o']) ? "d'" : "de ";
         echo $monthName;

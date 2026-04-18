@@ -22,7 +22,7 @@
     <?php
     if (!empty($displaySoldes)) {
       echo $this->element('ecritures/solde', array(
-      'date' => $debut,
+      'date' => $date->firstOfMonth(),
       'montant' => $a_nouveau));
     }
     
@@ -62,7 +62,7 @@
     
     if (!empty($displaySoldes)) {
       echo $this->element('ecritures/solde', array(
-        'date' => $fin,
+        'date' => $date->endOfMonth(),
         'montant' => $solde));
     }
     ?>
