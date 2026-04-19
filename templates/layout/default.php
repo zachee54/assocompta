@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<?php
+$title = $this->fetch('title');
+?><!DOCTYPE html>
 <html>
 <head>
   <?php echo $this->Html->charset(); ?>
   <meta name="robots" content="noindex, nofollow">
-  <title>CFE</title>
+  <title><?= $title ? 'CFE - '.$title : 'CFE' ?></title>
   <?php
     echo $this->Html->css('cfe');
     echo $this->fetch('css');
