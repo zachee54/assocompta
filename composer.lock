@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c29aae4692267d0a0062402769c7953f",
+    "content-hash": "f9ae3d3022cfe996e7bfc9effb20d951",
     "packages": [
         {
             "name": "cakephp/authentication",
@@ -76,20 +76,20 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "4.5.10",
+            "version": "4.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "789c840475a9b55ada2c2f80b41a22f61815b7c4"
+                "reference": "da6b2f49b9f0616d2fe8e04d67f6c558f699bb2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/789c840475a9b55ada2c2f80b41a22f61815b7c4",
-                "reference": "789c840475a9b55ada2c2f80b41a22f61815b7c4",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/da6b2f49b9f0616d2fe8e04d67f6c558f699bb2f",
+                "reference": "da6b2f49b9f0616d2fe8e04d67f6c558f699bb2f",
                 "shasum": ""
             },
             "require": {
-                "cakephp/chronos": "^2.4.0-RC2",
+                "cakephp/chronos": "^2.4.0",
                 "composer/ca-bundle": "^1.2",
                 "ext-intl": "*",
                 "ext-json": "*",
@@ -185,7 +185,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cakephp"
             },
-            "time": "2025-03-22T03:03:08+00:00"
+            "time": "2025-12-01T16:23:20+00:00"
         },
         {
             "name": "cakephp/chronos",
