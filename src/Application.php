@@ -33,7 +33,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Identifier\AbstractIdentifier;
+use Authentication\Identifier\PasswordIdentifier;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
@@ -159,17 +159,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
       PasswordIdentifier::CREDENTIAL_USERNAME => 'login',
       PasswordIdentifier::CREDENTIAL_PASSWORD => 'mdp',
     ];
-    // Load the authenticators. Session should be first.
-    $service->loadAuthenticator('Authentication.Session');
-    $service->loadAuthenticator('Authentication.Form', [
-      'fields' => $fields,
-      'loginUrl' => Router::url([
-        'prefix' => false,
-        'plugin' => null,
-        'controller' => 'Users',
-        'action' => 'login',
-      ]),
-    ]);
 
     // Load the authenticators. Session should be first.
     // Session just uses session data directly as identity, no identifier needed.
@@ -177,6 +166,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     $service->loadAuthenticator('Authentication.Form', [
       'identifier' => [
         'className' => 'Authentication.Password',
+        'fields' => $fields,
         'passwordHasher' => [
           'className' => 'Authentication.Fallback',
           'hashers' => [
