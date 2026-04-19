@@ -1,8 +1,6 @@
 <?php
 namespace App\Controller;
 
-use Cake\I18n\FrozenDate;
-
 class EcrituresController extends AppController {
   
   /**
@@ -28,7 +26,7 @@ class EcrituresController extends AppController {
       $year = $date->year;
       
     } else {
-      $date = new FrozenDate("$year-$month-1");
+      $date = new \Cake\I18n\Date("$year-$month-1");
     }
     
     $this->set('date', $date);
@@ -175,7 +173,7 @@ class EcrituresController extends AppController {
         'year' => '',
         'month' => ''];
     }
-    
+
     return [
       'year' => $dateBancaire->format('Y'),    // Année sur 4 chiffres
       'month' => $dateBancaire->format('n')];  // Mois sur 1 ou 2 chiffres
@@ -194,7 +192,7 @@ class EcrituresController extends AppController {
    * @return  array   Des options pour un input select.
    */ 
   private function _buildRattachementOptions($ecriture) {
-    $refDates = [new FrozenDate()];
+    $refDates = [new \Cake\I18n\Date()];
     if ($ecriture->date_engagement) {
       $refDates[] = $ecriture->date_engagement;
     }
@@ -202,7 +200,7 @@ class EcrituresController extends AppController {
       $refDates[] = $ecriture->date_bancaire;
     }
     if ($ecriture->rattachement) {
-      $refDates[] = FrozenDate::create($ecriture->rattachement, 1, 1, 0, 0, 0);
+      $refDates[] = \Cake\I18n\Date::create($ecriture->rattachement, 1, 1, 0, 0, 0);
     }
     
     // Garder une année de marge avant et après
