@@ -32,7 +32,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Identifier\IdentifierInterface;
+use Authentication\Identifier\AbstractIdentifier;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
@@ -171,8 +171,8 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
       ]);
 
       $fields = [
-          IdentifierInterface::CREDENTIAL_USERNAME => 'login',
-          IdentifierInterface::CREDENTIAL_PASSWORD => 'mdp'
+          AbstractIdentifier::CREDENTIAL_USERNAME => 'login',
+          AbstractIdentifier::CREDENTIAL_PASSWORD => 'mdp'
       ];
       // Load the authenticators. Session should be first.
       $service->loadAuthenticator('Authentication.Session');
