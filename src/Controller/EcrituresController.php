@@ -15,21 +15,24 @@ class EcrituresController extends AppController {
     // Inclure le traitement du formulaire d'ajout d'une écriture
     $this->edit();
     
-    // Année et mois par défaut : les plus récents saisis
-    if (!$year || !$month) {
-      $latest = $this->Ecritures->find()
-        ->select('date_bancaire')
-        ->orderDesc('date_bancaire')
-        ->first();
-      $date = $latest->date_bancaire;
-      $month = $date->month;
-      $year = $date->year;
-      
-    } else {
-      $date = new \Cake\I18n\Date("$year-$month-1");
-    }
+    $maxDate = $this->Ecritures->find()
+      ->select('date_bancaire')
+      ->orderDesc('date_bancaire')
+      ->first()
+      ->date_bancaire;
     
-    $this->set('date', $date);
+    $minDate = $this->Ecritures->find()
+      ->select('date_bancaire')
+      ->orderAsc('date_bancaire')
+      ->first()
+      ->date_bancaire;
+    
+    // Année et mois par défaut : les plus récents saisis
+    $date = (!$year || !$month)
+      ? $maxDate
+      : new \Cake\I18n\Date("$year-$month-1");
+    
+    $this->set(compact('date', 'minDate', 'maxDate'));
     
     $this->_setSoldesDebutFin($date);
     

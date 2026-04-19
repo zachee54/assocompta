@@ -1,18 +1,14 @@
 <?php
-$this->Html->css(
-  array('ecritures/index', 'ecritures/common', 'button'),
-  array('block' => true));
-
 $this->element('ecritures/click2edit');
 
 ?>
-<div id="content">
-  <?php
+<div class="d-flex gap-4">
 
-  echo $this->element('ecritures/nav_months');
-  
-  ?>
-  <section>
+  <div style="min-width:7rem">
+    <?= $this->element('ecritures/nav_months') ?>
+  </div>
+
+  <div>
     <?php
     // Sur cette page, afficher les flashs ici plutôt que dans le layout principal
     echo $this->Flash->render();
@@ -64,5 +60,5 @@ $this->element('ecritures/click2edit');
         'no_bancaire' => true));
       ?>
     </article>
-  </section>
+  </div>
 </div>

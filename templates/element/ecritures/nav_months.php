@@ -1,37 +1,45 @@
-<?php
-$this->Html->css('ecritures/nav_months', array('block' => true));
-?>
-<nav class="navMonths">
-  Aller au mois de&nbsp;:
-  <ul>
-  <?php
-  foreach ($months as $navYear => $navMonths) {
+<div id="months" class="accordion accordion-flush fs-small bg-tertiary h-100">
+  <?php for ( $yearDate = $maxDate;
+              $yearDate->greaterThanOrEquals($minDate);
+              $yearDate = $yearDate->subYears(1)->endOfYear() ):
+    
+    $show = ($yearDate->year == $maxDate->year);
     ?>
-    <li><?php echo $navYear; ?>
-      <ul>
-        <?php
-        foreach ($navMonths as $navMonth) {
-          ?>
-          <li>
-            <?php
-            $date = mktime(0, 0, 0, $navMonth, 10);
-            // Cf. http://userguide.icu-project.org/formatparse/datetime
-            $formattedDate = $this->Time->format($date, 'LLLL');
-            
-            echo $this->Html->link($formattedDate, [
-              'controller' => 'ecritures',
-              'action' => 'index',
-              $navYear,
-              $navMonth]);
-            ?>
-          </li>
-          <?php
-        }
-        ?>
-      </ul>
-    </li>
-    <?php
-  }
-  ?>
-  </ul>
-</nav>
+
+    <div class="accordion-item">
+
+      <div class="accordion-header">
+        <button class="accordion-button fs-small <?= $show ? null : 'collapsed' ?> p-2"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#months-<?= $yearDate->year ?>">
+
+          <?= $yearDate->year ?>
+
+        </button>
+      </div>
+
+      <div id="months-<?= $yearDate->year ?>"
+        class="accordion-collapse collapse <?= ($show) ? 'show' : null ?>"
+        data-bs-parent="#months">
+
+        <div class="list-group-item list-group-flush text-primary bg-secondary">
+          <?php for ( $monthDate = $yearDate->firstOfMonth();
+                      ($monthDate->year == $yearDate->year)
+                        && $monthDate->greaterThanOrEquals($minDate->firstOfMonth());
+                      $monthDate = $monthDate->subMonths(1) ): ?>
+
+            <?= $this->Html->link(
+              $monthDate->i18nFormat('MMMM'),
+              [ 'controller' => 'ecritures',
+                'action' => 'index',
+                $monthDate->year,
+                $monthDate->month ],
+              ['class' => 'list-group-item text-end p-1 px-3'] ) ?>
+          <?php endfor ?>
+        </div>
+
+      </div>
+    </div>
+  <?php endfor ?>
+</div>

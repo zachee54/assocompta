@@ -1,0 +1,29 @@
+{
+  "name": "cfe",
+  "description": "Comptability manager for CFE association",
+  "version": "1.0.0",
+  "main": "",
+  "directories": {},
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.21",
+    "postcss-cli": "^8.3.1",
+    "sass": "^1.48.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "sass": "sass --watch scss/main.scss:webroot/css/cfe.css --style compressed",
+    "sass-one": "sass scss/main.scss:webroot/css/cfe.css --style compressed"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachee54/assocompta.git"
+  },
+  "author": "Olivier Haas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zachee54/assocompta/issues"
+  },
+  "homepage": "https://github.com/zachee54/assocompta#readme"
+}
