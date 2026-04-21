@@ -1,27 +1,30 @@
 <?php
-$this->Html->css(
-  array('users/login', 'button'),
-  array('block' => true));
+$this->layout = 'root';
 
 ?>
-<section id="UserLogin">
-  <?php
-  echo $this->Form->create(null, [
-    'valueSources' => ['query'] ]);
-    
-    echo $this->Form->label('login', 'Identifiant');
-    echo $this->Form->control('login', [
-      'label' => false,
-      'autofocus' => true]);
-    
-    echo $this->Form->label('mdp', 'Mot de passe');
-    echo $this->Form->control('mdp', [
-      'label' => false,
-      'type' => 'password']);
-  
-    echo $this->Form->submit('Se connecter', array(
-      'class' => 'button'));
-    
-  echo $this->Form->end();
-  ?>
-</section>
+<div class="container">
+  <div class="row justify-content-center">
+    <?= $this->Form->create(null, [
+      'valueSources' => ['query'],
+      'class' => 'col-auto d-flex flex-column align-items-stretch gap-4 py-4 my-4' ]) ?>
+
+      <h2 class="h4 text-primary text-center mb-0">Connexion</h2>
+
+      <?= $this->Form->control('login', [
+        'label' => false,
+        'placeholder' => 'Identifiant',
+        'autofocus' => true,
+        'class' => 'form-control w-initial' ]) ?>
+
+      <?= $this->Form->control('mdp', [
+        'type' => 'password',
+        'label' => false,
+        'placeholder' => 'Mot de passe',
+        'class' => 'form-control w-initial' ]) ?>
+
+      <?= $this->Form->submit('OK', [
+        'class' => 'btn btn-primary text-secondary w-100' ]) ?>
+
+    <?= $this->Form->end() ?>
+  </div>
+</div>

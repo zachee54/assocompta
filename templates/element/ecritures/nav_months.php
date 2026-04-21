@@ -1,4 +1,4 @@
-<div id="months" class="accordion accordion-flush fs-small bg-tertiary h-100">
+<div id="months" class="accordion accordion-flush fs-small bg-custom-light h-100">
   <?php for ( $yearDate = $maxDate;
               $yearDate->greaterThanOrEquals($minDate);
               $yearDate = $yearDate->subYears(1)->endOfYear() ):
