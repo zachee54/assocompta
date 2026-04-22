@@ -2,3 +2,15 @@ $accordion-button-color: $primary;
 $accordion-button-bg: $custom-light;
 $accordion-button-active-color: $custom-light;
 $accordion-button-active-bg: $primary;
+
+$table-variants: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "custom-light":$custom-light,
+  "success":    shift-color($success, $table-bg-scale),
+  "info":       shift-color($info, $table-bg-scale),
+  "warning":    shift-color($warning, $table-bg-scale),
+  "danger":     shift-color($danger, $table-bg-scale),
+  "light":      $light,
+  "dark":       $dark,
+);

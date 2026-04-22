@@ -11,6 +11,7 @@ $title = $this->fetch('title');
   <?= $this->fetch('css') ?>
   <?= $this->fetch('jquery') ?>
   <link rel="icon" href="<?= $this->Url->image('favicon.ico'); ?>"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body class="vstack min-vh-100">
   <header class="d-flex align-items-end justify-content-between bg-custom-light p-2">

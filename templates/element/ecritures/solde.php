@@ -5,20 +5,18 @@
  * @var $date La date.
  */
 ?>
-<tr class="solde">
-  <td colspan="7">Solde au <?= $date->toDateString() ?></td>
-  <td>
-    <?php
-    if ($montant < 0) {
-      echo $this->Number->currency(-$montant); 
-    }
-    ?>
+<tr class="table-primary fw-bold">
+  <td colspan="7" class="fst-italic">
+    Solde au <?= $date ?>
   </td>
-  <td>
-    <?php
-    if ($montant >= 0) {
-      echo $this->Number->currency($montant); 
-    }
-    ?>
+  <td class="text-end">
+    <?php if ($montant < 0): ?>
+      <?= $this->Number->currency(-$montant) ?>
+    <?php endif ?>
+  </td>
+  <td class="text-end">
+    <?php if ($montant >= 0): ?>
+      <?= $this->Number->currency($montant) ?>
+    <?php endif ?>
   </td>
 </tr>

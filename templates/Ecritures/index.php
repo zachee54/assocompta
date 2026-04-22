@@ -1,36 +1,31 @@
-<?php
-$this->element('ecritures/click2edit');
-
-?>
-<div class="d-flex gap-4">
+<div class="d-flex">
 
   <div style="min-width:7rem">
     <?= $this->element('ecritures/nav_months') ?>
   </div>
 
-  <div>
-    <?php
-    // Sur cette page, afficher les flashs ici plutôt que dans le layout principal
-    echo $this->Flash->render();
-    
-    if (!$this->Identity->get('readonly')) {
-      ?>
-      <article class="align_left">
-        <fieldset>
-          <legend>Ajouter une écriture</legend>
-          <?php echo $this->element('ecritures/edit_form'); ?>
-        </fieldset>
-      </article>
-      <?php
-    }
-    
-    $browse_months = $this->element('ecritures/browse_months', array(
-      'year' => $date->year,
-      'month' => $date->month));
-    echo $browse_months;
-    ?>
-    
-    <h1>
+  <div class="p-4">
+    <?php if (!$this->Identity->get('readonly')): ?>
+      <div class="accordion mb-5" id="ecriture-edition">
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ecriture-edition__item">
+              <i class="bi bi-plus-circle-fill me-2"></i>
+              Ajouter une écriture
+            </button>
+          </div>
+          <div id="ecriture-edition__item" class="accordion-collapse collapse" data-bs-parent="#ecriture-edition">
+            <div class="accordion-body">
+              <?php echo $this->element('ecritures/edit_form'); ?>
+            </div>
+          </div>
+        </div>
+      </div>
+    <?php endif ?>
+
+    <?= $this->element('ecritures/browse_months') ?>
+
+    <h2 class="h2">
       <div>Relevé bancaire <?php
         // Cf. http://userguide.icu-project.org/formatparse/datetime
         $monthName = $this->Time->format($date, 'MMMM yyyy');
@@ -38,27 +33,31 @@ $this->element('ecritures/click2edit');
         echo in_array(substr($monthName, 0, 1), ['a', 'o']) ? "d'" : "de ";
         echo $monthName;
       ?></div>
-    </h1>
+    </h2>
     
-    <article>
-      <?php
-      echo $this->element('ecritures/table', array(
-        'displaySoldes' => true));
-      
-      echo $browse_months;
-      ?>
-    </article>
-    
-    <h1>
-      <div>Opérations en attente</div>
-    </h1>
+    <?= $this->element('ecritures/table', [
+      'displaySoldes' => true ]) ?>
+
+    <?= $this->element('ecritures/browse_months') ?>
+
+    <h2 class="h2">
+      Opérations en attente
+    </h2>
    
-    <article>
-      <?php
-      echo $this->element('ecritures/table', array(
-        'ecritures' => $enAttente,
-        'no_bancaire' => true));
-      ?>
-    </article>
+    <div>
+      <?php if ($enAttente->isEmpty()): ?>
+
+        <div class="fst-italic">
+          Aucune opération en attente
+        </div>
+
+      <?php else: ?>
+
+        <?= $this->element('ecritures/table', [
+          'ecritures' => $enAttente,
+          'no_bancaire' => true ]) ?>
+
+      <?php endif ?>
+    </div>
   </div>
 </div>

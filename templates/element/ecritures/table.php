@@ -1,14 +1,10 @@
-<table class="ecritures">
-  <thead>
+<table class="table table-custom-light table-hover fs-7">
+  <thead class="table-primary text-center">
     <tr>
       <th>Date</th>
-      <?php
-      if (empty($no_bancaire)) {
-        ?>
+      <?php if (empty($no_bancaire)): ?>
         <th>Date banque</th>
-        <?php
-      }
-      ?>
+      <?php endif ?>
       <th>Poste</th>
       <th>Activité</th>
       <th>Description</th>
@@ -18,53 +14,41 @@
       <th>Crédit</th>
     </tr>
   </thead>
-  <tbody>
-    <?php
-    if (!empty($displaySoldes)) {
-      echo $this->element('ecritures/solde', array(
-      'date' => $date->firstOfMonth(),
-      'montant' => $a_nouveau));
-    }
-    
-    foreach ($ecritures as $ecriture) {
-    ?>
-    <tr ref="<?= $ecriture->id ?>">
-      <td><?= $ecriture->date_engagement ?></td>
-      <?php
-      if (empty($no_bancaire)) {
-        ?>
-        <td><?= $ecriture->date_bancaire ?></td>
-        <?php
-      }
-      ?>
-      <td><?= $ecriture->poste->name ?></td>
-      <td><?= $ecriture->activite->name ?></td>
-      <td><?= $ecriture->description ?></td>
-      <td><?= $ecriture->personne ?></td>
-      <td><?= $ecriture->piece ?></td>
-      <td>
-        <?php
-        if ($ecriture->debit != 0) {
-          echo $this->Number->currency($ecriture->debit);
-        }
-        ?>
-      </td>
-      <td>
-        <?php
-        if ($ecriture->credit != 0) {
-          echo $this->Number->currency($ecriture->credit);
-        }
-        ?>
-      </td>
-    </tr>
-    <?php
-    }
-    
-    if (!empty($displaySoldes)) {
-      echo $this->element('ecritures/solde', array(
+  <tbody class="table-group-divider text-custom-light">
+    <?php if (!empty($displaySoldes)): ?>
+      <?= $this->element('ecritures/solde', [
+        'date '=> $date->firstOfMonth(),
+        'montant' => $a_nouveau ]) ?>
+    <?php endif ?>
+
+    <?php foreach ($ecritures as $ecriture): ?>
+      <tr>
+        <td><?= $ecriture->date_engagement ?></td>
+        <?php if (empty($no_bancaire)): ?>
+          <td><?= $ecriture->date_bancaire ?></td>
+        <?php endif ?>
+        <td><?= $ecriture->poste->name ?></td>
+        <td><?= $ecriture->activite->name ?></td>
+        <td><?= $ecriture->description ?></td>
+        <td><?= $ecriture->personne ?></td>
+        <td><?= $ecriture->piece ?></td>
+        <td class="table-secondary text-end">
+          <?php if ($ecriture->debit != 0): ?>
+            <?= $this->Number->currency($ecriture->debit) ?>
+          <?php endif ?>
+        </td>
+        <td class="table-secondary text-end">
+          <?php if ($ecriture->credit != 0): ?>
+            <?= $this->Number->currency($ecriture->credit) ?>
+          <?php endif ?>
+        </td>
+      </tr>
+    <?php endforeach ?>
+
+    <?php if (!empty($displaySoldes)): ?>
+      <?= $this->element('ecritures/solde', [
         'date' => $date->endOfMonth(),
-        'montant' => $solde));
-    }
-    ?>
+        'montant' => $solde ]) ?>
+    <?php endif ?>
   </tbody>
 </table>

@@ -46,11 +46,11 @@ class EcrituresController extends AppController {
           $date->endOfMonth() ))
       ->order(['date_bancaire', 'created']));
     
-    $this->set('enAttente',
-      $this->Ecritures->find()
+    $this->set('enAttente', $this->Ecritures->find()
       ->contain(['Postes', 'Activites'])
       ->whereNull('date_bancaire')
-      ->order(['created']));
+      ->order(['created'])
+      ->all() );
   }
   
   /**
