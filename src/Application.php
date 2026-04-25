@@ -153,6 +153,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         'action' => 'login',
       ],
       'queryParam' => 'redirect',
+      'redirectValidation' => [
+        'enabled' => true,
+      ],
     ]);
 
     $fields = [
