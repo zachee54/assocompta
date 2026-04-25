@@ -15,8 +15,8 @@
             </button>
           </div>
           <div id="ecriture-edition__item" class="accordion-collapse collapse" data-bs-parent="#ecriture-edition">
-            <div class="accordion-body">
-              <?php echo $this->element('ecritures/edit_form'); ?>
+            <div class="accordion-body bg-custom-light">
+              <?= $this->element('ecritures/edit_form') ?>
             </div>
           </div>
         </div>

@@ -129,24 +129,28 @@ class EcrituresController extends AppController {
    * @param int $id L'identifiant de l'écriture.
    */
   public function edit($id = null) {
-    if ($id === null) {
-      $ecriture = $this->Ecritures->newEmptyEntity();
-    } else {
-      $ecriture = $this->Ecritures->get($id);
-    }
+    $ecriture = ($id === null)
+      ? $this->Ecritures->newEmptyEntity()
+      : $this->Ecritures->get($id);
     
-    if ($this->request->is(array('put', 'post')) && $this->_checkReadOnly()) {
+    if ($this->request->is(['put', 'post']) && $this->_checkReadOnly()) {
       $data = $this->request->getData();
       $this->Ecritures->patchEntity($ecriture, $data);
       
       if ($this->Ecritures->save($ecriture)) {
         $this->Flash->success("L'écriture a été sauvegardée");
-        $yearMonth = $this->_getYearMonth($ecriture);
-        $ecriture = $this->Ecritures->newEmptyEntity();
-        $this->redirect([
-          'action' => 'index',
-          $yearMonth['year'],
-          $yearMonth['month'] ]);
+        
+        $dateBancaire = $ecriture->date_bancaire;
+        if ($dateBancaire) {
+          return $this->redirect([
+            'action' => 'index',
+            $dateBancaire->year,
+            $dateBancaire->month ]);
+        } else {
+          return $this->redirect([
+            'action' => 'index' ]);
+        }
+        
       } else {
         $this->Flash->error('Erreur pendant la sauvegarde');
       }

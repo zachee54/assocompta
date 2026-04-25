@@ -6,6 +6,7 @@ $title = $this->fetch('title');
 <head>
   <?= $this->Html->charset() ?>
   <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no">
   <title><?= $title ? 'CFE - '.$title : 'CFE' ?></title>
   <?= $this->Html->css('cfe') ?>
   <?= $this->fetch('css') ?>

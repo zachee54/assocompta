@@ -1,108 +1,114 @@
 <?php
-$this->Html->css(
-  array('ecritures/edit', 'button'),
-  array('block' => true));
-
 $readonly = $this->Identity->get('readonly');
 
-echo $this->Form->create($ecriture, array('class' => 'EcritureEditForm'));
 ?>
-  <article>
-    <div>
-      <?php
-      echo $this->Form->control('date_engagement', array(
-        'type' => 'DATE',
-        'default' => date_format(
-            date_modify(date_create(), 'first day of -1 month'),
-            'Y-m-d'),
-        'label' => 'Date'));
-      
-      echo $this->Form->control('date_bancaire', array(
-        'type' => 'DATE',
-        'label' => 'Date banque'));
-      
-      echo $this->Form->control('rattachement', array(
-        'label' => 'Rattachement (facultatif)',
+<?= $this->Form->create($ecriture, [
+  'class' => 'container-fluid p-0 m-0' ]) ?>
+  <div class="row align-items-end gy-3 mb-4">
+    <div class="col-auto d-flex gap-2">
+      <?= $this->Form->control('date_engagement', [
+        'default' => $date,
+        'label' => [
+          'text' => 'Date',
+          'class' => 'fs-small text-primary' ],
+        'class' => 'form-control w-initial' ]) ?>
+
+      <?= $this->Form->control('date_bancaire', [
+        'label' => [
+          'text' => 'Date banque',
+          'class' => 'fs-small text-primary' ],
+        'class' => 'form-control w-initial' ]) ?>
+
+      <?= $this->Form->control('rattachement', [
+        'label' => [
+          'text' => 'Rattachement (facultatif)',
+          'class' => 'fs-small text-primary' ],
         'type' => 'select',
         'options' => $rattachement,
-        'empty' => true));
-      
-      echo $this->Form->control('poste_id', array(
-        'default' => 8,
-        'label' => 'Poste'));
-      
-      echo $this->Form->control('activite_id', array(
-        'default' => 2,
-        'label' => 'Activité'));
-      ?>
+        'empty' => true,
+        'class' => 'form-select w-initial' ]) ?>
     </div>
-    <div>
-      <?php
-      echo $this->Form->control('description', array(
-        'label' => 'Description'));
-      
-      echo $this->Form->control('personne', array(
-        'label' => 'Personne'));
-      
-      echo $this->Form->control('piece', array(
-        'class' => 'piece',
-        'label' => 'N° pièce'));
-      
-      echo $this->Form->control('debit', array(
+
+    <div class="col-auto d-flex gap-2">
+      <?= $this->Form->control('poste_id', [
+        'default' => 8,
+        'label' => [
+          'text' => 'Poste',
+          'class' => 'fs-small text-primary' ],
+        'class' => 'form-select w-initial' ]) ?>
+
+      <?= $this->Form->control('activite_id', [
+        'default' => 2,
+        'label' => [
+          'text' => 'Activité',
+          'class' => 'fs-small text-primary' ],
+        'class' => 'form-select w-initial' ]) ?>
+    </div>
+    
+    <div class="col-auto d-flex gap-2">
+      <?= $this->Form->control('description', [
+        'label' => [
+          'text' => 'Description',
+          'class' => 'fs-small text-primary' ],
+        'class' => 'form-control w-initial' ]) ?>
+
+      <?= $this->Form->control('personne', [
+        'label' => [
+          'text' => 'Personne',
+          'class' => 'fs-small text-primary' ],
+        'class' => 'form-control w-initial' ]) ?>
+
+      <?= $this->Form->control('piece', [
+        'label' => [
+          'text' => 'N° pièce',
+          'class' => 'fs-small text-primary' ],
+        'size' => 4,
+        'class' => 'form-control w-initial' ]) ?>
+    </div>
+
+    <div class="col-auto d-flex gap-2">
+      <?= $this->Form->control('debit', [
         'default' => '',
         'required' => false,
-        'label' => 'Débit'));
-      
-      echo $this->Form->control('credit', array(
+        'label' => [
+          'text' => 'Débit',
+          'class' => 'fs-small text-primary' ],
+        'size' => 6,
+        'class' => 'form-control w-initial' ]) ?>
+      <?= $this->Form->control('credit', [
         'default' => '',
-        'label' => 'Crédit'));
-      
-      ?>
+        'label' => [
+          'text' => 'Crédit',
+          'class' => 'fs-small text-primary' ],
+        'size' => 6,
+        'class' => 'form-control w-initial' ]) ?>
     </div>
-    <div class="submit">
-      <?php
-      if (!$readonly) {
-        echo $this->Form->button('Valider', [
-          'class' => 'button']);
-      }
-      
-      if (!empty($showCancel)) {
-        echo $this->Html->link('Annuler',
+  </div>
+  <div class="row">
+    <div class="col-4 offset-4 d-flex justify-content-center gap-2">
+      <?php if (!$readonly): ?>
+        <?= $this->Form->button('Valider', [
+          'class' => 'btn btn-success' ]) ?>
+      <?php endif ?>
+      <?php if (!empty($showCancel)): ?>
+        <?= $this->Html->link('Annuler',
           $this->request->referer() ?? '/',
-          array('class' => 'button cancelButton'));
-        
-        if (!$readonly) {
-          echo $this->Form->button('Supprimer', [
-            'id' => 'deleteButton',
-            'formaction' => $this->Url->build(array(
-              'action' => 'delete',
-              $ecriture->id)),
-            'formmethod' => 'post',
-            'class' => 'button']);
-          
-          echo $this->element('jquery');
-
-          $this->append('scriptBottom');
-          ?>
-          <script type="text/javascript">
-            $(function() {
-              $('#deleteButton').click(function(evt) {
-                if (!confirm("Confirmez la suppression de l'écriture")) {
-            evt.preventDefault();
-                }
-              });
-            });
-          </script>
-          <?php
-          $this->end();
-        }
-      }
-      ?>
+          ['class' => 'btn btn-gray'] ) ?>
+      <?php endif ?>
     </div>
-  </article>
-  <?php
-  
-echo $this->Form->end();
+
+    <div class="col-4 text-end">
+      <?php if (!$readonly && !$ecriture->isNew()): ?>
+        <?= $this->Form->button('Supprimer', [
+          'formaction' => $this->Url->build([
+            'action' => 'delete',
+            $ecriture->id ]),
+          'formmethod' => 'post',
+          'class' => 'btn btn-danger' ]) ?>
+      <?php endif ?>
+    </div>
+  </div>
+<?= $this->Form->end();
 
 // La saisie d'une date d'écriture se reporte automatiquement en date banque
 $this->append('scriptBottom');
