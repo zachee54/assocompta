@@ -13,3 +13,7 @@
 .table--text-primary td {
   color: $primary !important;
 }
+
+.btn-gray {
+  @include button-variant($gray-300, $gray-300);
+}

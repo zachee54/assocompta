@@ -42,6 +42,8 @@ class EcrituresController extends AppController {
       ->whereNull('date_bancaire')
       ->order(['created'])
       ->all() );
+    
+    $this->_setRattachement($ecriture);
   }
   
   /**
@@ -131,10 +133,11 @@ class EcrituresController extends AppController {
     }
     
     $this->set('ecriture', $ecriture);
-    $this->_setMonths();
+    $this->_setMonthsByYear();
+    $this->set('date', $ecriture->date ?? \Cake\I18n\Date::now());
     $this->set('postes', $this->Ecritures->Postes->find('list'));
     $this->set('activites', $this->Ecritures->Activites->find('list'));
-    $this->set('rattachement', $this->_buildRattachementOptions($ecriture));
+    $this->_setRattachement($ecriture);
   }
   
   /**
@@ -172,8 +175,8 @@ class EcrituresController extends AppController {
    * @param $ecriture Une entité Ecriture.
    * @return  array   Des options pour un input select.
    */ 
-  private function _buildRattachementOptions($ecriture) {
-    $refDates = [new \Cake\I18n\Date()];
+  private function _setRattachement($ecriture) {
+    $refDates = [\Cake\I18n\Date::now()];
     if ($ecriture->date_engagement) {
       $refDates[] = $ecriture->date_engagement;
     }
@@ -192,7 +195,8 @@ class EcrituresController extends AppController {
     for ($year = $max; $year >= $min; $year--) {  // Ordre chronologique inverse
       $result[$year] = ($year-1)."/".$year;
     }
-    return $result;
+    
+    $this->set('rattachement', $result);
   }
   
   /**

@@ -22,7 +22,7 @@
     <?php endif ?>
 
     <?php foreach ($ecritures as $ecriture): ?>
-      <tr>
+      <tr class="position-relative">
         <td><?= $ecriture->date_engagement ?></td>
         <?php if (empty($no_bancaire)): ?>
           <td><?= $ecriture->date_bancaire ?></td>
@@ -41,6 +41,10 @@
           <?php if ($ecriture->credit != 0): ?>
             <?= $this->Number->currency($ecriture->credit) ?>
           <?php endif ?>
+
+          <?= $this->Html->link('',
+            ['action' => 'edit', $ecriture->id],
+            ['class' => 'stretched-link'] ) ?>
         </td>
       </tr>
     <?php endforeach ?>
