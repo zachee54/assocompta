@@ -4,86 +4,123 @@ $readonly = $this->Identity->get('readonly');
 ?>
 <?= $this->Form->create($ecriture, [
   'class' => 'container-fluid p-0 m-0' ]) ?>
-  <div class="row align-items-end gy-3 mb-4">
-    <div class="col-auto d-flex gap-2">
-      <?= $this->Form->control('date_engagement', [
-        'default' => $date,
-        'label' => [
-          'text' => 'Date',
-          'class' => 'fs-small text-primary' ],
-        'class' => 'form-control w-initial' ]) ?>
+  <div class="row gy-3 mb-4">
+    <div class="col-auto">
+       <div class="d-flex align-items-end gap-2">
+        <?= $this->Form->control('date_engagement', [
+          'default' => $date,
+          'label' => [
+            'text' => 'Date',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'class' => 'form-control w-initial' ]) ?>
 
-      <?= $this->Form->control('date_bancaire', [
-        'label' => [
-          'text' => 'Date banque',
-          'class' => 'fs-small text-primary' ],
-        'class' => 'form-control w-initial' ]) ?>
+        <?= $this->Form->control('date_bancaire', [
+          'label' => [
+            'text' => 'Date banque',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'class' => 'form-control w-initial' ]) ?>
 
-      <?= $this->Form->control('rattachement', [
-        'label' => [
-          'text' => 'Rattachement (facultatif)',
-          'class' => 'fs-small text-primary' ],
-        'type' => 'select',
-        'options' => $rattachement,
-        'empty' => true,
-        'class' => 'form-select w-initial' ]) ?>
+        <?= $this->Form->control('rattachement', [
+          'label' => [
+            'text' => 'Rattachement (facultatif)',
+            'class' => 'fs-small text-primary' ],
+          'type' => 'select',
+          'options' => $rattachement,
+          'empty' => true,
+          'error' => false,
+          'class' => 'form-select w-initial' ]) ?>
+      </div>
+      <div class="vstack align-items-start">
+        <?= $this->Form->error('date_engagement') ?>
+        <?= $this->Form->error('date_bancaire') ?>
+        <?= $this->Form->error('rattachement') ?>
+      </div>
     </div>
 
-    <div class="col-auto d-flex gap-2">
-      <?= $this->Form->control('poste_id', [
-        'default' => 8,
-        'label' => [
-          'text' => 'Poste',
-          'class' => 'fs-small text-primary' ],
-        'class' => 'form-select w-initial' ]) ?>
+    <div class="col-auto">
+      <div class="d-flex align-items-end gap-2">
+        <?= $this->Form->control('poste_id', [
+          'default' => 8,
+          'label' => [
+            'text' => 'Poste',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'class' => 'form-select w-initial' ]) ?>
 
-      <?= $this->Form->control('activite_id', [
-        'default' => 2,
-        'label' => [
-          'text' => 'Activité',
-          'class' => 'fs-small text-primary' ],
-        'class' => 'form-select w-initial' ]) ?>
+        <?= $this->Form->control('activite_id', [
+          'default' => 2,
+          'label' => [
+            'text' => 'Activité',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'class' => 'form-select w-initial' ]) ?>
+      </div>
+      <div class="vstack align-items-start">
+        <?= $this->Form->error('poste_id') ?>
+        <?= $this->Form->error('activite_id') ?>
+      </div>
     </div>
     
-    <div class="col-auto d-flex gap-2">
-      <?= $this->Form->control('description', [
-        'label' => [
-          'text' => 'Description',
-          'class' => 'fs-small text-primary' ],
-        'class' => 'form-control w-initial' ]) ?>
+    <div class="col-auto">
+      <div class="d-flex align-items-end gap-2">
+        <?= $this->Form->control('description', [
+          'label' => [
+            'text' => 'Description',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'class' => 'form-control w-initial' ]) ?>
 
-      <?= $this->Form->control('personne', [
-        'label' => [
-          'text' => 'Personne',
-          'class' => 'fs-small text-primary' ],
-        'class' => 'form-control w-initial' ]) ?>
+        <?= $this->Form->control('personne', [
+          'label' => [
+            'text' => 'Personne',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'class' => 'form-control w-initial' ]) ?>
 
-      <?= $this->Form->control('piece', [
-        'label' => [
-          'text' => 'N° pièce',
-          'class' => 'fs-small text-primary' ],
-        'size' => 4,
-        'class' => 'form-control w-initial' ]) ?>
+        <?= $this->Form->control('piece', [
+          'label' => [
+            'text' => 'N° pièce',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'size' => 4,
+          'class' => 'form-control w-initial' ]) ?>
+      </div>
+      <div class="vstack align-items-start">
+        <?= $this->Form->error('description') ?>
+        <?= $this->Form->error('personne') ?>
+        <?= $this->Form->error('piece') ?>
+      </div>
     </div>
 
-    <div class="col-auto d-flex gap-2">
-      <?= $this->Form->control('debit', [
-        'default' => '',
-        'required' => false,
-        'label' => [
-          'text' => 'Débit',
-          'class' => 'fs-small text-primary' ],
-        'size' => 6,
-        'class' => 'form-control w-initial' ]) ?>
-      <?= $this->Form->control('credit', [
-        'default' => '',
-        'label' => [
-          'text' => 'Crédit',
-          'class' => 'fs-small text-primary' ],
-        'size' => 6,
-        'class' => 'form-control w-initial' ]) ?>
+    <div class="col-auto">
+      <div class="d-flex align-items-end gap-2">
+        <?= $this->Form->control('debit', [
+          'default' => '',
+          'required' => false,
+          'label' => [
+            'text' => 'Débit',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'size' => 6,
+          'class' => 'form-control w-initial' ]) ?>
+        <?= $this->Form->control('credit', [
+          'default' => '',
+          'label' => [
+            'text' => 'Crédit',
+            'class' => 'fs-small text-primary' ],
+          'error' => false,
+          'size' => 6,
+          'class' => 'form-control w-initial' ]) ?>
+      </div>
+      <div class="vstack align-items-start">
+        <?= $this->Form->error('debit') ?>
+        <?= $this->Form->error('credit') ?>
+      </div>
     </div>
   </div>
+
   <div class="row">
     <div class="col-4 offset-4 d-flex justify-content-center gap-2">
       <?php if (!$readonly): ?>
