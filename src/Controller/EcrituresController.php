@@ -11,9 +11,40 @@ class EcrituresController extends AppController {
    * @param $month int  Le numéro du mois à afficher.
    */
   public function index($year = null, $month = null) {
-    $ecriture = $this->Ecritures->newEmptyEntity();
-    $this->set('ecriture', $ecriture);
+    $ecriture = $this->_addEcritureFromPost();
+    $date = $this->_getDate($year, $month);
     
+    $this->set('date', $date);
+    $this->set('ecriture', $ecriture);
+    $this->_setEcritures($date);
+    $this->_setStandingEcritures();
+    $this->_setAlternatives($ecriture);
+    $this->_setSoldesDebutFin($date);
+  }
+  
+  /**
+   * Ajoute une écriture si l'utilisateur a soumis un formulaire en ce sens.
+   */
+  private function _addEcritureFromPost() {
+    $ecriture = $this->Ecritures->newEmptyEntity();
+    
+    if ($this->request->is(['post', 'put'])) {
+      $data = $this->request->getData();
+      $this->Ecritures->patchEntity($ecriture, $data);
+      
+      if ($this->Ecritures->save($ecriture)) {
+        $this->Flash->success('L\'écriture a été créée.');
+        $ecriture = $this->Ecritures->newEmptyEntity();
+        
+      } else {
+        $this->Flash->error('Vérifiez votre saisie');
+      }
+    }
+    
+    return $ecriture;
+  }
+  
+  private function _getDate($year, $month) {
     $monthsByYear = $this->_setMonthsByYear();
     
     // Date par défaut : celle de l'écriture la plus récente
@@ -22,11 +53,15 @@ class EcrituresController extends AppController {
       $month = array_key_first($monthsByYear[$year]);
     }
     
-    $date = new \Cake\I18n\Date("$year-$month-1");
-    $this->set('date', $date);
-    
-    $this->_setSoldesDebutFin($date);
-    
+    return new \Cake\I18n\Date("$year-$month-1");
+  }
+  
+  /**
+   * Met à disposition de la vue les écritures du mois.
+   * 
+   * @param $date Une date du mois à récupérer.
+   */
+  private function _setEcritures($date) {
     $query = $this->Ecritures->find();
     $this->set('ecritures', $query
       ->contain(['Postes', 'Activites'])
@@ -36,14 +71,17 @@ class EcrituresController extends AppController {
           $date->firstOfMonth(),
           $date->endOfMonth() ))
       ->order(['date_bancaire', 'created']));
-    
+  }
+  
+  /**
+   * Met à disposition de la vue les écritures en attent de pointage.
+   */
+  private function _setStandingEcritures() {
     $this->set('enAttente', $this->Ecritures->find()
       ->contain(['Postes', 'Activites'])
       ->whereNull('date_bancaire')
       ->order(['created'])
       ->all() );
-    
-    $this->_setRattachement($ecriture);
   }
   
   /**
@@ -114,7 +152,7 @@ class EcrituresController extends AppController {
       $this->Ecritures->patchEntity($ecriture, $data);
       
       if ($this->Ecritures->save($ecriture)) {
-        $this->Flash->success("L'écriture a été sauvegardée");
+        $this->Flash->success('L\'écriture a été sauvegardée');
         
         $dateBancaire = $ecriture->date_bancaire;
         if ($dateBancaire) {
@@ -128,16 +166,14 @@ class EcrituresController extends AppController {
         }
         
       } else {
-        $this->Flash->error('Erreur pendant la sauvegarde');
+        $this->Flash->error('Vérifiez votre saisie');
       }
     }
     
     $this->set('ecriture', $ecriture);
     $this->_setMonthsByYear();
     $this->set('date', $ecriture->date ?? \Cake\I18n\Date::now());
-    $this->set('postes', $this->Ecritures->Postes->find('list'));
-    $this->set('activites', $this->Ecritures->Activites->find('list'));
-    $this->_setRattachement($ecriture);
+    $this->_setAlternatives($ecriture);
   }
   
   /**
@@ -161,6 +197,18 @@ class EcrituresController extends AppController {
     return [
       'year' => $dateBancaire->format('Y'),    // Année sur 4 chiffres
       'month' => $dateBancaire->format('n')];  // Mois sur 1 ou 2 chiffres
+  }
+  
+  /**
+   * Met à disposition de la vue les options possibles pour les listes
+   * déroulantes.
+   * 
+   * @param $ecriture L'écriture éditée.
+   */
+  private function _setAlternatives($ecriture) {
+    $this->set('postes', $this->Ecritures->Postes->find('list'));
+    $this->set('activites', $this->Ecritures->Activites->find('list'));
+    $this->_setRattachement($ecriture);
   }
   
   /**

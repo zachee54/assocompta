@@ -1,16 +1,22 @@
 <?php
 $this->extend('main');
+$showEcriture = $ecriture->isDirty();
 
 if (!$this->Identity->get('readonly')): ?>
   <div class="accordion mb-5" id="ecriture-edition">
     <div class="accordion-item">
       <div class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ecriture-edition__item">
+        <button class="accordion-button <?= $showEcriture ? null : 'collapsed' ?>"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#ecriture-edition__item">
           <i class="bi bi-plus-circle-fill me-2"></i>
           Ajouter une écriture
         </button>
       </div>
-      <div id="ecriture-edition__item" class="accordion-collapse collapse" data-bs-parent="#ecriture-edition">
+      <div id="ecriture-edition__item"
+        class="accordion-collapse collapse <?= $showEcriture ? 'show' : null ?>"
+        data-bs-parent="#ecriture-edition">
         <div class="accordion-body bg-custom-light">
           <?= $this->element('ecritures/edit_form') ?>
         </div>
