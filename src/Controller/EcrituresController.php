@@ -11,28 +11,19 @@ class EcrituresController extends AppController {
    * @param $month int  Le numéro du mois à afficher.
    */
   public function index($year = null, $month = null) {
+    $ecriture = $this->Ecritures->newEmptyEntity();
+    $this->set('ecriture', $ecriture);
     
-    // Inclure le traitement du formulaire d'ajout d'une écriture
-    $this->edit();
+    $monthsByYear = $this->_setMonthsByYear();
     
-    $maxDate = $this->Ecritures->find()
-      ->select('date_bancaire')
-      ->orderDesc('date_bancaire')
-      ->first()
-      ->date_bancaire;
+    // Date par défaut : celle de l'écriture la plus récente
+    if (!$year || !$month) {
+      $year = array_key_first($monthsByYear);
+      $month = array_key_first($monthsByYear[$year]);
+    }
     
-    $minDate = $this->Ecritures->find()
-      ->select('date_bancaire')
-      ->orderAsc('date_bancaire')
-      ->first()
-      ->date_bancaire;
-    
-    // Année et mois par défaut : les plus récents saisis
-    $date = (!$year || !$month)
-      ? $maxDate
-      : new \Cake\I18n\Date("$year-$month-1");
-    
-    $this->set(compact('date', 'minDate', 'maxDate'));
+    $date = new \Cake\I18n\Date("$year-$month-1");
+    $this->set('date', $date);
     
     $this->_setSoldesDebutFin($date);
     
@@ -81,45 +72,28 @@ class EcrituresController extends AppController {
   
   /**
    * Met à disposition de la vue la liste des mois contenant des écritures.
+   * 
+   * @return [ (int) year => [ (int) month => (int) $month ] ]
    */
-  private function _setMonths() {
+  private function _setMonthsByYear() {
     $query = $this->Ecritures->find();
     $month = $query->func()->month([
       'date_bancaire' => 'identifier']);
     $year = $query->func()->year([
       'date_bancaire' => 'identifier']);
     
-    $yearsMonths = $query
+    $monthsByYear = $query
       ->select([
         'month' => $month,
         'year' => $year])
       ->distinct(['month', 'year'])
       ->whereNotNull('date_bancaire')
       ->order(['date_bancaire' => 'DESC'])
-      ->all();
+      ->all()
+      ->combine('month', 'month', 'year')
+      ->toArray();
       
-    $this->set('months', $this->_groupMonthsByYear($yearsMonths));
-  }
-  
-  /**
-   * Réorganise une liste d'années et mois en tableau associatif à deux niveaux
-   * contenant les années puis les numéros des mois.
-   * 
-   * @param array $yearsMonths
-   *                ResultSet contenant les champs 'year' et 'month'.
-   * 
-   * @return array  Un tableau à double entrée contenant les années et les
-   *                numéros des mois
-   */
-  private function _groupMonthsByYear($yearsMonths) {
-    $monthsByYear = [];
-    foreach ($yearsMonths as $yearMonth) {
-      $year = $yearMonth->year;
-      if (!array_key_exists($year, $monthsByYear)) {
-        $monthsByYear[$year] = [];
-      }
-      $monthsByYear[$year][] = $yearMonth->month;
-    }
+    $this->set(compact('monthsByYear'));
     return $monthsByYear;
   }
   
