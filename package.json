@@ -12,8 +12,8 @@
     "sass": "^1.48.0"
   },
   "scripts": {
-    "sass": "sass --watch scss/main.scss:webroot/css/cfe.css --style compressed",
-    "sass-one": "sass scss/main.scss:webroot/css/cfe.css --style compressed"
+    "sass": "sass --watch scss:webroot/css --style compressed",
+    "sass-one": "sass scss:webroot/css --style compressed"
   },
   "repository": {
     "type": "git",
