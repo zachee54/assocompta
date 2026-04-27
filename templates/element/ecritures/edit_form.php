@@ -16,12 +16,20 @@ $readonly = $this->Identity->get('readonly');
           'error' => false,
           'class' => 'form-control w-initial' ]) ?>
 
-        <?= $this->Form->control('date_bancaire', [
-          'label' => [
-            'text' => 'Date banque',
-            'class' => 'fs-small text-primary' ],
-          'error' => false,
-          'class' => 'form-control w-initial' ]) ?>
+        <?php if (!$ecriture->date_bancaire): ?>
+          <button id="pointage-button" type="button"
+            class="btn btn-secondary fs-xsmall p-1 my-2">
+            pointer
+          </button>
+        <?php endif ?>
+        <div id="pointage" style="<?= $ecriture->date_bancaire ? null : 'display:none' ?>">
+          <?= $this->Form->control('date_bancaire', [
+            'label' => [
+              'text' => 'Date banque',
+              'class' => 'fs-small text-primary' ],
+            'error' => false,
+            'class' => 'form-control w-initial' ]) ?>
+        </div>
 
         <?= $this->Form->control('rattachement', [
           'label' => [
