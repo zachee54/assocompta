@@ -43,7 +43,9 @@
           <?php endif ?>
 
           <?= $this->Html->link('',
-            ['action' => 'edit', $ecriture->id],
+            [ 'controller' => 'ecritures',
+              'action' => 'edit',
+              $ecriture->id ],
             ['class' => 'stretched-link'] ) ?>
         </td>
       </tr>

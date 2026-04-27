@@ -18,69 +18,56 @@ class StatsController extends AppController {
   /** Libellé des opérations à enlever pour affichage utilisateur. */
   const DETACHED = 'À enlever';
   
-  public function initialize(): void {
-    $this->loadModel('Ecritures');
-  }
-  
   /**
    * Affiche un bilan de l'exercice par postes et par activités.
    * 
-   * @param $year: Année de clôture de l'exercice à afficher.
+   * @param $year   Année de clôture de l'exercice à afficher.
+   * @param $ajuste true pour ajuster le bilan en fonction du rattachement
+   *                explicite des écritures.
    */
-  public function bilan($year=null) {
-    $this->_buildBilan($year, false);
-  }
-  
-  /**
-   * Affiche un bilan de l'exercice par postes et par activités.
-   * Le bilan est ajusté en fonction du rattachement explicite des
-   * écritures.
-   * 
-   * @param $year:  Année de clôture de l'exercice à afficher.
-   */
-  public function bilanAjuste($year=null) {
-    $this->_buildBilan($year, true);
-  }
-  
-  /**
-   * Affiche un bilan de l'exercice par postes et par activités.
-   * 
-   * @param $year:    Année de clôture de l'exercice à afficher.
-   * @param $ajuste:  true pour ajuster le bilan en fonction du
-   *                  rattachement explicite des écritures.
-   */
-  private function _buildBilan($year, $ajuste=false) {
+  public function bilan($year = null, $ajuste = false) {
     if (!$year) {
-      $year = (new Date())->year;
+      $year = Date::now()->year;
     }
     
+    $this->set('years', $this->fetchTable('Ecritures')->find()
+      ->select(['year' => $this::EXERCICE])
+      ->distinct()
+      ->whereNotNull('date_bancaire')
+      ->orderDesc('year')
+      ->all() );
+    
+    $this->set(compact('year', 'ajuste'));
+  }
+  
+  /**
+   * Met à disposition de la vue les données des écritures.
+   * Action appelée en AJAX avec format JSON.
+   * 
+   * @param $year   Année de clôture de l'exercice à afficher.
+   * @param $ajuste true pour ajuster le bilan en fonction du rattachement
+   *                explicite des écritures.
+   */
+  public function data($year, $ajuste = false) {
     $ecritures = $this->_getFlatEcritures($year);
     
     if ($ajuste) {
       $ecritures = array_merge(
         $ecritures,
         $this->_getFlatEcritures($year, self::ATTACHED),
-        $this->_getFlatEcritures($year, self::DETACHED));
+        $this->_getFlatEcritures($year, self::DETACHED) );
     }
     
     $this->set('ecritures', $ecritures);
     
-    $this->set('activites', $this->Ecritures->Activites->find('list',
-      ['order' => 'id'])
+    $ecrituresTable = $this->fetchTable('Ecritures');
+    $this->set('activites', $ecrituresTable->Activites
+      ->find('list', ['order' => 'id'])
       ->toArray());
     
-    $this->set('postes', $this->Ecritures->Postes->find('list',
-      ['order' => 'id'])
+    $this->set('postes', $ecrituresTable->Postes
+      ->find('list', ['order' => 'id'])
       ->toArray());
-    
-    $this->set('years', $this->Ecritures->find()
-      ->select(['year' => $this::EXERCICE])
-      ->distinct()
-      ->whereNotNull('date_bancaire')
-      ->order(['year' => 'DESC'])
-      ->all());
-    
-    $this->set('year', $year);
   }
   
   /**
@@ -132,13 +119,12 @@ class StatsController extends AppController {
    *    écritures de l'exercice.
    */
   private function _buildQueryFor($year, $attachment) {
-    $query = $this->Ecritures->find()
+    $query = $this->fetchTable('Ecritures')->find()
       ->contain(['Activites'])
       ->select([
-        'montant' => 'SUM(credit - debit)',
-        'Activites.name'])
-      ->group([
-        'Activites.name']);
+        'montant' => 'SUM(COALESCE(credit, 0) - COALESCE(debit, 0))',
+        'Activites.name' ])
+      ->group(['Activites.name']);
     
     $this->_setFields($query, $attachment);
     $this->_setAttachmentConditions($query, $year, $attachment);
@@ -210,11 +196,11 @@ class StatsController extends AppController {
   /**
    * Affiche les écritures correspondant aux filtres postés.
    * 
-   * @param $year:    L'année de clôture de l'exercice.
-   * @param $ajuste:  true pour tenir compte du rattachement explicite
-   *                  des écritures.
+   * @param $year   L'année de clôture de l'exercice.
+   * @param $ajuste true pour tenir compte du rattachement explicite des
+   *                écritures.
    */
-  public function bilanDetail($year, $ajuste=false) {
+  public function bilanDetail($year, $ajuste = false) {
     if ($this->request->is('post')) {
       $this->set('ecritures', $this->_getDetails($year, $ajuste));
     }
@@ -272,7 +258,7 @@ class StatsController extends AppController {
    * @return        Un objet Query.
    */
   private function _buildExerciceQuery($year, $ajuste) {
-    $query = $this->Ecritures->find()
+    $query = $this->fetchTable('Ecritures')->find()
       ->contain(['Postes', 'Activites']);
     $data = $this->request->getData();
     
