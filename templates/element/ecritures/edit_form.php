@@ -1,4 +1,5 @@
 <?php
+$this->Html->script('ecritures/date', ['block' => 'scriptBottom']);
 $readonly = $this->Identity->get('readonly');
 
 ?>
@@ -147,25 +148,3 @@ $readonly = $this->Identity->get('readonly');
   </div>
 <?= $this->Form->end();
 
-// La saisie d'une date d'écriture se reporte automatiquement en date banque
-$this->append('scriptBottom');
-  ?>
-  <script type="text/javascript">
-    $(function() {
-      var dateEngagement = $('#date-engagement');
-      var dateBancaire = $('#date-bancaire');
-      
-      // Réinitialiser l'animation après qu'elle aura eu lieu
-      dateBancaire.get(0).addEventListener('animationend', function() {
-        $(this).removeClass('autoUpdated');
-      });
-      
-      // Recopie de la valeur + animation
-      dateEngagement.change(function(event) {
-        dateBancaire.val(this.value);
-        dateBancaire.addClass('autoUpdated');
-      });
-    });
-  </script>
-  <?php
-$this->end();

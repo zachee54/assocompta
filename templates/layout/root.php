@@ -10,7 +10,6 @@ $title = $this->fetch('title');
   <title><?= $title ? 'CFE - '.$title : 'CFE' ?></title>
   <?= $this->Html->css('cfe') ?>
   <?= $this->fetch('css') ?>
-  <?= $this->fetch('jquery') ?>
   <link rel="icon" href="<?= $this->Url->image('favicon.ico'); ?>"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
@@ -43,14 +42,14 @@ $title = $this->fetch('title');
     <?php endif ?>
   </header>
 
-  <?= $this->Flash->render() ?>
+  <div id="flash" class="toast-container position-fixed bottom-0 start-0 p-3">
+    <?= $this->Flash->render() ?>
+  </div>
 
   <div class="flex-grow-1">
     <?= $this->fetch('content') ?>
   </div>
 
-  <?= $this->fetch('scriptBottom') ?>
-  
   <footer class="fs-xsmall">
     <nav class="nav">
       <?= $this->Html->link('Mentions légales',
@@ -59,6 +58,10 @@ $title = $this->fetch('title');
         ['class' => 'nav-link'] ) ?>
     </nav>
   </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <?= $this->Html->script('jquery-3.6.0.min') ?>
+  <?= $this->Html->script('toasts') ?>
+  <?= $this->fetch('scriptBottom') ?>
 </body>
 </html>
