@@ -1,40 +1,44 @@
-<?php
-$this->Html->css(
-  ['users/login', 'button'],
-  ['block' => true] );
+<div class="d-flex justify-content-center">
+  <?= $this->Form->create($user, [
+    'class' => 'd-flex flex-column gap-3' ]) ?>
 
-?>
-<section id="UserLogin">
-  <?php
-  echo $this->Form->create($user);
-    
-    echo $this->Form->label('nom', 'Nom');
-    echo $this->Form->control('nom', [
-      'label' => false]);
-    
-    echo $this->Form->label('login', 'Login');
-    echo $this->Form->control('login', [
-      'label' => false]);
-    
-    echo $this->Form->label('mdp', 'Mot de passe');
-    echo $this->Form->control('mdp', [
+    <?= $this->Form->control('nom', [
+      'label' => [
+        'text' => 'Nom',
+        'class' => 'form-label text-primary fs-small' ],
+      'class' => 'form-control' ]) ?>
+
+    <?= $this->Form->control('login', [
+      'label' => [
+        'text' => 'Identifiant',
+        'class' => 'form-label text-primary fs-small' ],
+      'class' => 'form-control' ]) ?>
+
+    <?= $this->Form->control('mdp', [
       'type' => 'password',
-      'label' => false,
+      'label' => [
+        'text' => 'Mot de passe',
+        'class' => 'form-label text-primary fs-small' ],
       'placeholder' => ($user->isNew() ? '' : "garder l'existant"),
-      'required' => false ]);
-    
-    echo $this->Form->control('admin', [
-      'label' => 'Administrateur',
-      'type' => 'checkbox' ]);
-    
-    echo $this->Form->submit('Valider', array(
-      'class' => 'button',
-      'after' => $this->Html->link('Annuler',
-        array('action' => 'index'),
-        array(
-          'class' => 'button',
-          'escape' => false))));
-  
-  echo $this->Form->end();
-  ?>
-</section>
+      'required' => false,
+      'class' => 'form-control' ]) ?>
+
+    <div class="form-check form-switch mt-2 mb-4">
+      <?= $this->Form->control('admin', [
+        'type' => 'checkbox',
+        'label' => [
+          'text' => 'Administrateur',
+          'class' => 'form-check-label' ],
+        'class' => 'form-check-input' ]) ?>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3">
+      <?= $this->Form->submit('Valider', [
+        'class' => 'btn btn-success' ]) ?>
+      <?= $this->Html->link('Annuler',
+        ['action' => 'index'],
+        ['class' => 'btn btn-gray'] ) ?>
+    </div>
+
+  <?= $this->Form->end() ?>
+</div>
