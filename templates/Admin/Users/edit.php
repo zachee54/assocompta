@@ -1,4 +1,7 @@
-<div class="d-flex justify-content-center">
+<?php
+$this->assign('title', h($user->nom ?: 'Nouvel utilisateur'));
+
+?><div class="d-flex justify-content-center">
   <?= $this->Form->create($user, [
     'class' => 'd-flex flex-column gap-3' ]) ?>
 

@@ -1,3 +1,7 @@
+<?php
+$this->assign('title', 'Utilisateurs');
+
+?>
 <nav>
   <?= $this->Html->link(
     '<i class="bi bi-plus-circle-fill me-2"></i>Ajouter un utilisateur',

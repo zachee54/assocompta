@@ -1,5 +1,6 @@
 <?php
 $this->layout = 'root';
+$this->assign('title', 'Connexion');
 
 ?>
 <div class="container">

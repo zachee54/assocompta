@@ -5,6 +5,8 @@ $this->Html->css('stats/pivot.min', ['block' => true]);
 
 $this->loadHelper('Year');
 
+$this->assign('title', 'Bilan '.$this->Year->getExerciceName($year));
+
 ?>
 <ul class="nav nav-pills fs-small m-3">
   <?php foreach ($years as $entity): ?>

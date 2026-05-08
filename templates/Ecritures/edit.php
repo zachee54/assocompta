@@ -1,5 +1,6 @@
 <?php
 $this->extend('main');
+$this->assign('title', 'Détail d\'une écriture');
 
 ?>
 <div class="container">

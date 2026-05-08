@@ -1,4 +1,12 @@
 <?php
+
+// Cf. http://userguide.icu-project.org/formatparse/datetime
+$monthName = $this->Time->format($date, 'MMMM yyyy');
+$monthPrefix = in_array(substr($monthName, 0, 1), ['a', 'o']) ? 'd\'' : 'de ';
+$monthContext = $monthPrefix.$monthName;
+
+$this->assign('title', "Relevé bancaire $monthContext");
+
 $this->extend('main');
 $showEcriture = $ecriture->isDirty();
 
@@ -28,13 +36,7 @@ if (!$this->Identity->get('readonly')): ?>
 <?= $this->element('ecritures/browse_months') ?>
 
 <h2 class="h2">
-  <div>Relevé bancaire <?php
-    // Cf. http://userguide.icu-project.org/formatparse/datetime
-    $monthName = $this->Time->format($date, 'MMMM yyyy');
-    
-    echo in_array(substr($monthName, 0, 1), ['a', 'o']) ? "d'" : "de ";
-    echo $monthName;
-  ?></div>
+  <div>Relevé bancaire <?= $monthContext ?></div>
 </h2>
 
 <?= $this->element('ecritures/table', [
