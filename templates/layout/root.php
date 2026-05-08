@@ -54,7 +54,7 @@ $title = $this->fetch('title');
     <nav class="nav">
       <?= $this->Html->link('Mentions légales',
         [ 'controller' => 'pages',
-          'action' => 'legal' ],
+          'action' => 'mentions_legales' ],
         ['class' => 'nav-link'] ) ?>
     </nav>
   </footer>
