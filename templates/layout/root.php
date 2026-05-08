@@ -13,8 +13,8 @@ $title = $this->fetch('title');
   <link rel="icon" href="<?= $this->Url->image('favicon.ico'); ?>"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
-<body class="vstack min-vh-100">
-  <header class="d-flex align-items-end justify-content-between bg-custom-light p-2">
+<body style="width:min-content; min-width:100vw" class="vstack min-vh-100">
+  <header class="position-sticky start-0 vw-100 d-flex align-items-end justify-content-between bg-custom-light p-2">
     <h1 class="text-primary fw-bold fs-2 mb-0">
       Centre de Formation et d'Entraide
     </h1>
