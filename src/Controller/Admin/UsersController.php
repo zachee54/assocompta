@@ -11,21 +11,18 @@ class UsersController extends AppController {
    * Liste des utilisateurs.
    */
   public function index() {
-    $this->set('users', $this->Users->find('all'));
+    $this->set('users', $this->Users->find()->all());
   }
   
   /**
    * Modification d'un utilisateur par l'administrateur.
    */
   public function edit($id = null) {
-    if ($id === null) {
-      $user = $this->Users->newEmptyEntity();
-    } else {
-      $user = $this->Users->find()
-        ->select(['id', 'nom', 'login', 'admin'])
-        ->where(['id' => $id])
-        ->first();
-    }
+    $user = ($id === null)
+      ? $this->Users->newEmptyEntity()
+      : $this->Users->findById($id)
+          ->select(['id', 'nom', 'login', 'admin'])
+          ->first();
     
     if ($this->request->is(['post', 'put'])) {
       $data = $this->request->getData();
@@ -39,15 +36,10 @@ class UsersController extends AppController {
       $this->Users->patchEntity($user, $data);
       if ($this->Users->save($user)) {
         $this->Flash->success('Les modifications ont été sauvegardées');
-        $this->redirect(array('action' => 'index'));
+        $this->redirect(['action' => 'index']);
       } else {
-        $this->Flash->error("Erreur pendant l'enregistrement");
+        $this->Flash->error('Erreur pendant l\'enregistrement');
       }
-      
-    } else if ($id === null) {
-      
-      // Ajouter un utilisateur
-      $user = $this->Users->newEmptyEntity();
     }
     $this->set('user', $user);
   }

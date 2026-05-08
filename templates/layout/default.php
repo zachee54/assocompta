@@ -19,6 +19,7 @@ $this->extend('root');
     <?= $this->element('nav-link', [
       'text' => 'Administration',
       'url' => [
+        'prefix' => 'Admin',
         'controller' => 'users',
         'action' => 'index' ]]) ?>
   <?php endif ?>
