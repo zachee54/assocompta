@@ -182,12 +182,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         ]
       ],
       'fields' => $fields,
-      'loginUrl' => Router::url([
-          'prefix' => false,
-          'plugin' => false,
-          'controller' => 'Users',
-          'action' => 'login',
-      ]),
+      'loginUrl' => '/users/login',
     ]);
 
     return $service;
