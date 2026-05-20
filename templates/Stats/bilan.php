@@ -47,7 +47,7 @@ $this->assign('title', 'Bilan '.$this->Year->getExerciceName($year));
 <?php
 
 $scriptBottom = ['block' => 'scriptBottom'];
-$this->Html->script('jquery-ui-1.12.1/jquery-ui.min', $scriptBottom);
+$this->Html->script('jquery-ui-1.14.2/jquery-ui.min', $scriptBottom);
 $this->Html->script('pivottable/pivot.min', $scriptBottom);
 $this->Html->script('pivottable/pivot.fr.min', $scriptBottom);
 $this->Html->script('plotly-basic-latest.min', $scriptBottom);
