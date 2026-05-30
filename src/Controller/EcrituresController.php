@@ -91,7 +91,7 @@ class EcrituresController extends AppController {
    * @param $date Une date du mois.
    */
   private function _setSoldesDebutFin($date) {
-    $this->set('a_nouveau', $this->_getSoldeAt($date->firstOfMonth()));
+    $this->set('a_nouveau', $this->_getSoldeAt($date->firstOfMonth()->subDays(1)));
     $this->set('solde', $this->_getSoldeAt($date->endOfMonth()));
   }
   
@@ -103,7 +103,7 @@ class EcrituresController extends AppController {
   private function _getSoldeAt($date) {
     $query = $this->Ecritures->find();
     return $query
-      ->select(['solde' => $query->func()->sum('credit-debit')])
+      ->select(['solde' => 'SUM( COALESCE(credit,0) - COALESCE(debit,0) )'])
       ->where(
         $query->expr()->lte('date_bancaire', $date) )
       ->first()

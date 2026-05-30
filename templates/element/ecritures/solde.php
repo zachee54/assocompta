@@ -2,7 +2,8 @@
 /**
  * Affiche une ligne de table indiquant le solde à la date indiquée.
  * 
- * @var $date La date.
+ * @var $date     La date.
+ * @var $montant  Le montant.
  */
 ?>
 <tr class="table-primary fw-bold">
